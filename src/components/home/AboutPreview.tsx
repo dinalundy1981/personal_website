@@ -18,37 +18,37 @@ const AboutPreview = ({ images }: AboutPreviewProps) => {
     <section id="about-section" className="py-16 md:py-24 bg-background scroll-mt-20">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          {/* Photo Grid */}
+          {/* Photo Grid — constrained & responsive */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
             custom={0}
-            className="relative"
+            className="relative max-w-md mx-auto lg:max-w-none"
           >
-            <div className="grid grid-cols-2 gap-3 md:gap-4">
-              <div className="space-y-3 md:space-y-4">
-                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[4/3]">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              <div className="space-y-2 sm:space-y-3">
+                <div className="rounded-xl overflow-hidden shadow-md aspect-[4/3]">
                   <img src={img1} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
                 </div>
-                <div className="rounded-2xl overflow-hidden shadow-lg aspect-square">
+                <div className="rounded-xl overflow-hidden shadow-md aspect-square">
                   <img src={img3} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
                 </div>
               </div>
-              <div className="space-y-3 md:space-y-4 pt-6 md:pt-8">
-                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[3/4]">
+              <div className="space-y-2 sm:space-y-3 pt-4 sm:pt-6">
+                <div className="rounded-xl overflow-hidden shadow-md aspect-[3/4]">
                   <img src={img2} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
                 </div>
-                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[4/3]">
+                <div className="rounded-xl overflow-hidden shadow-md aspect-[4/3]">
                   <img src={img4} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
                 </div>
               </div>
               {/* Badge */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                <div className="bg-primary text-primary-foreground rounded-full w-24 h-24 md:w-28 md:h-28 flex flex-col items-center justify-center shadow-xl text-center">
-                  <span className="text-2xl md:text-3xl font-bold leading-none">30+</span>
-                  <span className="text-[10px] md:text-xs leading-tight mt-1">Years of<br />Expertise</span>
+                <div className="bg-primary text-primary-foreground rounded-full w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex flex-col items-center justify-center shadow-xl text-center">
+                  <span className="text-xl sm:text-2xl md:text-3xl font-bold leading-none">30+</span>
+                  <span className="text-[9px] sm:text-[10px] md:text-xs leading-tight mt-0.5">Years of<br />Expertise</span>
                 </div>
               </div>
             </div>
@@ -76,18 +76,18 @@ const AboutPreview = ({ images }: AboutPreviewProps) => {
             </p>
 
             {/* Stats */}
-            <div className="flex gap-8 md:gap-12 mb-8">
+            <div className="flex gap-6 sm:gap-8 md:gap-12 mb-8">
               <div>
-                <span className="text-3xl md:text-4xl font-bold text-primary">5+</span>
-                <p className="text-sm text-muted-foreground">Published Books</p>
+                <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">5+</span>
+                <p className="text-xs sm:text-sm text-muted-foreground">Published Books</p>
               </div>
               <div>
-                <span className="text-3xl md:text-4xl font-bold text-primary">100+</span>
-                <p className="text-sm text-muted-foreground">Speaking Events</p>
+                <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">100+</span>
+                <p className="text-xs sm:text-sm text-muted-foreground">Speaking Events</p>
               </div>
               <div>
-                <span className="text-3xl md:text-4xl font-bold text-primary">20+</span>
-                <p className="text-sm text-muted-foreground">Years Experience</p>
+                <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">20+</span>
+                <p className="text-xs sm:text-sm text-muted-foreground">Years Experience</p>
               </div>
             </div>
 

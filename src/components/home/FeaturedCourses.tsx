@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { GraduationCap, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { fadeUp } from "@/lib/animations";
+import { Button } from "@/components/ui/button";
+import bookImg from "@/assets/book-placeholder.jpg";
 
 const courses = [
-  { icon: GraduationCap, title: "Leadership in Education", price: "$149" },
-  { icon: Heart, title: "Advocacy & Community Impact", price: "$129" },
+  { title: "Leadership in Education", price: "$149", desc: "Comprehensive course with expert guidance and practical exercises.", image: bookImg },
+  { title: "Advocacy & Community Impact", price: "$129", desc: "Learn strategies to create lasting change in underserved communities.", image: bookImg },
 ];
 
 const FeaturedCourses = () => (
@@ -19,13 +19,17 @@ const FeaturedCourses = () => (
       <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
         {courses.map((course, i) => (
           <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i + 1}
-            className="bg-card rounded-xl p-8 border shadow-md hover:shadow-lg transition-shadow">
-            <course.icon className="w-10 h-10 text-secondary mb-4" />
-            <h3 className="font-heading text-xl text-primary mb-2">{course.title}</h3>
-            <p className="text-muted-foreground text-sm mb-4">Comprehensive course with expert guidance and practical exercises.</p>
-            <div className="flex items-center justify-between">
-              <span className="font-heading text-2xl text-secondary">{course.price}</span>
-              <Link to="/courses"><Button variant="secondary" size="sm">Enroll Now</Button></Link>
+            className="bg-card rounded-xl overflow-hidden border shadow-md hover:shadow-lg transition-shadow group flex flex-col">
+            <div className="h-48 overflow-hidden">
+              <img src={course.image} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+            <div className="p-6 flex flex-col flex-1">
+              <h3 className="font-heading text-xl text-primary mb-2">{course.title}</h3>
+              <p className="text-muted-foreground text-sm mb-4 flex-1">{course.desc}</p>
+              <div className="flex items-center justify-between">
+                <span className="font-heading text-2xl text-secondary">{course.price}</span>
+                <Link to="/courses"><Button variant="secondary" size="sm">Enroll Now</Button></Link>
+              </div>
             </div>
           </motion.div>
         ))}
