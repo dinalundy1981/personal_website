@@ -150,6 +150,9 @@ const Header = () => {
           <div className="px-6 pt-3 space-y-2">
             {user ? (
               <>
+                <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+                  <Button variant="warm" size="sm" className="w-full"><LayoutDashboard className="w-4 h-4 mr-1" /> My Dashboard</Button>
+                </Link>
                 {isAdmin && (
                   <Link to="/admin" onClick={() => setMobileOpen(false)}>
                     <Button variant="warm" size="sm" className="w-full"><Shield className="w-4 h-4 mr-1" /> Admin Dashboard</Button>
