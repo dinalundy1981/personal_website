@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fadeUp } from "@/lib/animations";
+import SiteImagesManager from "@/components/admin/SiteImagesManager";
 
 type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing";
 
