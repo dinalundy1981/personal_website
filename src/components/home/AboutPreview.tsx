@@ -15,7 +15,7 @@ const AboutPreview = ({ images }: AboutPreviewProps) => {
   const img4 = images["about_4"] || profileImg;
 
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section id="about-section" className="py-16 md:py-24 bg-background scroll-mt-20">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Photo Grid */}
