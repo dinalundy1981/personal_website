@@ -1,19 +1,42 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const { toast } = useToast();
+  const { signIn, signUp } = useAuth();
+  const navigate = useNavigate();
   const [isRegister, setIsRegister] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({ title: isRegister ? "Account Created!" : "Welcome Back!", description: isRegister ? "Please check your email to verify." : "You are now logged in." });
+    setLoading(true);
+
+    if (isRegister) {
+      const { error } = await signUp(form.email, form.password, form.name);
+      if (error) {
+        toast({ title: "Registration Failed", description: error.message, variant: "destructive" });
+      } else {
+        toast({ title: "Account Created!", description: "Please check your email to verify." });
+      }
+    } else {
+      const { error } = await signIn(form.email, form.password);
+      if (error) {
+        toast({ title: "Login Failed", description: error.message, variant: "destructive" });
+      } else {
+        toast({ title: "Welcome Back!", description: "You are now logged in." });
+        navigate("/");
+      }
+    }
+    setLoading(false);
   };
 
   return (
@@ -38,7 +61,9 @@ const Login = () => {
                 <label className="block text-sm font-medium text-foreground mb-1">Password</label>
                 <Input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="••••••••" required />
               </div>
-              <Button type="submit" variant="default" size="lg" className="w-full">{isRegister ? "Create Account" : "Login"}</Button>
+              <Button type="submit" variant="default" size="lg" className="w-full" disabled={loading}>
+                {loading ? "Please wait..." : isRegister ? "Create Account" : "Login"}
+              </Button>
             </form>
             <p className="text-center text-sm text-muted-foreground mt-6">
               {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
