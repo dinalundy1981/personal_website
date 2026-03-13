@@ -19,6 +19,7 @@ import Publishing from "./pages/Publishing";
 import Philanthropy from "./pages/Philanthropy";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
+import UserDashboard from "./pages/UserDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
