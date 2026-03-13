@@ -150,7 +150,7 @@ const AdminDashboard = () => {
     if (editingId) {
       ({ error } = await supabase.from(activeTab).update(payload).eq("id", editingId));
     } else {
-      ({ error } = await supabase.from(activeTab).insert(payload));
+      ({ error } = await supabase.from(activeTab).insert(payload as any));
     }
 
     if (error) {
