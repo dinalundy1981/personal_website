@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, ChevronDown, LogOut, Shield } from "lucide-react";
+import { Menu, X, ChevronDown, LogOut, Shield, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -94,6 +94,9 @@ const Header = () => {
 
           {user ? (
             <div className="flex items-center gap-2 ml-2">
+              <Link to="/dashboard">
+                <Button variant="warm" size="sm"><LayoutDashboard className="w-4 h-4 mr-1" /> Dashboard</Button>
+              </Link>
               {isAdmin && (
                 <Link to="/admin">
                   <Button variant="warm" size="sm"><Shield className="w-4 h-4 mr-1" /> Admin</Button>
@@ -147,6 +150,9 @@ const Header = () => {
           <div className="px-6 pt-3 space-y-2">
             {user ? (
               <>
+                <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+                  <Button variant="warm" size="sm" className="w-full"><LayoutDashboard className="w-4 h-4 mr-1" /> My Dashboard</Button>
+                </Link>
                 {isAdmin && (
                   <Link to="/admin" onClick={() => setMobileOpen(false)}>
                     <Button variant="warm" size="sm" className="w-full"><Shield className="w-4 h-4 mr-1" /> Admin Dashboard</Button>
