@@ -305,6 +305,13 @@ const AdminDashboard = () => {
             </TabsContent>
           ))}
 
+          {/* Site Images Tab */}
+          <TabsContent value={"site-images" as any}>
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
+              <SiteImagesManager />
+            </motion.div>
+          </TabsContent>
+
           {/* Contacts Tab */}
           <TabsContent value={"contacts" as any}>
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
