@@ -221,6 +221,9 @@ const AdminDashboard = () => {
             <TabsTrigger value={"contacts" as any} className="flex items-center gap-1.5 text-xs sm:text-sm">
               <Send className="w-4 h-4" /> Contacts
             </TabsTrigger>
+            <TabsTrigger value={"site-images" as any} className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <ImageIcon className="w-4 h-4" /> Site Images
+            </TabsTrigger>
           </TabsList>
 
           {/* Content Tables */}
