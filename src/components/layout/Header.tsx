@@ -94,6 +94,9 @@ const Header = () => {
 
           {user ? (
             <div className="flex items-center gap-2 ml-2">
+              <Link to="/dashboard">
+                <Button variant="warm" size="sm"><LayoutDashboard className="w-4 h-4 mr-1" /> Dashboard</Button>
+              </Link>
               {isAdmin && (
                 <Link to="/admin">
                   <Button variant="warm" size="sm"><Shield className="w-4 h-4 mr-1" /> Admin</Button>
