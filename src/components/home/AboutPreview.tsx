@@ -1,0 +1,104 @@
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { fadeUp } from "@/lib/animations";
+import profileImg from "@/assets/profile-placeholder.jpg";
+
+interface AboutPreviewProps {
+  images: Record<string, string>;
+}
+
+const AboutPreview = ({ images }: AboutPreviewProps) => {
+  const img1 = images["about_1"] || profileImg;
+  const img2 = images["about_2"] || profileImg;
+  const img3 = images["about_3"] || profileImg;
+  const img4 = images["about_4"] || profileImg;
+
+  return (
+    <section className="py-16 md:py-24 bg-background">
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* Photo Grid */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={0}
+            className="relative"
+          >
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
+              <div className="space-y-3 md:space-y-4">
+                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[4/3]">
+                  <img src={img1} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
+                </div>
+                <div className="rounded-2xl overflow-hidden shadow-lg aspect-square">
+                  <img src={img3} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div className="space-y-3 md:space-y-4 pt-6 md:pt-8">
+                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[3/4]">
+                  <img src={img2} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
+                </div>
+                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[4/3]">
+                  <img src={img4} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
+                </div>
+              </div>
+              {/* Badge */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                <div className="bg-primary text-primary-foreground rounded-full w-24 h-24 md:w-28 md:h-28 flex flex-col items-center justify-center shadow-xl text-center">
+                  <span className="text-2xl md:text-3xl font-bold leading-none">30+</span>
+                  <span className="text-[10px] md:text-xs leading-tight mt-1">Years of<br />Expertise</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Text Content */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={1}
+          >
+            <p className="text-sm font-semibold tracking-widest uppercase text-muted-foreground mb-2">About Dr. Dina Lundy</p>
+            <div className="w-10 h-1 bg-primary mb-6" />
+            <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-primary mb-2 leading-tight">
+              The Voice of<br />
+              <span className="text-secondary italic">Authority & Insight</span>
+            </h2>
+            <p className="text-foreground/80 leading-relaxed mt-4 mb-4">
+              Dr. Dina Lundy is a dedicated scholar, researcher, and thought leader whose work centers on education equity, foster youth advocacy, and leadership development. She serves as a passionate advocate for underserved communities, bringing a bold and balanced perspective to today's most pressing social issues.
+            </p>
+            <p className="text-foreground/80 leading-relaxed mb-8">
+              With decades of experience, Dr. Lundy has published in numerous peer-reviewed journals, authored multiple books, and coached thousands of educators and leaders toward success. Her philosophy is simple yet transformative: <span className="font-semibold italic text-primary">"Empower through education."</span>
+            </p>
+
+            {/* Stats */}
+            <div className="flex gap-8 md:gap-12 mb-8">
+              <div>
+                <span className="text-3xl md:text-4xl font-bold text-primary">5+</span>
+                <p className="text-sm text-muted-foreground">Published Books</p>
+              </div>
+              <div>
+                <span className="text-3xl md:text-4xl font-bold text-primary">100+</span>
+                <p className="text-sm text-muted-foreground">Speaking Events</p>
+              </div>
+              <div>
+                <span className="text-3xl md:text-4xl font-bold text-primary">20+</span>
+                <p className="text-sm text-muted-foreground">Years Experience</p>
+              </div>
+            </div>
+
+            <Link to="/about" className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
+              Learn More About Dr. Lundy <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default AboutPreview;

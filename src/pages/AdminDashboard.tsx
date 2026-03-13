@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send, LogOut, Plus, Trash2, Edit, Eye, EyeOff } from "lucide-react";
+import { Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send, LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fadeUp } from "@/lib/animations";
+import SiteImagesManager from "@/components/admin/SiteImagesManager";
 
 type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing";
 
@@ -220,6 +221,9 @@ const AdminDashboard = () => {
             <TabsTrigger value={"contacts" as any} className="flex items-center gap-1.5 text-xs sm:text-sm">
               <Send className="w-4 h-4" /> Contacts
             </TabsTrigger>
+            <TabsTrigger value={"site-images" as any} className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <ImageIcon className="w-4 h-4" /> Site Images
+            </TabsTrigger>
           </TabsList>
 
           {/* Content Tables */}
@@ -300,6 +304,13 @@ const AdminDashboard = () => {
               </motion.div>
             </TabsContent>
           ))}
+
+          {/* Site Images Tab */}
+          <TabsContent value={"site-images" as any}>
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
+              <SiteImagesManager />
+            </motion.div>
+          </TabsContent>
 
           {/* Contacts Tab */}
           <TabsContent value={"contacts" as any}>
