@@ -69,10 +69,10 @@ const AboutPreview = ({ images }: AboutPreviewProps) => {
               <span className="text-secondary italic">Authority & Insight</span>
             </h2>
             <p className="text-foreground/80 leading-relaxed mt-4 mb-4">
-              Dr. Dina Lundy is a dedicated scholar, researcher, and thought leader whose work centers on education equity, foster youth advocacy, and leadership development. She serves as a passionate advocate for underserved communities, bringing a bold and balanced perspective to today's most pressing social issues.
+              Born and raised in New York City, Dr. Dina Lundy built a coffee bar chain from the ground up, becoming a millionaire at 28. That success led her to pursue something deeper—her purpose. She earned a doctorate, transitioned into academe, writing, and life coaching, helping others break through their fear and build lives they believe in.
             </p>
             <p className="text-foreground/80 leading-relaxed mb-8">
-              With decades of experience, Dr. Lundy has published in numerous peer-reviewed journals, authored multiple books, and coached thousands of educators and leaders toward success. Her philosophy is simple yet transformative: <span className="font-semibold italic text-primary">"Empower through education."</span>
+              As a writer, researcher, and public speaker, her work intersects systemic inequity, implicit bias, and the phenomenology of youth whose lives have been shaped by foster care and criminal justice involvement. Her philosophy: <span className="font-semibold italic text-primary">"Empower through education."</span>
             </p>
 
             {/* Stats */}
