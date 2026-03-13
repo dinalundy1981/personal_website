@@ -3,17 +3,10 @@ import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, GraduationCap, Calendar, Mic, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
+import { fadeUp } from "@/lib/animations";
 import heroBg from "@/assets/hero-bg.jpg";
 import profileImg from "@/assets/profile-placeholder.jpg";
 import bookImg from "@/assets/book-placeholder.jpg";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" },
-  }),
-};
 
 const Index = () => {
   return (
@@ -26,12 +19,7 @@ const Index = () => {
         </div>
         <div className="container relative z-10 mx-auto px-4 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={0}
-            >
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
               <p className="text-warm text-sm font-semibold tracking-widest uppercase mb-4">
                 Scholar · Author · Speaker
               </p>
@@ -44,9 +32,7 @@ const Index = () => {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link to="/books">
-                  <Button variant="hero" size="lg">
-                    <BookOpen className="w-5 h-5" /> View Books
-                  </Button>
+                  <Button variant="hero" size="lg"><BookOpen className="w-5 h-5" /> View Books</Button>
                 </Link>
                 <Link to="/work-with-me">
                   <Button variant="heroOutline" size="lg" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
@@ -73,28 +59,13 @@ const Index = () => {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={0}
-              className="lg:hidden flex justify-center"
-            >
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="lg:hidden flex justify-center">
               <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-warm shadow-xl">
                 <img src={profileImg} alt="Dr. Dina Lundy" className="w-full h-full object-cover" />
               </div>
             </motion.div>
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              custom={1}
-            >
-              <h2 className="font-heading text-3xl md:text-4xl text-primary mb-6">
-                About Dr. Dina Lundy
-              </h2>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}>
+              <h2 className="font-heading text-3xl md:text-4xl text-primary mb-6">About Dr. Dina Lundy</h2>
               <p className="text-foreground/80 leading-relaxed mb-4">
                 Dr. Dina Lundy is a distinguished scholar, published author, and passionate advocate 
                 for education equity. With a rich academic background and years of impactful research, 
@@ -105,9 +76,7 @@ const Index = () => {
                 coaching, making her a sought-after speaker and thought leader in academia.
               </p>
               <Link to="/about">
-                <Button variant="secondary" size="lg">
-                  Read Full Story <ArrowRight className="w-4 h-4" />
-                </Button>
+                <Button variant="secondary" size="lg">Read Full Story <ArrowRight className="w-4 h-4" /></Button>
               </Link>
             </motion.div>
           </div>
@@ -135,9 +104,7 @@ const Index = () => {
                 <div className="p-6">
                   <h3 className="font-heading text-xl text-primary mb-2">{book.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4">{book.desc}</p>
-                  <Link to="/books">
-                    <Button variant="secondary" size="sm">View Details</Button>
-                  </Link>
+                  <Link to="/books"><Button variant="secondary" size="sm">View Details</Button></Link>
                 </div>
               </motion.div>
             ))}
@@ -214,9 +181,7 @@ const Index = () => {
               Schedule a coaching consultation with Dr. Lundy today.
             </p>
             <Link to="/work-with-me">
-              <Button variant="hero" size="lg">
-                Schedule Consultation <ArrowRight className="w-5 h-5" />
-              </Button>
+              <Button variant="hero" size="lg">Schedule Consultation <ArrowRight className="w-5 h-5" /></Button>
             </Link>
           </motion.div>
         </div>

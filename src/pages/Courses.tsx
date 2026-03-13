@@ -2,11 +2,7 @@ import { motion } from "framer-motion";
 import { GraduationCap, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.15, duration: 0.6 } }),
-};
+import { fadeUp } from "@/lib/animations";
 
 const courses = [
   { title: "Leadership in Education", desc: "Develop your leadership capacity with practical frameworks and case studies.", price: "$149" },
@@ -19,9 +15,7 @@ const Courses = () => (
     <section className="py-20 bg-warm/30">
       <div className="container mx-auto px-4 text-center">
         <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Courses</motion.h1>
-        <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">
-          Enroll in transformative courses designed by Dr. Lundy. Register and login to purchase.
-        </motion.p>
+        <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">Enroll in transformative courses designed by Dr. Lundy. Register and login to purchase.</motion.p>
       </div>
     </section>
     <section className="py-20 bg-background">

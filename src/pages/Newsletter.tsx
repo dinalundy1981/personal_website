@@ -1,10 +1,6 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.15, duration: 0.6 } }),
-};
+import { fadeUp } from "@/lib/animations";
 
 const newsletters = [
   { title: "Spring 2026 Newsletter", date: "Mar 1, 2026", summary: "Updates on upcoming events, new book announcements, and reflections on education equity progress." },
@@ -17,9 +13,7 @@ const Newsletter = () => (
     <section className="py-20 bg-warm/30">
       <div className="container mx-auto px-4 text-center">
         <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Newsletter</motion.h1>
-        <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">
-          Stay updated with Dr. Lundy's latest news, insights, and announcements.
-        </motion.p>
+        <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">Stay updated with Dr. Lundy's latest news, insights, and announcements.</motion.p>
       </div>
     </section>
     <section className="py-20 bg-background">
