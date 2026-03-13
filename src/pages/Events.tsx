@@ -3,12 +3,17 @@ import { Calendar, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
+import conferenceImg from "@/assets/conference-img.jpg";
 
 const events = [
-  { date: "Mar 25, 2026", title: "Education Equity Summit", location: "Los Angeles, CA", desc: "A two-day conference exploring systemic reform in K-12 and higher education." },
-  { date: "Apr 10, 2026", title: "Youth Advocacy Workshop", location: "Chicago, IL", desc: "Interactive workshop on creating advocacy programs for foster youth." },
-  { date: "May 5, 2026", title: "Leadership Conference", location: "New York, NY", desc: "Annual leadership conference for academic administrators and educators." },
-  { date: "Jun 15, 2026", title: "Community Impact Seminar", location: "Atlanta, GA", desc: "Seminar on evidence-based approaches to community-level education reform." },
+  {
+    date: "Spring 2026",
+    title: "Publish or Perish Conference for Black Women in Academe",
+    location: "University of Rhode Island",
+    desc: "Developed by Dr. Dina Lundy, Dr. Tracie McCargo, Dr. Bailey Thomas, and Anne Saluzaro-McGuigan to impact the dismal statistics faced by Women of Color in the academy.",
+    image: conferenceImg,
+    featured: true,
+  },
 ];
 
 const Events = () => (
@@ -16,30 +21,48 @@ const Events = () => (
     <section className="py-20 bg-warm/30">
       <div className="container mx-auto px-4 text-center">
         <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Events</motion.h1>
-        <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">Join Dr. Lundy at upcoming speaking engagements, conferences, and workshops.</motion.p>
+        <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">Join Dr. Lundy at upcoming conferences, workshops, and speaking engagements.</motion.p>
       </div>
     </section>
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="space-y-6 max-w-3xl mx-auto">
+        <div className="space-y-8 max-w-4xl mx-auto">
           {events.map((event, i) => (
             <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
-              className="bg-card rounded-xl p-6 border shadow-sm hover:shadow-md transition-shadow flex flex-col md:flex-row md:items-center gap-6">
-              <div className="md:w-32 shrink-0 text-center">
-                <div className="bg-warm/50 rounded-lg p-3 inline-block">
-                  <Calendar className="w-5 h-5 text-primary mx-auto mb-1" />
-                  <span className="text-sm font-semibold text-primary">{event.date}</span>
+              className="bg-card rounded-xl overflow-hidden shadow-lg border">
+              {event.image && (
+                <div className="h-64 overflow-hidden">
+                  <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
                 </div>
+              )}
+              <div className="p-8">
+                {event.featured && (
+                  <span className="inline-block bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1 rounded-full mb-4">Featured Event</span>
+                )}
+                <div className="flex items-center gap-2 text-secondary text-sm font-semibold mb-2">
+                  <Calendar className="w-4 h-4" /> {event.date}
+                </div>
+                <h3 className="font-heading text-2xl text-primary mb-2">{event.title}</h3>
+                <div className="flex items-center gap-1 text-muted-foreground text-sm mb-4">
+                  <MapPin className="w-3 h-3" /> {event.location}
+                </div>
+                <p className="text-foreground/80 leading-relaxed mb-6">{event.desc}</p>
+                <Button variant="default">Register Interest</Button>
               </div>
-              <div className="flex-1">
-                <h3 className="font-heading text-xl text-primary mb-1">{event.title}</h3>
-                <div className="flex items-center gap-1 text-muted-foreground text-sm mb-2"><MapPin className="w-3 h-3" /> {event.location}</div>
-                <p className="text-muted-foreground text-sm">{event.desc}</p>
-              </div>
-              <Button variant="secondary" size="sm">Register</Button>
             </motion.div>
           ))}
         </div>
+
+        {/* Contact CTA */}
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}
+          className="mt-16 text-center max-w-2xl mx-auto">
+          <h3 className="font-heading text-2xl text-primary mb-4">Want to Book Dr. Lundy?</h3>
+          <p className="text-muted-foreground mb-6">For speaking engagements, workshops, or conference keynotes, reach out for a free consultation.</p>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Button variant="default" size="lg" onClick={() => window.open("https://calendly.com", "_blank")}>Book a Free Consult</Button>
+            <Button variant="outline" size="lg" onClick={() => window.location.href = "/contact"}>Email</Button>
+          </div>
+        </motion.div>
       </div>
     </section>
   </Layout>
