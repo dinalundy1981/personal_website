@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, ChevronDown, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 const primaryLinks = [
   { label: "Home", path: "/" },
@@ -27,8 +28,15 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [othersOpen, setOthersOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAdmin, signOut } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-lg">
@@ -84,11 +92,20 @@ const Header = () => {
             )}
           </div>
 
-          <Link to="/login">
-            <Button variant="warm" size="sm" className="ml-2">
-              Login
-            </Button>
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-2 ml-2">
+              {isAdmin && (
+                <Link to="/admin">
+                  <Button variant="warm" size="sm"><Shield className="w-4 h-4 mr-1" /> Admin</Button>
+                </Link>
+              )}
+              <Button variant="warm" size="sm" onClick={handleLogout}><LogOut className="w-4 h-4 mr-1" /> Logout</Button>
+            </div>
+          ) : (
+            <Link to="/login">
+              <Button variant="warm" size="sm" className="ml-2">Login</Button>
+            </Link>
+          )}
         </nav>
 
         {/* Mobile Toggle */}
@@ -127,10 +144,23 @@ const Header = () => {
               {link.label}
             </Link>
           ))}
-          <div className="px-6 pt-3">
-            <Link to="/login" onClick={() => setMobileOpen(false)}>
-              <Button variant="warm" size="sm" className="w-full">Login</Button>
-            </Link>
+          <div className="px-6 pt-3 space-y-2">
+            {user ? (
+              <>
+                {isAdmin && (
+                  <Link to="/admin" onClick={() => setMobileOpen(false)}>
+                    <Button variant="warm" size="sm" className="w-full"><Shield className="w-4 h-4 mr-1" /> Admin Dashboard</Button>
+                  </Link>
+                )}
+                <Button variant="warm" size="sm" className="w-full" onClick={() => { handleLogout(); setMobileOpen(false); }}>
+                  <LogOut className="w-4 h-4 mr-1" /> Logout
+                </Button>
+              </>
+            ) : (
+              <Link to="/login" onClick={() => setMobileOpen(false)}>
+                <Button variant="warm" size="sm" className="w-full">Login</Button>
+              </Link>
+            )}
           </div>
         </nav>
       )}
@@ -139,4 +169,3 @@ const Header = () => {
 };
 
 export default Header;
-
