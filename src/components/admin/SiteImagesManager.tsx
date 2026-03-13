@@ -3,6 +3,7 @@ import { Upload, Trash2, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { uploadToImgBB } from "@/lib/imgbb";
 
 const SECTIONS = [
   { key: "hero", label: "Hero Profile Photo" },
@@ -38,32 +39,22 @@ const SiteImagesManager = () => {
 
   const handleUpload = async (section: string, file: File) => {
     setUploading(section);
-    const ext = file.name.split(".").pop();
-    const path = `${section}-${Date.now()}.${ext}`;
+    try {
+      const imageUrl = await uploadToImgBB(file);
 
-    const { error: uploadError } = await supabase.storage
-      .from("site-images")
-      .upload(path, file, { upsert: true });
+      const existing = getImageForSection(section);
+      if (existing) {
+        await supabase.from("site_images").update({ image_url: imageUrl, updated_at: new Date().toISOString() }).eq("id", existing.id);
+      } else {
+        await supabase.from("site_images").insert({ section, image_url: imageUrl, label: section } as any);
+      }
 
-    if (uploadError) {
-      toast({ title: "Upload failed", description: uploadError.message, variant: "destructive" });
-      setUploading(null);
-      return;
+      toast({ title: "Image uploaded!" });
+      fetchImages();
+    } catch {
+      toast({ title: "Upload failed", description: "Could not upload image to ImgBB.", variant: "destructive" });
     }
-
-    const { data: urlData } = supabase.storage.from("site-images").getPublicUrl(path);
-    const imageUrl = urlData.publicUrl;
-
-    const existing = getImageForSection(section);
-    if (existing) {
-      await supabase.from("site_images").update({ image_url: imageUrl, updated_at: new Date().toISOString() }).eq("id", existing.id);
-    } else {
-      await supabase.from("site_images").insert({ section, image_url: imageUrl, label: section } as any);
-    }
-
-    toast({ title: "Image uploaded!" });
     setUploading(null);
-    fetchImages();
   };
 
   const handleDelete = async (section: string) => {
@@ -87,25 +78,12 @@ const SiteImagesManager = () => {
               <p className="text-sm font-medium text-foreground mb-3">{sec.label}</p>
               {img ? (
                 <div className="relative group">
-                  <img
-                    src={img.image_url}
-                    alt={sec.label}
-                    className="w-full h-40 object-cover rounded-lg"
-                  />
+                  <img src={img.image_url} alt={sec.label} className="w-full h-40 object-cover rounded-lg" />
                   <div className="absolute inset-0 bg-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => fileRefs.current[sec.key]?.click()}
-                      disabled={uploading === sec.key}
-                    >
+                    <Button variant="secondary" size="sm" onClick={() => fileRefs.current[sec.key]?.click()} disabled={uploading === sec.key}>
                       <Upload className="w-4 h-4" /> Replace
                     </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(sec.key)}
-                    >
+                    <Button variant="destructive" size="sm" onClick={() => handleDelete(sec.key)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>

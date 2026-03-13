@@ -12,8 +12,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
+import ImageUploadField from "@/components/admin/ImageUploadField";
 
 type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing";
+
+const IMAGE_FIELDS = ["image_url", "thumbnail_url", "image1_url", "image2_url", "image3_url"];
 
 const tabConfig: { key: TableName; label: string; icon: any; fields: { name: string; type: string; required?: boolean }[] }[] = [
   {
@@ -22,7 +25,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "title", type: "text", required: true },
       { name: "description", type: "textarea" },
       { name: "price", type: "number", required: true },
-      { name: "image_url", type: "text" },
+      { name: "image_url", type: "image" },
       { name: "category", type: "text" },
     ],
   },
@@ -32,7 +35,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "title", type: "text", required: true },
       { name: "description", type: "textarea" },
       { name: "price", type: "number", required: true },
-      { name: "image_url", type: "text" },
+      { name: "image_url", type: "image" },
       { name: "category", type: "text" },
     ],
   },
@@ -43,7 +46,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "description", type: "textarea" },
       { name: "date", type: "datetime-local", required: true },
       { name: "location", type: "text" },
-      { name: "image_url", type: "text" },
+      { name: "image_url", type: "image" },
       { name: "max_attendees", type: "number" },
     ],
   },
@@ -53,7 +56,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "title", type: "text", required: true },
       { name: "content", type: "textarea" },
       { name: "excerpt", type: "textarea" },
-      { name: "image_url", type: "text" },
+      { name: "image_url", type: "image" },
       { name: "author", type: "text" },
     ],
   },
@@ -62,9 +65,9 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
     fields: [
       { name: "title", type: "text", required: true },
       { name: "content", type: "textarea" },
-      { name: "image1_url", type: "text" },
-      { name: "image2_url", type: "text" },
-      { name: "image3_url", type: "text" },
+      { name: "image1_url", type: "image" },
+      { name: "image2_url", type: "image" },
+      { name: "image3_url", type: "image" },
     ],
   },
   {
@@ -75,7 +78,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "audio_url", type: "text" },
       { name: "episode_number", type: "number" },
       { name: "duration", type: "text" },
-      { name: "image_url", type: "text" },
+      { name: "image_url", type: "image" },
     ],
   },
   {
@@ -85,7 +88,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "description", type: "textarea" },
       { name: "media_type", type: "text" },
       { name: "url", type: "text" },
-      { name: "thumbnail_url", type: "text" },
+      { name: "thumbnail_url", type: "image" },
     ],
   },
   {
@@ -95,7 +98,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "description", type: "textarea" },
       { name: "publication_type", type: "text" },
       { name: "url", type: "text" },
-      { name: "image_url", type: "text" },
+      { name: "image_url", type: "image" },
       { name: "published_date", type: "date" },
     ],
   },
@@ -243,11 +246,27 @@ const AdminDashboard = () => {
                       <div className="space-y-4 mt-4">
                         {tab.fields.map((field) => (
                           <div key={field.name}>
-                            <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>
-                            {field.type === "textarea" ? (
-                              <Textarea value={formData[field.name] || ""} onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })} rows={3} />
+                            {field.type === "image" ? (
+                              <ImageUploadField
+                                label={field.name.replace(/_/g, " ")}
+                                value={formData[field.name] || ""}
+                                onChange={(url) => setFormData({ ...formData, [field.name]: url })}
+                              />
                             ) : (
-                              <Input type={field.type === "number" ? "number" : field.type === "datetime-local" ? "datetime-local" : field.type === "date" ? "date" : "text"} value={formData[field.name] || ""} onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })} required={field.required} step={field.type === "number" ? "0.01" : undefined} />
+                              <>
+                                <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>
+                                {field.type === "textarea" ? (
+                                  <Textarea value={formData[field.name] || ""} onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })} rows={3} />
+                                ) : (
+                                  <Input
+                                    type={field.type === "number" ? "number" : field.type === "datetime-local" ? "datetime-local" : field.type === "date" ? "date" : "text"}
+                                    value={formData[field.name] || ""}
+                                    onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
+                                    required={field.required}
+                                    step={field.type === "number" ? "0.01" : undefined}
+                                  />
+                                )}
+                              </>
                             )}
                           </div>
                         ))}
@@ -269,6 +288,7 @@ const AdminDashboard = () => {
                       <table className="w-full text-sm">
                         <thead className="bg-muted/50">
                           <tr>
+                            <th className="text-left p-3 font-medium">Image</th>
                             <th className="text-left p-3 font-medium">Title</th>
                             <th className="text-left p-3 font-medium hidden md:table-cell">Created</th>
                             <th className="text-left p-3 font-medium hidden sm:table-cell">Status</th>
@@ -276,26 +296,38 @@ const AdminDashboard = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {items.map((item) => (
-                            <tr key={item.id} className="border-t hover:bg-muted/20 transition-colors">
-                              <td className="p-3 font-medium">{item.title}</td>
-                              <td className="p-3 text-muted-foreground hidden md:table-cell">{new Date(item.created_at).toLocaleDateString()}</td>
-                              <td className="p-3 hidden sm:table-cell">
-                                <span className={`px-2 py-1 rounded-full text-xs ${item.is_published !== false ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
-                                  {item.is_published !== false ? "Published" : "Draft"}
-                                </span>
-                              </td>
-                              <td className="p-3 text-right">
-                                <div className="flex items-center justify-end gap-1">
-                                  <Button variant="ghost" size="sm" onClick={() => handleTogglePublish(item.id, item.is_published !== false)}>
-                                    {item.is_published !== false ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                  </Button>
-                                  <Button variant="ghost" size="sm" onClick={() => openEdit(item)}><Edit className="w-4 h-4" /></Button>
-                                  <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDelete(item.id)}><Trash2 className="w-4 h-4" /></Button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
+                          {items.map((item) => {
+                            const imgUrl = item.image_url || item.thumbnail_url || item.image1_url;
+                            return (
+                              <tr key={item.id} className="border-t hover:bg-muted/20 transition-colors">
+                                <td className="p-3">
+                                  {imgUrl ? (
+                                    <img src={imgUrl} alt="" className="w-12 h-12 rounded-lg object-cover" />
+                                  ) : (
+                                    <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
+                                      <ImageIcon className="w-5 h-5 text-muted-foreground" />
+                                    </div>
+                                  )}
+                                </td>
+                                <td className="p-3 font-medium">{item.title}</td>
+                                <td className="p-3 text-muted-foreground hidden md:table-cell">{new Date(item.created_at).toLocaleDateString()}</td>
+                                <td className="p-3 hidden sm:table-cell">
+                                  <span className={`px-2 py-1 rounded-full text-xs ${item.is_published !== false ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
+                                    {item.is_published !== false ? "Published" : "Draft"}
+                                  </span>
+                                </td>
+                                <td className="p-3 text-right">
+                                  <div className="flex items-center justify-end gap-1">
+                                    <Button variant="ghost" size="sm" onClick={() => handleTogglePublish(item.id, item.is_published !== false)}>
+                                      {item.is_published !== false ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </Button>
+                                    <Button variant="ghost" size="sm" onClick={() => openEdit(item)}><Edit className="w-4 h-4" /></Button>
+                                    <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDelete(item.id)}><Trash2 className="w-4 h-4" /></Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
