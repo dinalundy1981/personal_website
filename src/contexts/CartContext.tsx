@@ -6,6 +6,7 @@ export interface CartItem {
   price: number;
   image_url: string | null;
   quantity: number;
+  item_type: "book" | "course";
 }
 
 interface CartContextType {
@@ -27,8 +28,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = (item: Omit<CartItem, "quantity">) => {
     setItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
-      if (existing) return prev.map((i) => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i);
+      const existing = prev.find((i) => i.id === item.id && i.item_type === item.item_type);
+      if (existing) return prev.map((i) => i.id === item.id && i.item_type === item.item_type ? { ...i, quantity: i.quantity + 1 } : i);
       return [...prev, { ...item, quantity: 1 }];
     });
   };

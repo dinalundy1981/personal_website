@@ -38,7 +38,7 @@ const FeaturedBooks = () => {
   if (books.length === 0) return null;
 
   const handleAdd = (book: Book) => {
-    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url });
+    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book" });
     toast({ title: `"${book.title}" added to cart!` });
   };
 

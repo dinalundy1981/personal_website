@@ -171,25 +171,43 @@ export type Database = {
       }
       course_orders: {
         Row: {
+          admin_notes: string | null
+          country: string | null
           course_id: string
           created_at: string
           id: string
+          payment_email: string | null
+          payment_method: string | null
+          phone: string | null
+          quantity: number
           status: string
           total_price: number
           user_id: string
         }
         Insert: {
+          admin_notes?: string | null
+          country?: string | null
           course_id: string
           created_at?: string
           id?: string
+          payment_email?: string | null
+          payment_method?: string | null
+          phone?: string | null
+          quantity?: number
           status?: string
           total_price: number
           user_id: string
         }
         Update: {
+          admin_notes?: string | null
+          country?: string | null
           course_id?: string
           created_at?: string
           id?: string
+          payment_email?: string | null
+          payment_method?: string | null
+          phone?: string | null
+          quantity?: number
           status?: string
           total_price?: number
           user_id?: string
