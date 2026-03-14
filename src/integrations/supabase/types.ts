@@ -419,6 +419,7 @@ export type Database = {
       podcasts: {
         Row: {
           audio_url: string | null
+          category: string | null
           created_at: string
           description: string | null
           duration: string | null
@@ -426,12 +427,15 @@ export type Database = {
           id: string
           image_url: string | null
           is_published: boolean | null
+          podcast_format: string | null
           published_at: string | null
           title: string
           updated_at: string
+          video_url: string | null
         }
         Insert: {
           audio_url?: string | null
+          category?: string | null
           created_at?: string
           description?: string | null
           duration?: string | null
@@ -439,12 +443,15 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_published?: boolean | null
+          podcast_format?: string | null
           published_at?: string | null
           title: string
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
           audio_url?: string | null
+          category?: string | null
           created_at?: string
           description?: string | null
           duration?: string | null
@@ -452,9 +459,11 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_published?: boolean | null
+          podcast_format?: string | null
           published_at?: string | null
           title?: string
           updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }
