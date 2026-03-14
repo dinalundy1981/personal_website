@@ -14,7 +14,7 @@ import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 
-type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing";
+type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing" | "works_in_progress";
 
 const IMAGE_FIELDS = ["image_url", "thumbnail_url", "image1_url", "image2_url", "image3_url"];
 
@@ -102,6 +102,17 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "url", type: "text" },
       { name: "image_url", type: "image" },
       { name: "published_date", type: "date" },
+    ],
+  },
+  {
+    key: "works_in_progress", label: "Works in Progress", icon: FileText,
+    fields: [
+      { name: "title", type: "text", required: true },
+      { name: "author", type: "text" },
+      { name: "description", type: "textarea" },
+      { name: "url", type: "text" },
+      { name: "image_url", type: "image" },
+      { name: "expected_date", type: "text" },
     ],
   },
 ];
