@@ -465,6 +465,14 @@ const AdminDashboard = () => {
           {/* Content Tables */}
           {tabConfig.map((tab) => (
             <TabsContent key={tab.key} value={tab.key}>
+              {/* Blog Editor Override */}
+              {tab.key === "blogs" && blogEditorOpen ? (
+                <BlogEditor
+                  initialData={blogEditData}
+                  onSave={handleBlogSave}
+                  onCancel={() => { setBlogEditorOpen(false); setBlogEditData(undefined); }}
+                />
+              ) : (
               <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="font-heading text-2xl text-primary">Manage {tab.label}</h2>
