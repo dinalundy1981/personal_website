@@ -256,7 +256,7 @@ const AdminDashboard = () => {
 
   // Orders state
   const [orders, setOrders] = useState<any[]>([]);
-
+  const [courseOrders, setCourseOrders] = useState<any[]>([]);
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
       navigate("/login");
