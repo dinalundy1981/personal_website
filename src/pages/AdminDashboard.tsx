@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import BlogEditor from "@/components/admin/BlogEditor";
 
 type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing" | "works_in_progress";
 
@@ -248,6 +249,10 @@ const AdminDashboard = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
 
+  // Blog editor state
+  const [blogEditorOpen, setBlogEditorOpen] = useState(false);
+  const [blogEditData, setBlogEditData] = useState<Record<string, any> | undefined>(undefined);
+
   // Payment methods state
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
   const [pmForm, setPmForm] = useState<Record<string, any>>({});
@@ -347,8 +352,39 @@ const AdminDashboard = () => {
     fetchItems();
   };
 
-  const openEdit = (item: any) => { setFormData(item); setEditingId(item.id); setDialogOpen(true); };
-  const openNew = () => { setFormData({}); setEditingId(null); setDialogOpen(true); };
+  const openEdit = (item: any) => {
+    if (activeTab === "blogs") {
+      setBlogEditData(item);
+      setBlogEditorOpen(true);
+      return;
+    }
+    setFormData(item); setEditingId(item.id); setDialogOpen(true);
+  };
+  const openNew = () => {
+    if (activeTab === "blogs") {
+      setBlogEditData(undefined);
+      setBlogEditorOpen(true);
+      return;
+    }
+    setFormData({}); setEditingId(null); setDialogOpen(true);
+  };
+
+  const handleBlogSave = async (data: Record<string, any>) => {
+    let error;
+    if (blogEditData?.id) {
+      ({ error } = await supabase.from("blogs").update(data).eq("id", blogEditData.id));
+    } else {
+      ({ error } = await supabase.from("blogs").insert(data as any));
+    }
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: blogEditData?.id ? "Blog updated!" : "Blog created!" });
+      setBlogEditorOpen(false);
+      setBlogEditData(undefined);
+      fetchItems();
+    }
+  };
 
   // Payment methods CRUD
   const handleSavePM = async () => {
@@ -429,6 +465,14 @@ const AdminDashboard = () => {
           {/* Content Tables */}
           {tabConfig.map((tab) => (
             <TabsContent key={tab.key} value={tab.key}>
+              {/* Blog Editor Override */}
+              {tab.key === "blogs" && blogEditorOpen ? (
+                <BlogEditor
+                  initialData={blogEditData}
+                  onSave={handleBlogSave}
+                  onCancel={() => { setBlogEditorOpen(false); setBlogEditData(undefined); }}
+                />
+              ) : (
               <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="font-heading text-2xl text-primary">Manage {tab.label}</h2>
@@ -531,6 +575,7 @@ const AdminDashboard = () => {
                   </div>
                 )}
               </motion.div>
+              )}
             </TabsContent>
           ))}
 
