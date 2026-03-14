@@ -164,15 +164,19 @@ const BlogPost = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="prose prose-lg max-w-none text-foreground
-                [&_img]:max-w-full [&_img]:rounded-xl [&_img]:my-6 [&_img]:mx-auto [&_img]:block
-                [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:my-6
+              className="prose prose-lg max-w-none text-foreground overflow-hidden break-words
+                [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-xl [&_img]:my-6 [&_img]:mx-auto [&_img]:block
+                [&_iframe]:w-full [&_iframe]:max-w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:my-6
+                [&_video]:w-full [&_video]:max-w-full [&_video]:rounded-xl [&_video]:my-6
+                [&_pre]:overflow-x-auto [&_pre]:max-w-full
+                [&_table]:overflow-x-auto [&_table]:block [&_table]:max-w-full
                 [&_h1]:font-heading [&_h1]:text-primary
                 [&_h2]:font-heading [&_h2]:text-primary
                 [&_h3]:font-heading [&_h3]:text-primary
-                [&_a]:text-secondary [&_a]:underline
+                [&_a]:text-secondary [&_a]:underline [&_a]:break-words
                 [&_blockquote]:border-l-secondary [&_blockquote]:bg-muted/30 [&_blockquote]:rounded-r-lg [&_blockquote]:py-2 [&_blockquote]:px-4
-                [&_p]:leading-relaxed [&_p]:text-foreground/90"
+                [&_p]:leading-relaxed [&_p]:text-foreground/90
+                [&>*]:max-w-full"
               dangerouslySetInnerHTML={{ __html: blog.content }}
             />
           )}
