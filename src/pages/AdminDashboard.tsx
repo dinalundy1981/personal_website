@@ -716,6 +716,9 @@ const AdminDashboard = () => {
     // Media categories manager
     if (activeSection === "media") return <MediaCategoriesManager />;
 
+    // Events manager
+    if (activeSection === "events") return <EventsManager />;
+
     // Blog editor
     if (activeSection === "blogs" && blogEditorOpen) {
       return (
