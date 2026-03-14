@@ -18,7 +18,7 @@ type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "pod
 
 const IMAGE_FIELDS = ["image_url", "thumbnail_url", "image1_url", "image2_url", "image3_url"];
 
-const tabConfig: { key: TableName; label: string; icon: any; fields: { name: string; type: string; required?: boolean }[] }[] = [
+const tabConfig: { key: TableName; label: string; icon: any; fields: { name: string; type: string; required?: boolean; options?: { value: string; label: string }[]; showWhen?: { field: string; value: string } }[] }[] = [
   {
     key: "books", label: "Books", icon: Book,
     fields: [
