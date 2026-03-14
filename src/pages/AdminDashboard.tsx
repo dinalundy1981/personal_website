@@ -109,16 +109,6 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
     ],
   },
   {
-    key: "media", label: "Media", icon: Video,
-    fields: [
-      { name: "title", type: "text", required: true },
-      { name: "description", type: "textarea" },
-      { name: "media_type", type: "text" },
-      { name: "url", type: "text" },
-      { name: "thumbnail_url", type: "image" },
-    ],
-  },
-  {
     key: "newsletters", label: "Newsletters", icon: Mail,
     fields: [
       { name: "title", type: "text", required: true },
