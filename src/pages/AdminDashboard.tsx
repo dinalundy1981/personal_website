@@ -505,6 +505,11 @@ const AdminDashboard = () => {
             </motion.div>
           </TabsContent>
 
+          {/* TEDx Video Tab */}
+          <TabsContent value="tedx-video">
+            <TedxVideoManager />
+          </TabsContent>
+
           {/* Contacts Tab */}
           <TabsContent value="contacts">
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
