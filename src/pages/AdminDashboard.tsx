@@ -575,6 +575,7 @@ const AdminDashboard = () => {
                   </div>
                 )}
               </motion.div>
+              )}
             </TabsContent>
           ))}
 
