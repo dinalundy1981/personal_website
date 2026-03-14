@@ -249,6 +249,10 @@ const AdminDashboard = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
 
+  // Blog editor state
+  const [blogEditorOpen, setBlogEditorOpen] = useState(false);
+  const [blogEditData, setBlogEditData] = useState<Record<string, any> | undefined>(undefined);
+
   // Payment methods state
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
   const [pmForm, setPmForm] = useState<Record<string, any>>({});
