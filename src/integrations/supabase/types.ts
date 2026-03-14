@@ -329,6 +329,51 @@ export type Database = {
         }
         Relationships: []
       }
+      featured_talks: {
+        Row: {
+          author_name: string | null
+          created_at: string
+          date: string | null
+          description: string | null
+          id: string
+          is_published: boolean | null
+          keywords: string | null
+          sort_order: number | null
+          subtitle: string | null
+          thumbnail_url: string | null
+          updated_at: string
+          video_url: string
+        }
+        Insert: {
+          author_name?: string | null
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          id?: string
+          is_published?: boolean | null
+          keywords?: string | null
+          sort_order?: number | null
+          subtitle?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string
+          video_url: string
+        }
+        Update: {
+          author_name?: string | null
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          id?: string
+          is_published?: boolean | null
+          keywords?: string | null
+          sort_order?: number | null
+          subtitle?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string
+          video_url?: string
+        }
+        Relationships: []
+      }
       media: {
         Row: {
           created_at: string
@@ -364,6 +409,71 @@ export type Database = {
           url?: string | null
         }
         Relationships: []
+      }
+      media_categories: {
+        Row: {
+          created_at: string
+          id: string
+          sort_order: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          sort_order?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          sort_order?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      media_items: {
+        Row: {
+          category_id: string
+          created_at: string
+          id: string
+          image_url: string
+          sort_order: number | null
+          subtitle: string | null
+          updated_at: string
+          year: string | null
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          id?: string
+          image_url: string
+          sort_order?: number | null
+          subtitle?: string | null
+          updated_at?: string
+          year?: string | null
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          sort_order?: number | null
+          subtitle?: string | null
+          updated_at?: string
+          year?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "media_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       newsletters: {
         Row: {
