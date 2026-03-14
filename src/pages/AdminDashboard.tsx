@@ -352,8 +352,39 @@ const AdminDashboard = () => {
     fetchItems();
   };
 
-  const openEdit = (item: any) => { setFormData(item); setEditingId(item.id); setDialogOpen(true); };
-  const openNew = () => { setFormData({}); setEditingId(null); setDialogOpen(true); };
+  const openEdit = (item: any) => {
+    if (activeTab === "blogs") {
+      setBlogEditData(item);
+      setBlogEditorOpen(true);
+      return;
+    }
+    setFormData(item); setEditingId(item.id); setDialogOpen(true);
+  };
+  const openNew = () => {
+    if (activeTab === "blogs") {
+      setBlogEditData(undefined);
+      setBlogEditorOpen(true);
+      return;
+    }
+    setFormData({}); setEditingId(null); setDialogOpen(true);
+  };
+
+  const handleBlogSave = async (data: Record<string, any>) => {
+    let error;
+    if (blogEditData?.id) {
+      ({ error } = await supabase.from("blogs").update(data).eq("id", blogEditData.id));
+    } else {
+      ({ error } = await supabase.from("blogs").insert(data as any));
+    }
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: blogEditData?.id ? "Blog updated!" : "Blog created!" });
+      setBlogEditorOpen(false);
+      setBlogEditData(undefined);
+      fetchItems();
+    }
+  };
 
   // Payment methods CRUD
   const handleSavePM = async () => {
