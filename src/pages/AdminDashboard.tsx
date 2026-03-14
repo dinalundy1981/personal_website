@@ -721,6 +721,9 @@ const AdminDashboard = () => {
     // Events manager
     if (activeSection === "events") return <EventsManager />;
 
+    // Philanthropy manager
+    if (activeSection === "philanthropy") return <PhilanthropyManager />;
+
     // Blog editor
     if (activeSection === "blogs" && blogEditorOpen) {
       return (
