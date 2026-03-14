@@ -12,7 +12,7 @@ const card3D = {
     opacity: 1,
     y: 0,
     rotateX: 0,
-    transition: { delay: i * 0.12, duration: 0.6, ease: "easeOut" },
+    transition: { delay: i * 0.12, duration: 0.6, ease: "easeOut" as const },
   }),
 };
 
