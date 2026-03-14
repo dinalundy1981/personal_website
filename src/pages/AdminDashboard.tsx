@@ -290,6 +290,9 @@ const AdminDashboard = () => {
             <TabsTrigger value="site-images" className="flex items-center gap-1.5 text-xs sm:text-sm">
               <ImageIcon className="w-4 h-4" /> Site Images
             </TabsTrigger>
+            <TabsTrigger value="tedx-video" className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <Play className="w-4 h-4" /> TEDx Video
+            </TabsTrigger>
           </TabsList>
 
           {/* Content Tables */}
