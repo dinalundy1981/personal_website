@@ -374,10 +374,20 @@ const AdminDashboard = () => {
                         <DialogTitle>{editingId ? "Edit" : "Add"} {tab.label.replace(/s$/, "")}</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4 mt-4">
-                        {tab.fields.map((field) => (
+                        {tab.fields.filter((field) => {
+                          if (field.showWhen) return formData[field.showWhen.field] === field.showWhen.value;
+                          return true;
+                        }).map((field) => (
                           <div key={field.name}>
                             {field.type === "image" ? (
                               <ImageUploadField label={field.name.replace(/_/g, " ")} value={formData[field.name] || ""} onChange={(url) => setFormData({ ...formData, [field.name]: url })} />
+                            ) : field.type === "select" && field.options ? (
+                              <>
+                                <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>
+                                <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={formData[field.name] || field.options[0]?.value || ""} onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}>
+                                  {field.options.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                                </select>
+                              </>
                             ) : (
                               <>
                                 <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>
