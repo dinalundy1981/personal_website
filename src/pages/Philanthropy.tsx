@@ -45,12 +45,12 @@ const Philanthropy = () => {
       {cards.length > 0 && (
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {cards.map((card, i) => (
                 <motion.div key={card.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i * 0.5}>
-                  <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-shadow duration-300 group">
+                  <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-all duration-300 group border-border/50">
                     {card.image_url && (
-                      <div className="aspect-video overflow-hidden">
+                      <div className="aspect-[4/3] overflow-hidden">
                         <img
                           src={card.image_url}
                           alt={card.title}
@@ -58,15 +58,15 @@ const Philanthropy = () => {
                         />
                       </div>
                     )}
-                    <CardContent className="p-6 flex-1 flex flex-col">
-                      <h3 className="font-heading text-xl text-primary mb-2">{card.title}</h3>
+                    <CardContent className="p-4 flex-1 flex flex-col">
+                      <h3 className="font-heading text-base text-primary mb-1.5 line-clamp-2">{card.title}</h3>
                       {card.description && (
-                        <p className="text-muted-foreground text-sm leading-relaxed flex-1 mb-4">{card.description}</p>
+                        <p className="text-muted-foreground text-xs leading-relaxed flex-1 mb-3 line-clamp-3">{card.description}</p>
                       )}
                       {card.link_url && (
-                        <Button variant="heroOutline" size="sm" asChild className="self-start mt-auto">
+                        <Button variant="heroOutline" size="sm" asChild className="self-start mt-auto text-xs h-8 px-3">
                           <a href={card.link_url} target="_blank" rel="noopener noreferrer">
-                            Read More <ExternalLink className="w-3.5 h-3.5 ml-1" />
+                            Read More <ExternalLink className="w-3 h-3 ml-1" />
                           </a>
                         </Button>
                       )}
