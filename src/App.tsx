@@ -17,6 +17,7 @@ import Contact from "./pages/Contact";
 import Media from "./pages/Media";
 import Newsletter from "./pages/Newsletter";
 import Publishing from "./pages/Publishing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Philanthropy from "./pages/Philanthropy";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/newsletter" element={<Newsletter />} />
               <Route path="/publishing" element={<Publishing />} />
               <Route path="/philanthropy" element={<Philanthropy />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/login" element={<Login />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/dashboard" element={<UserDashboard />} />
