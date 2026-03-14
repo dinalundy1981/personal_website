@@ -59,7 +59,7 @@ const Events = () => (
           <h3 className="font-heading text-2xl text-primary mb-4">Want to Book Dr. Lundy?</h3>
           <p className="text-muted-foreground mb-6">For speaking engagements, workshops, or conference keynotes, reach out for a free consultation.</p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <Button variant="default" size="lg" onClick={() => window.open("https://calendly.com", "_blank")}>Book a Free Consult</Button>
+            <Button variant="default" size="lg" onClick={() => window.open("https://calendly.com/dinalundy1981/30min", "_blank")}>Book a Free Consult</Button>
             <Button variant="outline" size="lg" onClick={() => window.location.href = "/contact"}>Email</Button>
           </div>
         </motion.div>
