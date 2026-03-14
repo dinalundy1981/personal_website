@@ -73,11 +73,15 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
   {
     key: "podcasts", label: "Podcasts", icon: Mic,
     fields: [
+      { name: "podcast_format", type: "select", required: true, options: [{ value: "audio", label: "Audio" }, { value: "video", label: "Video" }] },
       { name: "title", type: "text", required: true },
       { name: "description", type: "textarea" },
-      { name: "audio_url", type: "text" },
+      { name: "category", type: "text" },
       { name: "episode_number", type: "number" },
       { name: "duration", type: "text" },
+      { name: "published_at", type: "date" },
+      { name: "audio_url", type: "text", showWhen: { field: "podcast_format", value: "audio" } },
+      { name: "video_url", type: "text", showWhen: { field: "podcast_format", value: "video" } },
       { name: "image_url", type: "image" },
     ],
   },
