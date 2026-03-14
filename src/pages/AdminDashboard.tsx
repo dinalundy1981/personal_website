@@ -250,6 +250,11 @@ const AdminDashboard = () => {
     const config = tabConfig.find((t) => t.key === activeTab)!;
     const payload: Record<string, any> = {};
     config.fields.forEach((f) => {
+      // Clear fields whose showWhen condition isn't met
+      if (f.showWhen && formData[f.showWhen.field] !== f.showWhen.value) {
+        if (editingId) payload[f.name] = null;
+        return;
+      }
       if (formData[f.name] !== undefined && formData[f.name] !== "") {
         payload[f.name] = f.type === "number" ? Number(formData[f.name]) : formData[f.name];
       }
