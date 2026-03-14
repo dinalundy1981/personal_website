@@ -448,6 +448,8 @@ export type Database = {
       }
       publishing: {
         Row: {
+          abstract: string | null
+          author: string | null
           created_at: string
           description: string | null
           id: string
@@ -460,6 +462,8 @@ export type Database = {
           url: string | null
         }
         Insert: {
+          abstract?: string | null
+          author?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -472,6 +476,8 @@ export type Database = {
           url?: string | null
         }
         Update: {
+          abstract?: string | null
+          author?: string | null
           created_at?: string
           description?: string | null
           id?: string
