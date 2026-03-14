@@ -21,6 +21,7 @@ import BlogEditor from "@/components/admin/BlogEditor";
 import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import EventsManager from "@/components/admin/EventsManager";
 import PhilanthropyManager from "@/components/admin/PhilanthropyManager";
+import SubscribersManager from "@/components/admin/SubscribersManager";
 import {
   Sidebar,
   SidebarContent,
