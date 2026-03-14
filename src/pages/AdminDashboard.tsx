@@ -293,11 +293,12 @@ const AdminDashboard = () => {
 
   const fetchOrders = async () => {
     setLoadingData(true);
-    const { data } = await supabase
-      .from("book_orders")
-      .select("*, books(title, image_url)")
-      .order("created_at", { ascending: false });
-    if (data) setOrders(data);
+    const [bookRes, courseRes] = await Promise.all([
+      supabase.from("book_orders").select("*, books(title, image_url)").order("created_at", { ascending: false }),
+      supabase.from("course_orders").select("*, courses(title, image_url)").order("created_at", { ascending: false }),
+    ]);
+    if (bookRes.data) setOrders(bookRes.data);
+    if (courseRes.data) setCourseOrders(courseRes.data);
     setLoadingData(false);
   };
 
