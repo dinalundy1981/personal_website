@@ -55,27 +55,42 @@ export type Database = {
       }
       book_orders: {
         Row: {
+          admin_notes: string | null
           book_id: string
+          country: string | null
           created_at: string
           id: string
+          payment_email: string | null
+          payment_method: string | null
+          phone: string | null
           quantity: number
           status: string
           total_price: number
           user_id: string
         }
         Insert: {
+          admin_notes?: string | null
           book_id: string
+          country?: string | null
           created_at?: string
           id?: string
+          payment_email?: string | null
+          payment_method?: string | null
+          phone?: string | null
           quantity?: number
           status?: string
           total_price: number
           user_id: string
         }
         Update: {
+          admin_notes?: string | null
           book_id?: string
+          country?: string | null
           created_at?: string
           id?: string
+          payment_email?: string | null
+          payment_method?: string | null
+          phone?: string | null
           quantity?: number
           status?: string
           total_price?: number
@@ -367,6 +382,36 @@ export type Database = {
           is_published?: boolean | null
           published_at?: string | null
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payment_methods: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          is_active: boolean | null
+          label: string
+          method_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          is_active?: boolean | null
+          label: string
+          method_type?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          is_active?: boolean | null
+          label?: string
+          method_type?: string
           updated_at?: string
         }
         Relationships: []

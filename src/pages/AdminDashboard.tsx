@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send, LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon } from "lucide-react";
+import { Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send, LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon, CreditCard, ShoppingCart, Check, X as XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -121,13 +121,22 @@ const AdminDashboard = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<TableName>("books");
+  const [activeTab, setActiveTab] = useState<string>("books");
   const [items, setItems] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [editingId, setEditingId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
+
+  // Payment methods state
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
+  const [pmForm, setPmForm] = useState<Record<string, any>>({});
+  const [pmEditingId, setPmEditingId] = useState<string | null>(null);
+  const [pmDialogOpen, setPmDialogOpen] = useState(false);
+
+  // Orders state
+  const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
@@ -137,14 +146,16 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (isAdmin) {
-      fetchItems();
-      fetchContacts();
+      if (activeTab === "payment-methods") fetchPaymentMethods();
+      else if (activeTab === "orders") fetchOrders();
+      else if (activeTab === "contacts") fetchContacts();
+      else if (activeTab !== "site-images") fetchItems();
     }
   }, [activeTab, isAdmin]);
 
   const fetchItems = async () => {
     setLoadingData(true);
-    const { data, error } = await supabase.from(activeTab).select("*").order("created_at", { ascending: false });
+    const { data, error } = await supabase.from(activeTab as TableName).select("*").order("created_at", { ascending: false });
     if (!error) setItems(data || []);
     setLoadingData(false);
   };
@@ -152,6 +163,23 @@ const AdminDashboard = () => {
   const fetchContacts = async () => {
     const { data } = await supabase.from("contacts").select("*").order("created_at", { ascending: false });
     if (data) setContacts(data);
+  };
+
+  const fetchPaymentMethods = async () => {
+    setLoadingData(true);
+    const { data } = await supabase.from("payment_methods").select("*").order("created_at", { ascending: false });
+    if (data) setPaymentMethods(data);
+    setLoadingData(false);
+  };
+
+  const fetchOrders = async () => {
+    setLoadingData(true);
+    const { data } = await supabase
+      .from("book_orders")
+      .select("*, books(title, image_url)")
+      .order("created_at", { ascending: false });
+    if (data) setOrders(data);
+    setLoadingData(false);
   };
 
   const handleSave = async () => {
@@ -165,9 +193,9 @@ const AdminDashboard = () => {
 
     let error;
     if (editingId) {
-      ({ error } = await supabase.from(activeTab).update(payload).eq("id", editingId));
+      ({ error } = await supabase.from(activeTab as TableName).update(payload).eq("id", editingId));
     } else {
-      ({ error } = await supabase.from(activeTab).insert(payload as any));
+      ({ error } = await supabase.from(activeTab as TableName).insert(payload as any));
     }
 
     if (error) {
@@ -182,7 +210,7 @@ const AdminDashboard = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const { error } = await supabase.from(activeTab).delete().eq("id", id);
+    const { error } = await supabase.from(activeTab as TableName).delete().eq("id", id);
     if (!error) {
       toast({ title: "Deleted!" });
       fetchItems();
@@ -190,30 +218,46 @@ const AdminDashboard = () => {
   };
 
   const handleTogglePublish = async (id: string, current: boolean) => {
-    await supabase.from(activeTab).update({ is_published: !current }).eq("id", id);
+    await supabase.from(activeTab as TableName).update({ is_published: !current }).eq("id", id);
     fetchItems();
   };
 
-  const openEdit = (item: any) => {
-    setFormData(item);
-    setEditingId(item.id);
-    setDialogOpen(true);
+  const openEdit = (item: any) => { setFormData(item); setEditingId(item.id); setDialogOpen(true); };
+  const openNew = () => { setFormData({}); setEditingId(null); setDialogOpen(true); };
+
+  // Payment methods CRUD
+  const handleSavePM = async () => {
+    const payload = { label: pmForm.label, method_type: pmForm.method_type || "paypal", details: pmForm.details || null, is_active: pmForm.is_active !== false };
+    let error;
+    if (pmEditingId) {
+      ({ error } = await supabase.from("payment_methods").update(payload).eq("id", pmEditingId));
+    } else {
+      ({ error } = await supabase.from("payment_methods").insert(payload as any));
+    }
+    if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
+    else { toast({ title: pmEditingId ? "Updated!" : "Created!" }); setPmDialogOpen(false); setPmForm({}); setPmEditingId(null); fetchPaymentMethods(); }
   };
 
-  const openNew = () => {
-    setFormData({});
-    setEditingId(null);
-    setDialogOpen(true);
+  const handleDeletePM = async (id: string) => {
+    await supabase.from("payment_methods").delete().eq("id", id);
+    toast({ title: "Deleted!" });
+    fetchPaymentMethods();
+  };
+
+  // Order actions
+  const handleOrderStatus = async (id: string, status: string) => {
+    await supabase.from("book_orders").update({ status } as any).eq("id", id);
+    toast({ title: `Order ${status}!` });
+    fetchOrders();
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
   if (!isAdmin) return null;
 
-  const currentConfig = tabConfig.find((t) => t.key === activeTab)!;
+  const currentConfig = tabConfig.find((t) => t.key === activeTab);
 
   return (
     <div className="min-h-screen bg-muted/30">
-      {/* Header */}
       <header className="bg-primary text-primary-foreground shadow-lg">
         <div className="container mx-auto flex items-center justify-between py-4 px-4">
           <h1 className="font-heading text-2xl">Admin Dashboard</h1>
@@ -227,17 +271,23 @@ const AdminDashboard = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TableName)}>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="flex flex-wrap gap-1 h-auto bg-background border p-2 rounded-xl mb-8">
             {tabConfig.map((tab) => (
               <TabsTrigger key={tab.key} value={tab.key} className="flex items-center gap-1.5 text-xs sm:text-sm">
                 <tab.icon className="w-4 h-4" /> {tab.label}
               </TabsTrigger>
             ))}
-            <TabsTrigger value={"contacts" as any} className="flex items-center gap-1.5 text-xs sm:text-sm">
+            <TabsTrigger value="orders" className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <ShoppingCart className="w-4 h-4" /> Orders
+            </TabsTrigger>
+            <TabsTrigger value="payment-methods" className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <CreditCard className="w-4 h-4" /> Payment Methods
+            </TabsTrigger>
+            <TabsTrigger value="contacts" className="flex items-center gap-1.5 text-xs sm:text-sm">
               <Send className="w-4 h-4" /> Contacts
             </TabsTrigger>
-            <TabsTrigger value={"site-images" as any} className="flex items-center gap-1.5 text-xs sm:text-sm">
+            <TabsTrigger value="site-images" className="flex items-center gap-1.5 text-xs sm:text-sm">
               <ImageIcon className="w-4 h-4" /> Site Images
             </TabsTrigger>
           </TabsList>
@@ -260,11 +310,7 @@ const AdminDashboard = () => {
                         {tab.fields.map((field) => (
                           <div key={field.name}>
                             {field.type === "image" ? (
-                              <ImageUploadField
-                                label={field.name.replace(/_/g, " ")}
-                                value={formData[field.name] || ""}
-                                onChange={(url) => setFormData({ ...formData, [field.name]: url })}
-                              />
+                              <ImageUploadField label={field.name.replace(/_/g, " ")} value={formData[field.name] || ""} onChange={(url) => setFormData({ ...formData, [field.name]: url })} />
                             ) : (
                               <>
                                 <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>
@@ -314,13 +360,7 @@ const AdminDashboard = () => {
                             return (
                               <tr key={item.id} className="border-t hover:bg-muted/20 transition-colors">
                                 <td className="p-3">
-                                  {imgUrl ? (
-                                    <img src={imgUrl} alt="" className="w-12 h-12 rounded-lg object-cover" />
-                                  ) : (
-                                    <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
-                                      <ImageIcon className="w-5 h-5 text-muted-foreground" />
-                                    </div>
-                                  )}
+                                  {imgUrl ? <img src={imgUrl} alt="" className="w-12 h-12 rounded-lg object-cover" /> : <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center"><ImageIcon className="w-5 h-5 text-muted-foreground" /></div>}
                                 </td>
                                 <td className="p-3 font-medium">{item.title}</td>
                                 <td className="p-3 text-muted-foreground hidden md:table-cell">{new Date(item.created_at).toLocaleDateString()}</td>
@@ -350,21 +390,124 @@ const AdminDashboard = () => {
             </TabsContent>
           ))}
 
+          {/* Orders Tab */}
+          <TabsContent value="orders">
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
+              <h2 className="font-heading text-2xl text-primary mb-6">Book Orders</h2>
+              {loadingData ? <p className="text-muted-foreground">Loading...</p> : orders.length === 0 ? (
+                <div className="text-center py-12 bg-background rounded-xl border"><p className="text-muted-foreground">No orders yet.</p></div>
+              ) : (
+                <div className="space-y-4">
+                  {orders.map((order) => (
+                    <div key={order.id} className="bg-background rounded-xl border p-5">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        {order.books?.image_url && <img src={order.books.image_url} alt="" className="w-16 h-16 rounded-lg object-cover" />}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-medium text-foreground">{order.books?.title || "Unknown Book"}</h3>
+                          <div className="text-sm text-muted-foreground space-y-0.5 mt-1">
+                            <p>Qty: {order.quantity} · Total: ${Number(order.total_price).toFixed(2)}</p>
+                            <p>Phone: {order.phone || "N/A"} · Country: {order.country || "N/A"}</p>
+                            <p>Payment: {order.payment_method || "N/A"} · Email: {order.payment_email || "N/A"}</p>
+                            <p>Date: {new Date(order.created_at).toLocaleString()}</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            order.status === "approved" ? "bg-green-100 text-green-700" :
+                            order.status === "rejected" ? "bg-red-100 text-red-700" :
+                            "bg-yellow-100 text-yellow-700"
+                          }`}>
+                            {order.status}
+                          </span>
+                          {order.status === "pending" && (
+                            <div className="flex gap-1">
+                              <Button size="sm" variant="default" onClick={() => handleOrderStatus(order.id, "approved")}>
+                                <Check className="w-3 h-3 mr-1" /> Approve
+                              </Button>
+                              <Button size="sm" variant="destructive" onClick={() => handleOrderStatus(order.id, "rejected")}>
+                                <XIcon className="w-3 h-3 mr-1" /> Reject
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </TabsContent>
+
+          {/* Payment Methods Tab */}
+          <TabsContent value="payment-methods">
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-heading text-2xl text-primary">Payment Methods</h2>
+                <Dialog open={pmDialogOpen} onOpenChange={setPmDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="secondary" onClick={() => { setPmForm({}); setPmEditingId(null); setPmDialogOpen(true); }}>
+                      <Plus className="w-4 h-4 mr-1" /> Add Payment Method
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader><DialogTitle>{pmEditingId ? "Edit" : "Add"} Payment Method</DialogTitle></DialogHeader>
+                    <div className="space-y-4 mt-4">
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-1">Label</label>
+                        <Input placeholder="e.g. PayPal - business@email.com" value={pmForm.label || ""} onChange={(e) => setPmForm({ ...pmForm, label: e.target.value })} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-1">Type</label>
+                        <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={pmForm.method_type || "paypal"} onChange={(e) => setPmForm({ ...pmForm, method_type: e.target.value })}>
+                          <option value="paypal">PayPal</option>
+                          <option value="bank_transfer">Bank Transfer</option>
+                          <option value="mobile_apps">Mobile Apps</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-1">Details (shown to buyers)</label>
+                        <Textarea placeholder="Account info, instructions, etc." value={pmForm.details || ""} onChange={(e) => setPmForm({ ...pmForm, details: e.target.value })} rows={4} />
+                      </div>
+                      <Button onClick={handleSavePM} className="w-full" disabled={!pmForm.label?.trim()}>{pmEditingId ? "Update" : "Create"}</Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              {loadingData ? <p className="text-muted-foreground">Loading...</p> : paymentMethods.length === 0 ? (
+                <div className="text-center py-12 bg-background rounded-xl border"><p className="text-muted-foreground">No payment methods yet. Add your first one!</p></div>
+              ) : (
+                <div className="space-y-3">
+                  {paymentMethods.map((pm) => (
+                    <div key={pm.id} className="bg-background rounded-xl border p-4 flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <h3 className="font-medium text-foreground">{pm.label}</h3>
+                        <p className="text-xs text-muted-foreground capitalize">{pm.method_type.replace(/_/g, " ")}</p>
+                        {pm.details && <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{pm.details}</p>}
+                      </div>
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="sm" onClick={() => { setPmForm(pm); setPmEditingId(pm.id); setPmDialogOpen(true); }}><Edit className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDeletePM(pm.id)}><Trash2 className="w-4 h-4" /></Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </TabsContent>
+
           {/* Site Images Tab */}
-          <TabsContent value={"site-images" as any}>
+          <TabsContent value="site-images">
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
               <SiteImagesManager />
             </motion.div>
           </TabsContent>
 
           {/* Contacts Tab */}
-          <TabsContent value={"contacts" as any}>
+          <TabsContent value="contacts">
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
               <h2 className="font-heading text-2xl text-primary mb-6">Contact Messages</h2>
               {contacts.length === 0 ? (
-                <div className="text-center py-12 bg-background rounded-xl border">
-                  <p className="text-muted-foreground">No contact messages yet.</p>
-                </div>
+                <div className="text-center py-12 bg-background rounded-xl border"><p className="text-muted-foreground">No contact messages yet.</p></div>
               ) : (
                 <div className="space-y-4">
                   {contacts.map((c) => (
