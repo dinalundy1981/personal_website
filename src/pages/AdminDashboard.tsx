@@ -21,6 +21,7 @@ import BlogEditor from "@/components/admin/BlogEditor";
 import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import EventsManager from "@/components/admin/EventsManager";
 import PhilanthropyManager from "@/components/admin/PhilanthropyManager";
+import SubscribersManager from "@/components/admin/SubscribersManager";
 import {
   Sidebar,
   SidebarContent,
@@ -458,6 +459,7 @@ const sidebarNav = [
 const sidebarNav2 = [
   { key: "orders", label: "Orders", icon: ShoppingCart },
   { key: "contacts", label: "Messages", icon: Send },
+  { key: "subscribers", label: "Subscribers", icon: Users },
 ];
 
 const sidebarSettings = [
@@ -723,6 +725,9 @@ const AdminDashboard = () => {
 
     // Philanthropy manager
     if (activeSection === "philanthropy") return <PhilanthropyManager />;
+
+    // Subscribers
+    if (activeSection === "subscribers") return <SubscribersManager />;
 
     // Blog editor
     if (activeSection === "blogs" && blogEditorOpen) {

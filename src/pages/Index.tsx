@@ -5,6 +5,7 @@ import FeaturedBooks from "@/components/home/FeaturedBooks";
 import FeaturedCourses from "@/components/home/FeaturedCourses";
 import UpcomingEvents from "@/components/home/UpcomingEvents";
 import WorkWithMeCTA from "@/components/home/WorkWithMeCTA";
+import EmailSubscription from "@/components/home/EmailSubscription";
 import PodcastPreview from "@/components/home/PodcastPreview";
 import NewsletterCTA from "@/components/home/NewsletterCTA";
 import { useSiteImages } from "@/hooks/useSiteImages";
@@ -20,6 +21,7 @@ const Index = () => {
       <FeaturedCourses />
       <UpcomingEvents />
       <WorkWithMeCTA />
+      <EmailSubscription />
       <PodcastPreview />
       <NewsletterCTA />
     </Layout>
