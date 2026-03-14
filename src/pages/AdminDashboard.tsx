@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send, LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon, CreditCard, ShoppingCart, Check, X as XIcon } from "lucide-react";
+import { Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send, LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon, CreditCard, ShoppingCart, Check, X as XIcon, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -116,6 +116,66 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
     ],
   },
 ];
+
+const TedxVideoManager = () => {
+  const [videoUrl, setVideoUrl] = useState("");
+  const [existingId, setExistingId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    supabase.from("site_images").select("*").eq("section", "tedx_video").single()
+      .then(({ data }) => {
+        if (data) { setVideoUrl(data.image_url); setExistingId(data.id); }
+      });
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    if (existingId) {
+      await supabase.from("site_images").update({ image_url: videoUrl }).eq("id", existingId);
+    } else {
+      const { data } = await supabase.from("site_images").insert({ section: "tedx_video", image_url: videoUrl, label: "TEDx Video" }).select().single();
+      if (data) setExistingId(data.id);
+    }
+    setSaving(false);
+    toast({ title: "Video URL saved!" });
+  };
+
+  const handleDelete = async () => {
+    if (!existingId) return;
+    await supabase.from("site_images").delete().eq("id", existingId);
+    setVideoUrl(""); setExistingId(null);
+    toast({ title: "Video removed" });
+  };
+
+  const embedUrl = videoUrl ? (() => {
+    const match = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+  })() : null;
+
+  return (
+    <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0} className="space-y-6">
+      <h2 className="font-heading text-2xl text-primary">TEDx Video (Work With Me Page)</h2>
+      <div className="bg-background rounded-xl border p-6 space-y-4 max-w-2xl">
+        <div>
+          <label className="block text-sm font-medium text-foreground mb-1">YouTube Video URL</label>
+          <Input placeholder="https://www.youtube.com/watch?v=..." value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} />
+          <p className="text-xs text-muted-foreground mt-1">Paste any YouTube URL (watch, share, or embed link)</p>
+        </div>
+        {embedUrl && (
+          <div className="aspect-video rounded-lg overflow-hidden border">
+            <iframe src={embedUrl} title="Preview" className="w-full h-full" allowFullScreen />
+          </div>
+        )}
+        <div className="flex gap-2">
+          <Button onClick={handleSave} disabled={saving || !videoUrl.trim()}>{saving ? "Saving..." : existingId ? "Update Video" : "Save Video"}</Button>
+          {existingId && <Button variant="destructive" onClick={handleDelete}><Trash2 className="w-4 h-4 mr-1" /> Remove</Button>}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 const AdminDashboard = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -289,6 +349,9 @@ const AdminDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="site-images" className="flex items-center gap-1.5 text-xs sm:text-sm">
               <ImageIcon className="w-4 h-4" /> Site Images
+            </TabsTrigger>
+            <TabsTrigger value="tedx-video" className="flex items-center gap-1.5 text-xs sm:text-sm">
+              <Play className="w-4 h-4" /> TEDx Video
             </TabsTrigger>
           </TabsList>
 
@@ -500,6 +563,11 @@ const AdminDashboard = () => {
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
               <SiteImagesManager />
             </motion.div>
+          </TabsContent>
+
+          {/* TEDx Video Tab */}
+          <TabsContent value="tedx-video">
+            <TedxVideoManager />
           </TabsContent>
 
           {/* Contacts Tab */}
