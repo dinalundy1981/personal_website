@@ -539,7 +539,7 @@ const AdminDashboard = () => {
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
               <h2 className="font-heading text-2xl text-primary mb-6">Book Orders</h2>
               {loadingData ? <p className="text-muted-foreground">Loading...</p> : orders.length === 0 ? (
-                <div className="text-center py-12 bg-background rounded-xl border"><p className="text-muted-foreground">No orders yet.</p></div>
+                <div className="text-center py-12 bg-background rounded-xl border"><p className="text-muted-foreground">No book orders yet.</p></div>
               ) : (
                 <div className="space-y-4">
                   {orders.map((order) => (
@@ -569,6 +569,49 @@ const AdminDashboard = () => {
                                 <Check className="w-3 h-3 mr-1" /> Approve
                               </Button>
                               <Button size="sm" variant="destructive" onClick={() => handleOrderStatus(order.id, "rejected")}>
+                                <XIcon className="w-3 h-3 mr-1" /> Reject
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <h2 className="font-heading text-2xl text-primary mb-6 mt-12">Course Orders</h2>
+              {loadingData ? <p className="text-muted-foreground">Loading...</p> : courseOrders.length === 0 ? (
+                <div className="text-center py-12 bg-background rounded-xl border"><p className="text-muted-foreground">No course orders yet.</p></div>
+              ) : (
+                <div className="space-y-4">
+                  {courseOrders.map((order: any) => (
+                    <div key={order.id} className="bg-background rounded-xl border p-5">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        {order.courses?.image_url && <img src={order.courses.image_url} alt="" className="w-16 h-16 rounded-lg object-cover" />}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-medium text-foreground">{order.courses?.title || "Unknown Course"}</h3>
+                          <div className="text-sm text-muted-foreground space-y-0.5 mt-1">
+                            <p>Qty: {order.quantity} · Total: ${Number(order.total_price).toFixed(2)}</p>
+                            <p>Phone: {order.phone || "N/A"} · Country: {order.country || "N/A"}</p>
+                            <p>Payment: {order.payment_method || "N/A"} · Email: {order.payment_email || "N/A"}</p>
+                            <p>Date: {new Date(order.created_at).toLocaleString()}</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            order.status === "approved" ? "bg-green-100 text-green-700" :
+                            order.status === "rejected" ? "bg-red-100 text-red-700" :
+                            "bg-yellow-100 text-yellow-700"
+                          }`}>
+                            {order.status}
+                          </span>
+                          {order.status === "pending" && (
+                            <div className="flex gap-1">
+                              <Button size="sm" variant="default" onClick={() => handleCourseOrderStatus(order.id, "approved")}>
+                                <Check className="w-3 h-3 mr-1" /> Approve
+                              </Button>
+                              <Button size="sm" variant="destructive" onClick={() => handleCourseOrderStatus(order.id, "rejected")}>
                                 <XIcon className="w-3 h-3 mr-1" /> Reject
                               </Button>
                             </div>
