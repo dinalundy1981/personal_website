@@ -25,31 +25,27 @@ const AboutPreview = ({ images }: AboutPreviewProps) => {
             viewport={{ once: true }}
             variants={fadeUp}
             custom={0}
-            className="relative w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:max-w-none"
+            className="relative w-full max-w-md mx-auto lg:max-w-none"
           >
-            <div className="grid grid-cols-2 gap-2 sm:gap-3">
-              <div className="space-y-2 sm:space-y-3">
-                <div className="rounded-xl overflow-hidden shadow-md aspect-[4/3]">
-                  <img src={img1} alt="Dr. Dina Lundy speaking" className="w-full h-full object-cover" loading="lazy" />
-                </div>
-                <div className="rounded-xl overflow-hidden shadow-md aspect-square">
-                  <img src={img3} alt="Dr. Dina Lundy coaching" className="w-full h-full object-cover" loading="lazy" />
-                </div>
+            <div className="grid grid-cols-4 gap-2 sm:gap-3">
+              <div className="rounded-xl overflow-hidden shadow-md aspect-[3/4]">
+                <img src={img1} alt="Dr. Dina Lundy speaking" className="w-full h-full object-cover" loading="lazy" />
               </div>
-              <div className="space-y-2 sm:space-y-3 pt-4 sm:pt-6">
-                <div className="rounded-xl overflow-hidden shadow-md aspect-[3/4]">
-                  <img src={img2} alt="Dr. Dina Lundy portrait" className="w-full h-full object-cover" loading="lazy" />
-                </div>
-                <div className="rounded-xl overflow-hidden shadow-md aspect-[4/3]">
-                  <img src={img4} alt="Dr. Dina Lundy at event" className="w-full h-full object-cover" loading="lazy" />
-                </div>
+              <div className="rounded-xl overflow-hidden shadow-md aspect-[3/4]">
+                <img src={img2} alt="Dr. Dina Lundy portrait" className="w-full h-full object-cover" loading="lazy" />
               </div>
-              {/* Badge */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                <div className="bg-primary text-primary-foreground rounded-full w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex flex-col items-center justify-center shadow-xl text-center">
-                  <span className="text-lg sm:text-xl md:text-2xl font-bold leading-none">30+</span>
-                  <span className="text-[8px] sm:text-[9px] md:text-[10px] leading-tight mt-0.5">Years of<br />Expertise</span>
-                </div>
+              <div className="rounded-xl overflow-hidden shadow-md aspect-[3/4]">
+                <img src={img3} alt="Dr. Dina Lundy coaching" className="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <div className="rounded-xl overflow-hidden shadow-md aspect-[3/4]">
+                <img src={img4} alt="Dr. Dina Lundy at event" className="w-full h-full object-cover" loading="lazy" />
+              </div>
+            </div>
+            {/* Badge */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+              <div className="bg-primary text-primary-foreground rounded-full w-16 h-16 sm:w-20 sm:h-20 flex flex-col items-center justify-center shadow-xl text-center">
+                <span className="text-lg sm:text-xl font-bold leading-none">30+</span>
+                <span className="text-[7px] sm:text-[9px] leading-tight mt-0.5">Years of<br />Expertise</span>
               </div>
             </div>
           </motion.div>
