@@ -452,6 +452,7 @@ const sidebarNav = [
   { key: "media", label: "Media", icon: Video },
   { key: "newsletters", label: "Newsletters", icon: Mail },
   { key: "works_in_progress", label: "Works in Progress", icon: BookOpen },
+  { key: "philanthropy", label: "Philanthropy", icon: Heart },
 ];
 
 const sidebarNav2 = [
