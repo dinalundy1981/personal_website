@@ -18,6 +18,7 @@ import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import BlogEditor from "@/components/admin/BlogEditor";
+import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import {
   Sidebar,
   SidebarContent,
