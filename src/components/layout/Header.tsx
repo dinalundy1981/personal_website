@@ -93,6 +93,8 @@ const Header = () => {
             )}
           </div>
 
+          <CartButton />
+
           {user ? (
             <div className="flex items-center gap-2 ml-2">
               <Link to="/dashboard">
