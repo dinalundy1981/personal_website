@@ -64,19 +64,37 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
     }
     setSubmitting(true);
     try {
-      const orderPromises = items.map((item) =>
-        supabase.from("book_orders").insert({
-          book_id: item.id,
-          user_id: user.id,
-          quantity: item.quantity,
-          total_price: item.price * item.quantity,
-          status: "pending",
-          phone,
-          country,
-          payment_method: selectedMethod,
-          payment_email: paymentEmail,
-        } as any)
-      );
+      const bookItems = items.filter((i) => i.item_type === "book");
+      const courseItems = items.filter((i) => i.item_type === "course");
+
+      const orderPromises = [
+        ...bookItems.map((item) =>
+          supabase.from("book_orders").insert({
+            book_id: item.id,
+            user_id: user.id,
+            quantity: item.quantity,
+            total_price: item.price * item.quantity,
+            status: "pending",
+            phone,
+            country,
+            payment_method: selectedMethod,
+            payment_email: paymentEmail,
+          } as any)
+        ),
+        ...courseItems.map((item) =>
+          supabase.from("course_orders").insert({
+            course_id: item.id,
+            user_id: user.id,
+            quantity: item.quantity,
+            total_price: item.price * item.quantity,
+            status: "pending",
+            phone,
+            country,
+            payment_method: selectedMethod,
+            payment_email: paymentEmail,
+          } as any)
+        ),
+      ];
       await Promise.all(orderPromises);
       clearCart();
       onOpenChange(false);
@@ -104,7 +122,10 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
                     {item.image_url && <img src={item.image_url} alt="" className="w-14 h-14 rounded object-cover" />}
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate">{item.title}</p>
-                      <p className="text-secondary font-heading">${item.price.toFixed(2)}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-secondary font-heading">${item.price.toFixed(2)}</p>
+                        <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground capitalize">{item.item_type}</span>
+                      </div>
                     </div>
                     <div className="flex items-center gap-1">
                       <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
