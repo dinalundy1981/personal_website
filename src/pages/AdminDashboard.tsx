@@ -104,6 +104,17 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "published_date", type: "date" },
     ],
   },
+  {
+    key: "works_in_progress", label: "Works in Progress", icon: FileText,
+    fields: [
+      { name: "title", type: "text", required: true },
+      { name: "author", type: "text" },
+      { name: "description", type: "textarea" },
+      { name: "url", type: "text" },
+      { name: "image_url", type: "image" },
+      { name: "expected_date", type: "text" },
+    ],
+  },
 ];
 
 const AdminDashboard = () => {
