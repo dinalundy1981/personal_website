@@ -61,17 +61,6 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
     ],
   },
   {
-    key: "events", label: "Events", icon: Calendar,
-    fields: [
-      { name: "title", type: "text", required: true },
-      { name: "description", type: "textarea" },
-      { name: "date", type: "datetime-local", required: true },
-      { name: "location", type: "text" },
-      { name: "image_url", type: "image" },
-      { name: "max_attendees", type: "number" },
-    ],
-  },
-  {
     key: "blogs", label: "Blog", icon: FileText,
     fields: [
       { name: "title", type: "text", required: true },
