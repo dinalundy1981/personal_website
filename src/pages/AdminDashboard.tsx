@@ -458,6 +458,7 @@ const sidebarNav = [
 const sidebarNav2 = [
   { key: "orders", label: "Orders", icon: ShoppingCart },
   { key: "contacts", label: "Messages", icon: Send },
+  { key: "subscribers", label: "Subscribers", icon: Users },
 ];
 
 const sidebarSettings = [
