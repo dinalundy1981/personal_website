@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown, LogOut, Shield, LayoutDashboard } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import CartButton from "@/components/checkout/CartButton";
 
 const primaryLinks = [
   { label: "Home", path: "/" },
