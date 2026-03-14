@@ -10,8 +10,8 @@ const CartButton = () => {
 
   return (
     <>
-      <Button variant="outline" size="icon" className="relative" onClick={() => setOpen(true)}>
-        <ShoppingCart className="w-4 h-4" />
+      <Button variant="ghost" size="icon" className="relative text-primary-foreground hover:bg-primary/80" onClick={() => setOpen(true)}>
+        <ShoppingCart className="w-5 h-5" />
         {itemCount > 0 && (
           <span className="absolute -top-1.5 -right-1.5 bg-secondary text-secondary-foreground text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
             {itemCount}
