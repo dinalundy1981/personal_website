@@ -258,27 +258,71 @@ export type Database = {
         }
         Relationships: []
       }
-      event_registrations: {
+      event_images: {
         Row: {
           created_at: string
           event_id: string
           id: string
-          status: string
-          user_id: string
+          image_url: string
+          sort_order: number | null
         }
         Insert: {
           created_at?: string
           event_id: string
           id?: string
-          status?: string
-          user_id: string
+          image_url: string
+          sort_order?: number | null
         }
         Update: {
           created_at?: string
           event_id?: string
           id?: string
+          image_url?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_images_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_registrations: {
+        Row: {
+          created_at: string
+          email: string | null
+          event_id: string
+          id: string
+          location: string | null
+          name: string | null
+          phone: string | null
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          event_id: string
+          id?: string
+          location?: string | null
+          name?: string | null
+          phone?: string | null
           status?: string
-          user_id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          event_id?: string
+          id?: string
+          location?: string | null
+          name?: string | null
+          phone?: string | null
+          status?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -292,6 +336,7 @@ export type Database = {
       }
       events: {
         Row: {
+          close_date: string | null
           created_at: string
           date: string
           description: string | null
@@ -304,6 +349,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          close_date?: string | null
           created_at?: string
           date: string
           description?: string | null
@@ -316,6 +362,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          close_date?: string | null
           created_at?: string
           date?: string
           description?: string | null

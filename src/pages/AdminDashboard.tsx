@@ -19,6 +19,7 @@ import SiteImagesManager from "@/components/admin/SiteImagesManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import BlogEditor from "@/components/admin/BlogEditor";
 import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
+import EventsManager from "@/components/admin/EventsManager";
 import {
   Sidebar,
   SidebarContent,
@@ -57,17 +58,6 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "price", type: "number", required: true },
       { name: "image_url", type: "image" },
       { name: "category", type: "text" },
-    ],
-  },
-  {
-    key: "events", label: "Events", icon: Calendar,
-    fields: [
-      { name: "title", type: "text", required: true },
-      { name: "description", type: "textarea" },
-      { name: "date", type: "datetime-local", required: true },
-      { name: "location", type: "text" },
-      { name: "image_url", type: "image" },
-      { name: "max_attendees", type: "number" },
     ],
   },
   {
@@ -725,6 +715,9 @@ const AdminDashboard = () => {
 
     // Media categories manager
     if (activeSection === "media") return <MediaCategoriesManager />;
+
+    // Events manager
+    if (activeSection === "events") return <EventsManager />;
 
     // Blog editor
     if (activeSection === "blogs" && blogEditorOpen) {
