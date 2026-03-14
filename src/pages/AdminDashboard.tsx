@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import BlogEditor from "@/components/admin/BlogEditor";
 
 type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing" | "works_in_progress";
 
