@@ -376,6 +376,12 @@ const AdminDashboard = () => {
     fetchOrders();
   };
 
+  const handleCourseOrderStatus = async (id: string, status: string) => {
+    await supabase.from("course_orders").update({ status } as any).eq("id", id);
+    toast({ title: `Course order ${status}!` });
+    fetchOrders();
+  };
+
   if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
   if (!isAdmin) return null;
 
