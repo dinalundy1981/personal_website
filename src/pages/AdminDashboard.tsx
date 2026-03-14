@@ -18,7 +18,7 @@ type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "pod
 
 const IMAGE_FIELDS = ["image_url", "thumbnail_url", "image1_url", "image2_url", "image3_url"];
 
-const tabConfig: { key: TableName; label: string; icon: any; fields: { name: string; type: string; required?: boolean }[] }[] = [
+const tabConfig: { key: TableName; label: string; icon: any; fields: { name: string; type: string; required?: boolean; options?: { value: string; label: string }[]; showWhen?: { field: string; value: string } }[] }[] = [
   {
     key: "books", label: "Books", icon: Book,
     fields: [
@@ -73,11 +73,15 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
   {
     key: "podcasts", label: "Podcasts", icon: Mic,
     fields: [
+      { name: "podcast_format", type: "select", required: true, options: [{ value: "audio", label: "Audio" }, { value: "video", label: "Video" }] },
       { name: "title", type: "text", required: true },
       { name: "description", type: "textarea" },
-      { name: "audio_url", type: "text" },
+      { name: "category", type: "text" },
       { name: "episode_number", type: "number" },
       { name: "duration", type: "text" },
+      { name: "published_at", type: "date" },
+      { name: "audio_url", type: "text", showWhen: { field: "podcast_format", value: "audio" } },
+      { name: "video_url", type: "text", showWhen: { field: "podcast_format", value: "video" } },
       { name: "image_url", type: "image" },
     ],
   },
@@ -246,6 +250,11 @@ const AdminDashboard = () => {
     const config = tabConfig.find((t) => t.key === activeTab)!;
     const payload: Record<string, any> = {};
     config.fields.forEach((f) => {
+      // Clear fields whose showWhen condition isn't met
+      if (f.showWhen && formData[f.showWhen.field] !== f.showWhen.value) {
+        if (editingId) payload[f.name] = null;
+        return;
+      }
       if (formData[f.name] !== undefined && formData[f.name] !== "") {
         payload[f.name] = f.type === "number" ? Number(formData[f.name]) : formData[f.name];
       }
@@ -370,10 +379,20 @@ const AdminDashboard = () => {
                         <DialogTitle>{editingId ? "Edit" : "Add"} {tab.label.replace(/s$/, "")}</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4 mt-4">
-                        {tab.fields.map((field) => (
+                        {tab.fields.filter((field) => {
+                          if (field.showWhen) return formData[field.showWhen.field] === field.showWhen.value;
+                          return true;
+                        }).map((field) => (
                           <div key={field.name}>
                             {field.type === "image" ? (
                               <ImageUploadField label={field.name.replace(/_/g, " ")} value={formData[field.name] || ""} onChange={(url) => setFormData({ ...formData, [field.name]: url })} />
+                            ) : field.type === "select" && field.options ? (
+                              <>
+                                <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>
+                                <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={formData[field.name] || field.options[0]?.value || ""} onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}>
+                                  {field.options.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                                </select>
+                              </>
                             ) : (
                               <>
                                 <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>
