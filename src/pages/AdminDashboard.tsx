@@ -159,25 +159,80 @@ const TedxVideoManager = () => {
   })() : null;
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0} className="space-y-6">
-      <h2 className="font-heading text-2xl text-primary">TEDx Video (Work With Me Page)</h2>
-      <div className="bg-background rounded-xl border p-6 space-y-4 max-w-2xl">
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1">YouTube Video URL</label>
-          <Input placeholder="https://www.youtube.com/watch?v=..." value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} />
-          <p className="text-xs text-muted-foreground mt-1">Paste any YouTube URL (watch, share, or embed link)</p>
+    <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0} className="space-y-8">
+      <div>
+        <h2 className="font-heading text-2xl text-primary mb-4">TEDx Video (Work With Me Page)</h2>
+        <div className="bg-background rounded-xl border p-6 space-y-4 max-w-2xl">
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">YouTube Video URL</label>
+            <Input placeholder="https://www.youtube.com/watch?v=..." value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} />
+            <p className="text-xs text-muted-foreground mt-1">Paste any YouTube URL (watch, share, or embed link)</p>
+          </div>
+          {embedUrl && (
+            <div className="aspect-video rounded-lg overflow-hidden border">
+              <iframe src={embedUrl} title="Preview" className="w-full h-full" allowFullScreen />
+            </div>
+          )}
+          <div className="flex gap-2">
+            <Button onClick={handleSave} disabled={saving || !videoUrl.trim()}>{saving ? "Saving..." : existingId ? "Update Video" : "Save Video"}</Button>
+            {existingId && <Button variant="destructive" onClick={handleDelete}><Trash2 className="w-4 h-4 mr-1" /> Remove</Button>}
+          </div>
         </div>
-        {embedUrl && (
-          <div className="aspect-video rounded-lg overflow-hidden border">
-            <iframe src={embedUrl} title="Preview" className="w-full h-full" allowFullScreen />
+      </div>
+
+      <WorkWithMeImageManager />
+    </motion.div>
+  );
+};
+
+const WorkWithMeImageManager = () => {
+  const [imageUrl, setImageUrl] = useState("");
+  const [existingId, setExistingId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    supabase.from("site_images").select("*").eq("section", "work_with_me_image").single()
+      .then(({ data }) => {
+        if (data) { setImageUrl(data.image_url); setExistingId(data.id); }
+      });
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    if (existingId) {
+      await supabase.from("site_images").update({ image_url: imageUrl }).eq("id", existingId);
+    } else {
+      const { data } = await supabase.from("site_images").insert({ section: "work_with_me_image", image_url: imageUrl, label: "Work With Me Image" }).select().single();
+      if (data) setExistingId(data.id);
+    }
+    setSaving(false);
+    toast({ title: "Image saved!" });
+  };
+
+  const handleDelete = async () => {
+    if (!existingId) return;
+    await supabase.from("site_images").delete().eq("id", existingId);
+    setImageUrl(""); setExistingId(null);
+    toast({ title: "Image removed" });
+  };
+
+  return (
+    <div>
+      <h2 className="font-heading text-2xl text-primary mb-4">Coaching Image (Work With Me Page)</h2>
+      <div className="bg-background rounded-xl border p-6 space-y-4 max-w-2xl">
+        <ImageUploadField label="Coaching Image" value={imageUrl} onChange={setImageUrl} />
+        {imageUrl && (
+          <div className="w-48 rounded-lg overflow-hidden border">
+            <img src={imageUrl} alt="Preview" className="w-full h-auto" />
           </div>
         )}
         <div className="flex gap-2">
-          <Button onClick={handleSave} disabled={saving || !videoUrl.trim()}>{saving ? "Saving..." : existingId ? "Update Video" : "Save Video"}</Button>
+          <Button onClick={handleSave} disabled={saving || !imageUrl.trim()}>{saving ? "Saving..." : existingId ? "Update Image" : "Save Image"}</Button>
           {existingId && <Button variant="destructive" onClick={handleDelete}><Trash2 className="w-4 h-4 mr-1" /> Remove</Button>}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
