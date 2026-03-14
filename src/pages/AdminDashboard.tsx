@@ -95,8 +95,10 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
     key: "publishing", label: "Publishing", icon: Book,
     fields: [
       { name: "title", type: "text", required: true },
-      { name: "description", type: "textarea" },
+      { name: "author", type: "text" },
       { name: "publication_type", type: "text" },
+      { name: "abstract", type: "textarea" },
+      { name: "description", type: "textarea" },
       { name: "url", type: "text" },
       { name: "image_url", type: "image" },
       { name: "published_date", type: "date" },
