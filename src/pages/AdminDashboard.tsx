@@ -5,7 +5,7 @@ import {
   Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send,
   LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon, CreditCard,
   ShoppingCart, Check, X as XIcon, Play, LayoutDashboard, Settings,
-  Users, BarChart3, Clock, TrendingUp, BookOpen, Newspaper, Image as ImageLucide
+  Users, BarChart3, Clock, TrendingUp, BookOpen, Newspaper, Image as ImageLucide, Heart
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import ImageUploadField from "@/components/admin/ImageUploadField";
 import BlogEditor from "@/components/admin/BlogEditor";
 import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import EventsManager from "@/components/admin/EventsManager";
+import PhilanthropyManager from "@/components/admin/PhilanthropyManager";
 import {
   Sidebar,
   SidebarContent,
@@ -451,6 +452,7 @@ const sidebarNav = [
   { key: "media", label: "Media", icon: Video },
   { key: "newsletters", label: "Newsletters", icon: Mail },
   { key: "works_in_progress", label: "Works in Progress", icon: BookOpen },
+  { key: "philanthropy", label: "Philanthropy", icon: Heart },
 ];
 
 const sidebarNav2 = [
@@ -718,6 +720,9 @@ const AdminDashboard = () => {
 
     // Events manager
     if (activeSection === "events") return <EventsManager />;
+
+    // Philanthropy manager
+    if (activeSection === "philanthropy") return <PhilanthropyManager />;
 
     // Blog editor
     if (activeSection === "blogs" && blogEditorOpen) {
