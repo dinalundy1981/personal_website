@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send, LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon, CreditCard, ShoppingCart, Check, X as XIcon } from "lucide-react";
+import { Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send, LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon, CreditCard, ShoppingCart, Check, X as XIcon, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
