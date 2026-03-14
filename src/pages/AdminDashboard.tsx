@@ -18,6 +18,7 @@ import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import BlogEditor from "@/components/admin/BlogEditor";
+import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import {
   Sidebar,
   SidebarContent,
@@ -105,16 +106,6 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "url", type: "text" },
       { name: "image_url", type: "image" },
       { name: "published_date", type: "date" },
-    ],
-  },
-  {
-    key: "media", label: "Media", icon: Video,
-    fields: [
-      { name: "title", type: "text", required: true },
-      { name: "description", type: "textarea" },
-      { name: "media_type", type: "text" },
-      { name: "url", type: "text" },
-      { name: "thumbnail_url", type: "image" },
     ],
   },
   {
@@ -731,6 +722,9 @@ const AdminDashboard = () => {
   const renderContent = () => {
     // Dashboard
     if (activeSection === "dashboard") return <DashboardView />;
+
+    // Media categories manager
+    if (activeSection === "media") return <MediaCategoriesManager />;
 
     // Blog editor
     if (activeSection === "blogs" && blogEditorOpen) {
