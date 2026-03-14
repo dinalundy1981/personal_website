@@ -24,7 +24,7 @@ const card3D = {
     y: 0,
     rotateX: 0,
     scale: 1,
-    transition: { delay: i * 0.12, duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { delay: i * 0.12, duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
   }),
 };
 
