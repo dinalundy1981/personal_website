@@ -108,9 +108,11 @@ export type Database = {
       }
       books: {
         Row: {
+          book_format: string | null
           category: string | null
           created_at: string
           description: string | null
+          file_url: string | null
           id: string
           image_url: string | null
           is_published: boolean | null
@@ -119,9 +121,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          book_format?: string | null
           category?: string | null
           created_at?: string
           description?: string | null
+          file_url?: string | null
           id?: string
           image_url?: string | null
           is_published?: boolean | null
@@ -130,9 +134,11 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          book_format?: string | null
           category?: string | null
           created_at?: string
           description?: string | null
+          file_url?: string | null
           id?: string
           image_url?: string | null
           is_published?: boolean | null

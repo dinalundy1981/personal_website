@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import BookFileUpload from "@/components/admin/BookFileUpload";
 import BlogEditor from "@/components/admin/BlogEditor";
 import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import EventsManager from "@/components/admin/EventsManager";
@@ -51,6 +52,8 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "price", type: "number", required: true },
       { name: "image_url", type: "image" },
       { name: "category", type: "text" },
+      { name: "book_format", type: "select", required: true, options: [{ value: "physical", label: "Physical Book" }, { value: "pdf", label: "PDF Book" }, { value: "audio", label: "Audiobook" }] },
+      { name: "file_url", type: "book_file" },
     ],
   },
   {
@@ -756,6 +759,13 @@ const AdminDashboard = () => {
                     <div key={field.name}>
                       {field.type === "image" ? (
                         <ImageUploadField label={field.name.replace(/_/g, " ")} value={formData[field.name] || ""} onChange={(url) => setFormData({ ...formData, [field.name]: url })} />
+                      ) : field.type === "book_file" ? (
+                        <BookFileUpload
+                          value={formData[field.name] || ""}
+                          onChange={(url) => setFormData({ ...formData, [field.name]: url })}
+                          accept={formData.book_format === "audio" ? ".mp3,.wav,.m4a,.ogg" : ".pdf"}
+                          label={formData.book_format === "audio" ? "Audio File" : "PDF File"}
+                        />
                       ) : field.type === "select" && field.options ? (
                         <>
                           <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>

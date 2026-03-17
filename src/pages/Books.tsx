@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, FileText, Headphones, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
@@ -16,7 +16,15 @@ interface Book {
   price: number;
   image_url: string | null;
   category: string | null;
+  book_format: string | null;
+  file_url: string | null;
 }
+
+const formatBadge = (format: string | null) => {
+  if (format === "pdf") return { label: "PDF", icon: FileText, color: "bg-red-100 text-red-700" };
+  if (format === "audio") return { label: "Audiobook", icon: Headphones, color: "bg-blue-100 text-blue-700" };
+  return null;
+};
 
 const Books = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -28,10 +36,10 @@ const Books = () => {
     const fetchBooks = async () => {
       const { data } = await supabase
         .from("books")
-        .select("id, title, description, price, image_url, category")
+        .select("id, title, description, price, image_url, category, book_format, file_url")
         .eq("is_published", true)
         .order("created_at", { ascending: false });
-      if (data) setBooks(data);
+      if (data) setBooks(data as Book[]);
       setLoading(false);
     };
     fetchBooks();
@@ -58,27 +66,46 @@ const Books = () => {
             <p className="text-center text-muted-foreground py-12">No books available yet. Check back soon!</p>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {books.map((book, i) => (
-                <motion.div key={book.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
-                  className="bg-card rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group border flex flex-col">
-                  <div className="aspect-[16/10] overflow-hidden relative">
-                    <img src={book.image_url || bookPlaceholder} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    {book.category && (
-                      <span className="absolute top-3 right-3 bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1 rounded-full shadow">{book.category}</span>
-                    )}
-                  </div>
-                  <div className="p-5 flex flex-col flex-1">
-                    <h3 className="font-heading text-lg text-primary mb-2">{book.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-4 flex-1 line-clamp-3">{book.description}</p>
-                    <div className="flex items-center justify-between pt-3 border-t border-border">
-                      <span className="font-heading text-xl text-secondary">${book.price.toFixed(2)}</span>
-                      <Button variant="secondary" size="sm" onClick={() => handleAdd(book)}>
-                        <ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart
-                      </Button>
+              {books.map((book, i) => {
+                const badge = formatBadge(book.book_format);
+                return (
+                  <motion.div key={book.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
+                    className="bg-card rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group border flex flex-col">
+                    <div className="aspect-[16/10] overflow-hidden relative">
+                      <img src={book.image_url || bookPlaceholder} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute top-3 right-3 flex gap-1.5">
+                        {book.category && (
+                          <span className="bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1 rounded-full shadow">{book.category}</span>
+                        )}
+                        {badge && (
+                          <span className={`${badge.color} text-xs font-semibold px-3 py-1 rounded-full shadow flex items-center gap-1`}>
+                            <badge.icon className="w-3 h-3" /> {badge.label}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                    <div className="p-5 flex flex-col flex-1">
+                      <h3 className="font-heading text-lg text-primary mb-2">{book.title}</h3>
+                      <p className="text-muted-foreground text-sm mb-4 flex-1 line-clamp-3">{book.description}</p>
+                      <div className="flex items-center justify-between pt-3 border-t border-border gap-2">
+                        <span className="font-heading text-xl text-secondary">${book.price.toFixed(2)}</span>
+                        <div className="flex gap-2">
+                          {book.file_url && (book.book_format === "pdf" || book.book_format === "audio") && (
+                            <a href={book.file_url} target="_blank" rel="noopener noreferrer">
+                              <Button variant="outline" size="sm">
+                                <Download className="w-4 h-4 mr-1" /> {book.book_format === "pdf" ? "PDF" : "Listen"}
+                              </Button>
+                            </a>
+                          )}
+                          <Button variant="secondary" size="sm" onClick={() => handleAdd(book)}>
+                            <ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           )}
         </div>
