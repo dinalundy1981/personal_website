@@ -132,7 +132,7 @@ const BlogPost = () => {
       <article className="py-12 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">
           <Button variant="ghost" size="sm" onClick={() => navigate("/newsletter")} className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Blog
+            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Newsletter
           </Button>
 
           {blog.image_url && (
