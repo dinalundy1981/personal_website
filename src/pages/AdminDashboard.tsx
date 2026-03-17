@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import BookFileUpload from "@/components/admin/BookFileUpload";
 import BlogEditor from "@/components/admin/BlogEditor";
 import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import EventsManager from "@/components/admin/EventsManager";
