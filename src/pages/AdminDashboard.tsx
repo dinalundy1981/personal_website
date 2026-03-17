@@ -22,6 +22,7 @@ import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import EventsManager from "@/components/admin/EventsManager";
 import PhilanthropyManager from "@/components/admin/PhilanthropyManager";
 import SubscribersManager from "@/components/admin/SubscribersManager";
+import TedxTalksManager from "@/components/admin/TedxTalksManager";
 import {
   Sidebar,
   SidebarContent,
