@@ -438,11 +438,11 @@ const sidebarNav = [
   { key: "books", label: "Books", icon: Book },
   { key: "courses", label: "Courses", icon: GraduationCap },
   { key: "events", label: "Events", icon: Calendar },
-  { key: "blogs", label: "Blog", icon: FileText },
+  { key: "blogs", label: "Newsletter", icon: FileText },
   { key: "podcasts", label: "Podcasts", icon: Mic },
   { key: "publishing", label: "Publishing", icon: Newspaper },
   { key: "media", label: "Media", icon: Video },
-  { key: "newsletters", label: "Newsletters", icon: Mail },
+  { key: "tedx_talks", label: "TEDxTalk", icon: PlayCircle },
   { key: "works_in_progress", label: "Works in Progress", icon: BookOpen },
   { key: "philanthropy", label: "Philanthropy", icon: Heart },
 ];
