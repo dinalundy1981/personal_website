@@ -720,6 +720,9 @@ const AdminDashboard = () => {
     // Subscribers
     if (activeSection === "subscribers") return <SubscribersManager />;
 
+    // TEDxTalk videos
+    if (activeSection === "tedx_talks") return <TedxTalksManager />;
+
     // Blog editor
     if (activeSection === "blogs" && blogEditorOpen) {
       return (
