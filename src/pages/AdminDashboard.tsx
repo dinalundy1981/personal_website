@@ -52,6 +52,8 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "price", type: "number", required: true },
       { name: "image_url", type: "image" },
       { name: "category", type: "text" },
+      { name: "book_format", type: "select", required: true, options: [{ value: "physical", label: "Physical Book" }, { value: "pdf", label: "PDF Book" }, { value: "audio", label: "Audiobook" }] },
+      { name: "file_url", type: "book_file" },
     ],
   },
   {
