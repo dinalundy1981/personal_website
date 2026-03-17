@@ -70,7 +70,7 @@ const BlogList = () => {
                   variants={fadeUp}
                   custom={i}
                   whileHover={{ y: -6, boxShadow: "0 20px 40px -12px hsl(var(--primary) / 0.12)" }}
-                  onClick={() => navigate(`/blog/${post.id}`)}
+                  onClick={() => navigate(`/newsletter/${post.id}`)}
                   className="bg-card rounded-xl overflow-hidden border shadow-sm cursor-pointer group flex flex-col"
                 >
                   <div className="aspect-[16/9] overflow-hidden relative">
