@@ -5,7 +5,7 @@ import {
   Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send,
   LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon, CreditCard,
   ShoppingCart, Check, X as XIcon, Play, LayoutDashboard, Settings,
-  Users, BarChart3, Clock, TrendingUp, BookOpen, Newspaper, Image as ImageLucide, Heart
+  Users, BarChart3, Clock, TrendingUp, BookOpen, Newspaper, Image as ImageLucide, Heart, PlayCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ import MediaCategoriesManager from "@/components/admin/MediaCategoriesManager";
 import EventsManager from "@/components/admin/EventsManager";
 import PhilanthropyManager from "@/components/admin/PhilanthropyManager";
 import SubscribersManager from "@/components/admin/SubscribersManager";
+import TedxTalksManager from "@/components/admin/TedxTalksManager";
 import {
   Sidebar,
   SidebarContent,
@@ -37,7 +38,7 @@ import {
 } from "@/components/ui/sidebar";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
-type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing" | "works_in_progress";
+type TableName = "books" | "courses" | "events" | "blogs" | "podcasts" | "media" | "publishing" | "works_in_progress";
 
 const IMAGE_FIELDS = ["image_url", "thumbnail_url", "image1_url", "image2_url", "image3_url"];
 
@@ -63,7 +64,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
     ],
   },
   {
-    key: "blogs", label: "Blog", icon: FileText,
+    key: "blogs", label: "Newsletter", icon: FileText,
     fields: [
       { name: "title", type: "text", required: true },
       { name: "content", type: "textarea" },
@@ -98,16 +99,6 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "url", type: "text" },
       { name: "image_url", type: "image" },
       { name: "published_date", type: "date" },
-    ],
-  },
-  {
-    key: "newsletters", label: "Newsletters", icon: Mail,
-    fields: [
-      { name: "title", type: "text", required: true },
-      { name: "content", type: "textarea" },
-      { name: "image1_url", type: "image" },
-      { name: "image2_url", type: "image" },
-      { name: "image3_url", type: "image" },
     ],
   },
   {
@@ -447,11 +438,11 @@ const sidebarNav = [
   { key: "books", label: "Books", icon: Book },
   { key: "courses", label: "Courses", icon: GraduationCap },
   { key: "events", label: "Events", icon: Calendar },
-  { key: "blogs", label: "Blog", icon: FileText },
+  { key: "blogs", label: "Newsletter", icon: FileText },
   { key: "podcasts", label: "Podcasts", icon: Mic },
   { key: "publishing", label: "Publishing", icon: Newspaper },
   { key: "media", label: "Media", icon: Video },
-  { key: "newsletters", label: "Newsletters", icon: Mail },
+  { key: "tedx_talks", label: "TEDxTalk", icon: PlayCircle },
   { key: "works_in_progress", label: "Works in Progress", icon: BookOpen },
   { key: "philanthropy", label: "Philanthropy", icon: Heart },
 ];
@@ -728,6 +719,9 @@ const AdminDashboard = () => {
 
     // Subscribers
     if (activeSection === "subscribers") return <SubscribersManager />;
+
+    // TEDxTalk videos
+    if (activeSection === "tedx_talks") return <TedxTalksManager />;
 
     // Blog editor
     if (activeSection === "blogs" && blogEditorOpen) {

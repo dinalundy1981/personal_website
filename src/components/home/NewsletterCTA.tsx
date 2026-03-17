@@ -11,7 +11,7 @@ const NewsletterCTA = () => (
         <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
           Read the latest newsletters and stay updated on Dr. Lundy's work.
         </p>
-        <Link to="/newsletter"><Button variant="default" size="lg">View Newsletters</Button></Link>
+        <Link to="/newsletter"><Button variant="default" size="lg">View Newsletter</Button></Link>
       </motion.div>
     </div>
   </section>

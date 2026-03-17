@@ -49,7 +49,7 @@ const BlogList = () => {
     <Layout>
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">
-          <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Blog</motion.h1>
+          <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Newsletter</motion.h1>
           <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">Insights, reflections, and thought leadership from Dr. Lundy.</motion.p>
         </div>
       </section>
@@ -70,7 +70,7 @@ const BlogList = () => {
                   variants={fadeUp}
                   custom={i}
                   whileHover={{ y: -6, boxShadow: "0 20px 40px -12px hsl(var(--primary) / 0.12)" }}
-                  onClick={() => navigate(`/blog/${post.id}`)}
+                  onClick={() => navigate(`/newsletter/${post.id}`)}
                   className="bg-card rounded-xl overflow-hidden border shadow-sm cursor-pointer group flex flex-col"
                 >
                   <div className="aspect-[16/9] overflow-hidden relative">
@@ -131,8 +131,8 @@ const BlogPost = () => {
     <Layout>
       <article className="py-12 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/blog")} className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Blog
+          <Button variant="ghost" size="sm" onClick={() => navigate("/newsletter")} className="mb-6">
+            <ArrowLeft className="w-4 h-4 mr-1" /> Back to Newsletter
           </Button>
 
           {blog.image_url && (

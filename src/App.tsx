@@ -17,8 +17,8 @@ import Podcast from "./pages/Podcast";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Media from "./pages/Media";
-import Newsletter from "./pages/Newsletter";
 import Publishing from "./pages/Publishing";
+import TedxTalk from "./pages/TedxTalk";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Philanthropy from "./pages/Philanthropy";
 import Login from "./pages/Login";
@@ -48,11 +48,11 @@ const App = () => {
                 <Route path="/events" element={<Events />} />
                 <Route path="/work-with-me" element={<WorkWithMe />} />
                 <Route path="/podcast" element={<Podcast />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:id" element={<Blog />} />
+                <Route path="/newsletter" element={<Blog />} />
+                <Route path="/newsletter/:id" element={<Blog />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/media" element={<Media />} />
-                <Route path="/newsletter" element={<Newsletter />} />
+                <Route path="/tedxtalk" element={<TedxTalk />} />
                 <Route path="/publishing" element={<Publishing />} />
                 <Route path="/philanthropy" element={<Philanthropy />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
