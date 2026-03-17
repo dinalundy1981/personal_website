@@ -49,7 +49,7 @@ const BlogList = () => {
     <Layout>
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">
-          <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Blog</motion.h1>
+          <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Newsletter</motion.h1>
           <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">Insights, reflections, and thought leadership from Dr. Lundy.</motion.p>
         </div>
       </section>
