@@ -14,13 +14,13 @@ const primaryLinks = [
   { label: "Work With Me", path: "/work-with-me" },
   { label: "Podcast", path: "/podcast" },
   { label: "Courses", path: "/courses" },
-  { label: "Blog", path: "/blog" },
+  { label: "Newsletter", path: "/newsletter" },
+  { label: "TEDxTalk", path: "/tedxtalk" },
   { label: "Contact", path: "/contact" },
 ];
 
 const otherLinks = [
   { label: "Media", path: "/media" },
-  { label: "Newsletter", path: "/newsletter" },
   { label: "Events", path: "/events" },
   { label: "Philanthropy", path: "/philanthropy" },
 ];
