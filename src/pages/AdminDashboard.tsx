@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/sidebar";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
-type TableName = "books" | "courses" | "events" | "blogs" | "newsletters" | "podcasts" | "media" | "publishing" | "works_in_progress";
+type TableName = "books" | "courses" | "events" | "blogs" | "podcasts" | "media" | "publishing" | "works_in_progress";
 
 const IMAGE_FIELDS = ["image_url", "thumbnail_url", "image1_url", "image2_url", "image3_url"];
 
