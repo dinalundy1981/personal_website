@@ -5,7 +5,7 @@ import {
   Book, GraduationCap, Calendar, FileText, Mail, Mic, Video, Send,
   LogOut, Plus, Trash2, Edit, Eye, EyeOff, ImageIcon, CreditCard,
   ShoppingCart, Check, X as XIcon, Play, LayoutDashboard, Settings,
-  Users, BarChart3, Clock, TrendingUp, BookOpen, Newspaper, Image as ImageLucide, Heart
+  Users, BarChart3, Clock, TrendingUp, BookOpen, Newspaper, Image as ImageLucide, Heart, PlayCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
