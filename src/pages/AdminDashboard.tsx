@@ -64,7 +64,7 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
     ],
   },
   {
-    key: "blogs", label: "Blog", icon: FileText,
+    key: "blogs", label: "Newsletter", icon: FileText,
     fields: [
       { name: "title", type: "text", required: true },
       { name: "content", type: "textarea" },
