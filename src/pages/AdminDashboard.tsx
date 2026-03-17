@@ -102,16 +102,6 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
     ],
   },
   {
-    key: "newsletters", label: "Newsletters", icon: Mail,
-    fields: [
-      { name: "title", type: "text", required: true },
-      { name: "content", type: "textarea" },
-      { name: "image1_url", type: "image" },
-      { name: "image2_url", type: "image" },
-      { name: "image3_url", type: "image" },
-    ],
-  },
-  {
     key: "works_in_progress", label: "Works in Progress", icon: BookOpen,
     fields: [
       { name: "title", type: "text", required: true },
