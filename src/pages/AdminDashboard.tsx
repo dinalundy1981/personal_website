@@ -759,6 +759,13 @@ const AdminDashboard = () => {
                     <div key={field.name}>
                       {field.type === "image" ? (
                         <ImageUploadField label={field.name.replace(/_/g, " ")} value={formData[field.name] || ""} onChange={(url) => setFormData({ ...formData, [field.name]: url })} />
+                      ) : field.type === "book_file" ? (
+                        <BookFileUpload
+                          value={formData[field.name] || ""}
+                          onChange={(url) => setFormData({ ...formData, [field.name]: url })}
+                          accept={formData.book_format === "audio" ? ".mp3,.wav,.m4a,.ogg" : ".pdf"}
+                          label={formData.book_format === "audio" ? "Audio File" : "PDF File"}
+                        />
                       ) : field.type === "select" && field.options ? (
                         <>
                           <label className="block text-sm font-medium text-foreground mb-1 capitalize">{field.name.replace(/_/g, " ")}</label>
