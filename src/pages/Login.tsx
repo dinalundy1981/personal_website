@@ -7,8 +7,6 @@ import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { lovable } from "@/integrations/lovable/index";
-import { Separator } from "@/components/ui/separator";
 
 const Login = () => {
   const { toast } = useToast();
