@@ -61,7 +61,7 @@ const TedxTalkPage = () => {
             TEDxTalk
           </motion.h1>
           <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto">
-            Watch inspiring talks, presentations, and conversations featuring Dr. Lundy.
+            Featured talk by Dr. Lundy.
           </motion.p>
         </div>
       </section>

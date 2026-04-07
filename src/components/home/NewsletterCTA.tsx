@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { fadeUp } from "@/lib/animations";
 
@@ -11,7 +11,7 @@ const NewsletterCTA = () => (
         <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
           Read the latest newsletters and stay updated on Dr. Lundy's work.
         </p>
-        <Link to="/newsletter"><Button variant="default" size="lg">View Newsletter</Button></Link>
+        <a href="https://www.linkedin.com/in/drlundy" target="_blank" rel="noopener noreferrer"><Button variant="default" size="lg">View Newsletter</Button></a>
       </motion.div>
     </div>
   </section>
