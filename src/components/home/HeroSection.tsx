@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, ArrowRight, Mic } from "lucide-react";
+import { BookOpen, ArrowRight } from "lucide-react";
 import profileImg from "@/assets/profile-placeholder.jpg";
 
 interface HeroSectionProps {
@@ -38,7 +38,7 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
               transition={{ delay: 0.15, duration: 0.7 }}
               className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-primary leading-[0.95] tracking-tight mb-4"
             >
-              Empower Through{" "}
+              Empowering Marginalized Populations Through{" "}
               <span className="text-secondary italic">Education.</span>
             </motion.h1>
 
@@ -49,7 +49,7 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-base sm:text-lg font-medium text-foreground/70 mb-4"
             >
-              Education Equity Advocate&nbsp; |&nbsp; Life Coach&nbsp; |&nbsp; Media Expert
+              Education Equity Advocate
             </motion.p>
 
             {/* Description */}
@@ -99,21 +99,6 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
                 />
               </div>
 
-              {/* Floating stat badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.5 }}
-                className="absolute -bottom-4 -left-4 sm:-bottom-5 sm:-left-6 bg-card border border-border rounded-xl px-4 py-3 shadow-lg flex items-center gap-3"
-              >
-                <div className="w-9 h-9 rounded-full bg-secondary/15 flex items-center justify-center">
-                  <Mic className="w-4 h-4 text-secondary" />
-                </div>
-                <div>
-                  <p className="text-lg font-bold text-primary leading-none">100+</p>
-                  <p className="text-[10px] text-muted-foreground">Speaking Events</p>
-                </div>
-              </motion.div>
 
               {/* Floating books badge */}
               <motion.div
