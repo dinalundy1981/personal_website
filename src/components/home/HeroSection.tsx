@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, ArrowRight } from "lucide-react";
+import { BookOpen, ArrowRight, PenTool } from "lucide-react";
 import profileImg from "@/assets/profile-placeholder.jpg";
 
 interface HeroSectionProps {
@@ -28,19 +28,19 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
               className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 mb-6"
             >
               <span className="w-2 h-2 rounded-full bg-secondary" />
-              <span className="text-xs font-semibold text-primary tracking-wide">Scholar · Author · Speaker</span>
+              <span className="text-xs font-semibold text-primary tracking-wide">Family Advocate · Author · Keynote Speaker</span>
             </motion.div>
 
             {/* Heading */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.7 }}
-              className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-primary leading-[0.95] tracking-tight mb-4"
-            >
-              Empowering Marginalized Populations Through{" "}
-              <span className="text-secondary italic">Education.</span>
-            </motion.h1>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15, duration: 0.7 }}
+                className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-primary leading-[0.95] tracking-tight mb-4"
+              >
+                Understanding the Human Mind While Strengthening{" "}
+                <span className="text-secondary italic">Court Cases.</span>
+              </motion.h1>
 
             {/* Subtitle */}
             <motion.p
@@ -49,7 +49,7 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-base sm:text-lg font-medium text-foreground/70 mb-4"
             >
-              Education Equity Advocate
+              Specializing in Psychological Analysis for Litigation, Criminal Cases and Forensic Evaluation
             </motion.p>
 
             {/* Description */}
@@ -113,6 +113,24 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
                 <div>
                   <p className="text-lg font-bold text-primary leading-none">5+</p>
                   <p className="text-[10px] text-muted-foreground">Published Books</p>
+                </div>
+              </motion.div>
+
+              {/* New book badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.0, duration: 0.5 }}
+                className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 bg-card border border-border rounded-xl px-4 py-3 shadow-lg max-w-[180px]"
+              >
+                <div className="flex items-start gap-2">
+                  <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <PenTool className="w-4 h-4 text-secondary" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-0.5">Forthcoming Release</p>
+                    <p className="text-xs font-semibold text-primary leading-tight">Self-Help Book for the Child Raised in Foster Care</p>
+                  </div>
                 </div>
               </motion.div>
             </div>
