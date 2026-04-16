@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, ArrowRight } from "lucide-react";
+import { BookOpen, ArrowRight, PenTool } from "lucide-react";
 import profileImg from "@/assets/profile-placeholder.jpg";
 
 interface HeroSectionProps {
