@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BookOpen, ArrowRight, PenTool } from "lucide-react";
 import profileImg from "@/assets/profile-placeholder.jpg";
+import { useHeroSettings } from "@/hooks/useHeroSettings";
 
 interface HeroSectionProps {
   heroImage?: string;
@@ -10,6 +11,17 @@ interface HeroSectionProps {
 
 const HeroSection = ({ heroImage }: HeroSectionProps) => {
   const imgSrc = heroImage || profileImg;
+  const { settings } = useHeroSettings();
+
+  const badgeText = settings?.badge_text ?? "Family Advocate · Author · Keynote Speaker";
+  const headingMain = settings?.heading_main ?? "Understanding the Human Mind While Strengthening";
+  const headingHighlight = settings?.heading_highlight ?? "Court Cases.";
+  const subtitle = settings?.subtitle ?? "Specializing in Psychological Analysis for Litigation, Criminal Cases and Forensic Evaluation";
+  const description = settings?.description ?? "Dr. Dina Lundy is a nationally recognized scholar, author, and speaker who has dedicated her career to education equity, foster youth advocacy, and leadership development with confidence and authority.";
+  const booksCountNumber = settings?.books_count_number ?? "5+";
+  const booksCountLabel = settings?.books_count_label ?? "Published Books";
+  const forthcomingLabel = settings?.forthcoming_label ?? "Forthcoming Release";
+  const forthcomingTitle = settings?.forthcoming_title ?? "Self-Help Book for the Child Raised in Foster Care";
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-background">
@@ -28,7 +40,7 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
               className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 mb-6"
             >
               <span className="w-2 h-2 rounded-full bg-secondary" />
-              <span className="text-xs font-semibold text-primary tracking-wide">Family Advocate · Author · Keynote Speaker</span>
+              <span className="text-xs font-semibold text-primary tracking-wide">{badgeText}</span>
             </motion.div>
 
             {/* Heading */}
@@ -38,8 +50,8 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
                 transition={{ delay: 0.15, duration: 0.7 }}
                 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-primary leading-[0.95] tracking-tight mb-4"
               >
-                Understanding the Human Mind While Strengthening{" "}
-                <span className="text-secondary italic">Court Cases.</span>
+                {headingMain}{" "}
+                <span className="text-secondary italic">{headingHighlight}</span>
               </motion.h1>
 
             {/* Subtitle */}
@@ -49,7 +61,7 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-base sm:text-lg font-medium text-foreground/70 mb-4"
             >
-              Specializing in Psychological Analysis for Litigation, Criminal Cases and Forensic Evaluation
+              {subtitle}
             </motion.p>
 
             {/* Description */}
@@ -59,7 +71,7 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto lg:mx-0 mb-8"
             >
-              Dr. Dina Lundy is a nationally recognized scholar, author, and speaker who has dedicated her career to education equity, foster youth advocacy, and leadership development with confidence and authority.
+              {description}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -111,27 +123,34 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
                   <BookOpen className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-primary leading-none">5+</p>
-                  <p className="text-[10px] text-muted-foreground">Published Books</p>
+                  <p className="text-lg font-bold text-primary leading-none">{booksCountNumber}</p>
+                  <p className="text-[10px] text-muted-foreground">{booksCountLabel}</p>
                 </div>
               </motion.div>
 
-              {/* New book badge */}
+              {/* Forthcoming book badge — clickable, links to Books page */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.0, duration: 0.5 }}
-                className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 bg-card border border-border rounded-xl px-4 py-3 shadow-lg max-w-[180px]"
+                whileHover={{ scale: 1.04, y: -2 }}
+                className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 max-w-[180px]"
               >
-                <div className="flex items-start gap-2">
-                  <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <PenTool className="w-4 h-4 text-secondary" />
+                <Link
+                  to="/books"
+                  aria-label={`View Books — ${forthcomingTitle}`}
+                  className="block bg-card border border-border rounded-xl px-4 py-3 shadow-lg hover:shadow-xl hover:border-secondary/50 transition-all cursor-pointer"
+                >
+                  <div className="flex items-start gap-2">
+                    <div className="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <PenTool className="w-4 h-4 text-secondary" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-0.5">{forthcomingLabel}</p>
+                      <p className="text-xs font-semibold text-primary leading-tight">{forthcomingTitle}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-0.5">Forthcoming Release</p>
-                    <p className="text-xs font-semibold text-primary leading-tight">Self-Help Book for the Child Raised in Foster Care</p>
-                  </div>
-                </div>
+                </Link>
               </motion.div>
             </div>
           </motion.div>
