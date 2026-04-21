@@ -445,6 +445,51 @@ export type Database = {
         }
         Relationships: []
       }
+      homepage_hero_settings: {
+        Row: {
+          badge_text: string
+          books_count_label: string
+          books_count_number: string
+          created_at: string
+          description: string
+          forthcoming_label: string
+          forthcoming_title: string
+          heading_highlight: string
+          heading_main: string
+          id: string
+          subtitle: string
+          updated_at: string
+        }
+        Insert: {
+          badge_text?: string
+          books_count_label?: string
+          books_count_number?: string
+          created_at?: string
+          description?: string
+          forthcoming_label?: string
+          forthcoming_title?: string
+          heading_highlight?: string
+          heading_main?: string
+          id?: string
+          subtitle?: string
+          updated_at?: string
+        }
+        Update: {
+          badge_text?: string
+          books_count_label?: string
+          books_count_number?: string
+          created_at?: string
+          description?: string
+          forthcoming_label?: string
+          forthcoming_title?: string
+          heading_highlight?: string
+          heading_main?: string
+          id?: string
+          subtitle?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       media: {
         Row: {
           created_at: string
