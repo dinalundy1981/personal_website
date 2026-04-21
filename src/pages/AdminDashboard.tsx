@@ -16,6 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fadeUp } from "@/lib/animations";
 import SiteImagesManager from "@/components/admin/SiteImagesManager";
+import HeroSettingsManager from "@/components/admin/HeroSettingsManager";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import BookFileUpload from "@/components/admin/BookFileUpload";
 import BlogEditor from "@/components/admin/BlogEditor";
@@ -459,6 +460,7 @@ const sidebarNav2 = [
 const sidebarSettings = [
   { key: "payment-methods", label: "Payment Methods", icon: CreditCard },
   { key: "site-images", label: "Site Images", icon: ImageLucide },
+  { key: "hero-content", label: "Homepage Content", icon: LayoutDashboard },
   { key: "tedx-video", label: "Work With Me Settings", icon: Play },
 ];
 
@@ -978,6 +980,9 @@ const AdminDashboard = () => {
 
     // Site Images
     if (activeSection === "site-images") return <SiteImagesManager />;
+
+    // Homepage Hero Content
+    if (activeSection === "hero-content") return <HeroSettingsManager />;
 
     // TEDx Video / Work With Me Settings
     if (activeSection === "tedx-video") return <TedxVideoManager />;
