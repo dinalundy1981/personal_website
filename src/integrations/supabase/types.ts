@@ -445,6 +445,69 @@ export type Database = {
         }
         Relationships: []
       }
+      homepage_about_settings: {
+        Row: {
+          badge_label: string
+          badge_number: string
+          button_text: string
+          created_at: string
+          eyebrow: string
+          heading_highlight: string
+          heading_line1: string
+          id: string
+          paragraph1: string
+          paragraph2: string
+          quote: string
+          stat1_label: string
+          stat1_number: string
+          stat2_label: string
+          stat2_number: string
+          stat3_label: string
+          stat3_number: string
+          updated_at: string
+        }
+        Insert: {
+          badge_label?: string
+          badge_number?: string
+          button_text?: string
+          created_at?: string
+          eyebrow?: string
+          heading_highlight?: string
+          heading_line1?: string
+          id?: string
+          paragraph1?: string
+          paragraph2?: string
+          quote?: string
+          stat1_label?: string
+          stat1_number?: string
+          stat2_label?: string
+          stat2_number?: string
+          stat3_label?: string
+          stat3_number?: string
+          updated_at?: string
+        }
+        Update: {
+          badge_label?: string
+          badge_number?: string
+          button_text?: string
+          created_at?: string
+          eyebrow?: string
+          heading_highlight?: string
+          heading_line1?: string
+          id?: string
+          paragraph1?: string
+          paragraph2?: string
+          quote?: string
+          stat1_label?: string
+          stat1_number?: string
+          stat2_label?: string
+          stat2_number?: string
+          stat3_label?: string
+          stat3_number?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       homepage_hero_settings: {
         Row: {
           badge_text: string
