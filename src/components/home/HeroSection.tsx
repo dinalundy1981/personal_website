@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { BookOpen, ArrowRight, PenTool } from "lucide-react";
+import { BookOpen, ArrowRight, PenTool, FileText } from "lucide-react";
 import profileImg from "@/assets/profile-placeholder.jpg";
 import { useHeroSettings } from "@/hooks/useHeroSettings";
 
@@ -91,6 +91,15 @@ const HeroSection = ({ heroImage }: HeroSectionProps) => {
                   Learn More
                 </Button>
               </Link>
+              <a
+                href="https://docs.google.com/document/d/1VULjLVU1uTAbmofsCVeWIwMZquFB0HJj/mobilebasic"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" size="lg" className="group">
+                  <FileText className="w-4 h-4 mr-1" /> CV
+                </Button>
+              </a>
             </motion.div>
           </div>
 

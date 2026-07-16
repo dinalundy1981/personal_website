@@ -8,6 +8,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import AuthDialog from "@/components/auth/AuthDialog";
 import { ShoppingCart, ArrowRight, CheckCircle, X, Minus, Plus } from "lucide-react";
 
 interface PaymentMethod {
@@ -34,6 +35,7 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
   const [selectedMethod, setSelectedMethod] = useState("");
   const [paymentEmail, setPaymentEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     if (open && step === "payment") {
@@ -53,9 +55,17 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
     }
   }, [open]);
 
+  const handleProceedToCheckout = () => {
+    if (!user) {
+      setShowAuth(true);
+      return;
+    }
+    setStep("info");
+  };
+
   const handleSubmitOrder = async () => {
     if (!user) {
-      toast({ title: "Please log in to complete your purchase", variant: "destructive" });
+      setShowAuth(true);
       return;
     }
     if (!paymentEmail.trim()) {
@@ -107,45 +117,93 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+      <DialogContent className="w-[calc(100%-2rem)] sm:w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-xl">
         {step === "cart" && (
           <>
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2"><ShoppingCart className="w-5 h-5" /> Your Cart</DialogTitle>
+              <DialogTitle className="flex items-center gap-2">
+                <ShoppingCart className="w-5 h-5 text-secondary" /> Your Cart
+                {items.length > 0 && (
+                  <span className="ml-auto text-xs font-normal text-muted-foreground">
+                    {items.length} item{items.length > 1 ? "s" : ""}
+                  </span>
+                )}
+              </DialogTitle>
             </DialogHeader>
             {items.length === 0 ? (
-              <p className="text-muted-foreground text-center py-8">Your cart is empty.</p>
+              <div className="flex flex-col items-center gap-3 py-12 px-4 text-center">
+                <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center">
+                  <ShoppingCart className="w-6 h-6 text-muted-foreground" />
+                </div>
+                <p className="text-muted-foreground">Your cart is empty.</p>
+              </div>
             ) : (
-              <div className="space-y-4 mt-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 border rounded-lg p-3">
-                    {item.image_url && <img src={item.image_url} alt="" className="w-14 h-14 rounded object-cover" />}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm truncate">{item.title}</p>
-                      <div className="flex items-center gap-2">
-                        <p className="text-secondary font-heading">${item.price.toFixed(2)}</p>
-                        <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground capitalize">{item.item_type}</span>
+              <div className="mt-4 space-y-4">
+                <div className="space-y-3 max-h-[45vh] overflow-y-auto pr-1 -mr-1">
+                  {items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex flex-col sm:flex-row sm:items-center gap-3 border rounded-xl p-3 bg-card hover:border-secondary/40 transition-colors"
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        {item.image_url ? (
+                          <img
+                            src={item.image_url}
+                            alt=""
+                            className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-14 h-14 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                            <ShoppingCart className="w-5 h-5 text-muted-foreground" />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm leading-snug line-clamp-2">{item.title}</p>
+                          <div className="flex items-center gap-2 mt-1 flex-wrap">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">
+                              {item.item_type}
+                            </span>
+                            <p className="text-secondary font-heading text-sm">${item.price.toFixed(2)}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between sm:justify-end gap-2 pl-[4.25rem] sm:pl-0">
+                        <div className="flex items-center gap-1 bg-muted rounded-full p-0.5">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 rounded-full hover:bg-background"
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          >
+                            <Minus className="w-3 h-3" />
+                          </Button>
+                          <span className="w-6 text-center text-sm font-medium">{item.quantity}</span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 rounded-full hover:bg-background"
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          >
+                            <Plus className="w-3 h-3" />
+                          </Button>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-6 text-center text-sm">{item.quantity}</span>
-                      <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                        <Plus className="w-3 h-3" />
-                      </Button>
-                    </div>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => removeFromCart(item.id)}>
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
+                  ))}
+                </div>
                 <div className="flex justify-between items-center pt-3 border-t">
                   <span className="font-heading text-lg">Total:</span>
                   <span className="font-heading text-2xl text-secondary">${total.toFixed(2)}</span>
                 </div>
-                <Button className="w-full" onClick={() => setStep("info")}>
+                <Button className="w-full" size="lg" onClick={handleProceedToCheckout}>
                   Proceed to Checkout <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
@@ -240,6 +298,7 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
           </>
         )}
       </DialogContent>
+      <AuthDialog open={showAuth} onOpenChange={setShowAuth} onLoggedIn={() => setStep((s) => (s === "cart" ? "info" : s))} />
     </Dialog>
   );
 };

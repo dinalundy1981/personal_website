@@ -10,7 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { fadeUp } from "@/lib/animations";
-import { User, BookOpen, GraduationCap, CalendarDays, Mail, Phone, Edit2, Save } from "lucide-react";
+import { openBookFile } from "@/lib/bookFile";
+import { User, BookOpen, GraduationCap, CalendarDays, Mail, Phone, Edit2, Save, FileText, Headphones } from "lucide-react";
 
 const UserDashboard = () => {
   const { user, loading } = useAuth();
@@ -32,7 +33,7 @@ const UserDashboard = () => {
     const fetchData = async () => {
       const [profileRes, booksRes, coursesRes, eventsRes] = await Promise.all([
         supabase.from("profiles").select("*").eq("user_id", user.id).maybeSingle(),
-        supabase.from("book_orders").select("*, books(title, image_url)").eq("user_id", user.id).order("created_at", { ascending: false }),
+        supabase.from("book_orders").select("*, books(title, image_url, book_format, file_url)").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("course_orders").select("*, courses(title, image_url)").eq("user_id", user.id).order("created_at", { ascending: false }),
         supabase.from("event_registrations").select("*, events(title, date, location)").eq("user_id", user.id).order("created_at", { ascending: false }),
       ]);
@@ -57,6 +58,10 @@ const UserDashboard = () => {
       setEditing(false);
       toast({ title: "Profile Updated!" });
     }
+  };
+
+  const handleOpenBookFile = (path: string) => {
+    openBookFile(path, (message) => toast({ title: "Unable to open file", description: message, variant: "destructive" }));
   };
 
   if (loading || !user) return null;
@@ -122,14 +127,25 @@ const UserDashboard = () => {
                     ) : (
                       <div className="space-y-3">
                         {bookOrders.map(order => (
-                          <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border">
+                          <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border gap-3">
                             <div>
                               <p className="font-medium text-foreground">{order.books?.title || "Book"}</p>
                               <p className="text-sm text-muted-foreground">Qty: {order.quantity} · ${order.total_price}</p>
                             </div>
-                            <span className={`text-xs px-2 py-1 rounded-full ${order.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
-                              {order.status}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              {order.status === "approved" && order.books?.file_url && (
+                                <Button size="sm" variant="outline" onClick={() => handleOpenBookFile(order.books.file_url)}>
+                                  {order.books.book_format === "audio" ? (
+                                    <><Headphones className="w-4 h-4 mr-1" /> Listen</>
+                                  ) : (
+                                    <><FileText className="w-4 h-4 mr-1" /> Read PDF</>
+                                  )}
+                                </Button>
+                              )}
+                              <span className={`text-xs px-2 py-1 rounded-full ${order.status === "approved" ? "bg-green-100 text-green-700" : order.status === "rejected" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
+                                {order.status}
+                              </span>
+                            </div>
                           </div>
                         ))}
                       </div>

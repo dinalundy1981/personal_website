@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, ChevronDown, LogOut, Shield, LayoutDashboard } from "lucide-react";
+import { Menu, X, LogOut, Shield, LayoutDashboard, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,15 +19,10 @@ const primaryLinks = [
   { label: "Contact", path: "/contact" },
 ];
 
-const otherLinks = [
-  { label: "Media", path: "/media" },
-  { label: "Events", path: "/events" },
-  { label: "Philanthropy", path: "/philanthropy" },
-];
+const CV_URL = "https://docs.google.com/document/d/1VULjLVU1uTAbmofsCVeWIwMZquFB0HJj/mobilebasic";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [othersOpen, setOthersOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAdmin, signOut } = useAuth();
@@ -63,36 +58,6 @@ const Header = () => {
             </Link>
           ))}
 
-          {/* Others Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setOthersOpen(!othersOpen)}
-              className="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-primary/80 text-primary-foreground/90 hover:text-primary-foreground flex items-center gap-1"
-            >
-              Others <ChevronDown className="w-4 h-4" />
-            </button>
-            {othersOpen && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setOthersOpen(false)} />
-                <div className="absolute right-0 top-full mt-1 z-50 bg-background text-foreground rounded-lg shadow-xl border py-2 min-w-[160px]">
-                  {otherLinks.map((link) => (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      onClick={() => setOthersOpen(false)}
-                      className={cn(
-                        "block px-4 py-2 text-sm transition-colors",
-                        isActive(link.path) ? "bg-warm text-warm-foreground" : "hover:bg-muted"
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-
           <CartButton />
 
           {user ? (
@@ -105,12 +70,20 @@ const Header = () => {
                   <Button variant="warm" size="sm"><Shield className="w-4 h-4 mr-1" /> Admin</Button>
                 </Link>
               )}
+              <a href={CV_URL} target="_blank" rel="noopener noreferrer">
+                <Button variant="warm" size="sm"><FileText className="w-4 h-4 mr-1" /> CV</Button>
+              </a>
               <Button variant="warm" size="sm" onClick={handleLogout}><LogOut className="w-4 h-4 mr-1" /> Logout</Button>
             </div>
           ) : (
-            <Link to="/login">
-              <Button variant="warm" size="sm" className="ml-2">Login</Button>
-            </Link>
+            <div className="flex items-center gap-2 ml-2">
+              <a href={CV_URL} target="_blank" rel="noopener noreferrer">
+                <Button variant="warm" size="sm"><FileText className="w-4 h-4 mr-1" /> CV</Button>
+              </a>
+              <Link to="/login">
+                <Button variant="warm" size="sm">Login</Button>
+              </Link>
+            </div>
           )}
         </nav>
 
@@ -136,20 +109,6 @@ const Header = () => {
               {link.label}
             </Link>
           ))}
-          <div className="px-6 py-2 text-xs font-semibold uppercase tracking-wider text-primary-foreground/50">Others</div>
-          {otherLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              onClick={() => setMobileOpen(false)}
-              className={cn(
-                "block px-6 py-3 text-sm font-medium transition-colors",
-                isActive(link.path) ? "bg-secondary text-secondary-foreground" : "text-primary-foreground/90 hover:bg-primary/80"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
           <div className="px-6 pt-3 space-y-2">
             {user ? (
               <>
@@ -161,14 +120,22 @@ const Header = () => {
                     <Button variant="warm" size="sm" className="w-full"><Shield className="w-4 h-4 mr-1" /> Admin Dashboard</Button>
                   </Link>
                 )}
+                <a href={CV_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}>
+                  <Button variant="warm" size="sm" className="w-full"><FileText className="w-4 h-4 mr-1" /> CV</Button>
+                </a>
                 <Button variant="warm" size="sm" className="w-full" onClick={() => { handleLogout(); setMobileOpen(false); }}>
                   <LogOut className="w-4 h-4 mr-1" /> Logout
                 </Button>
               </>
             ) : (
-              <Link to="/login" onClick={() => setMobileOpen(false)}>
-                <Button variant="warm" size="sm" className="w-full">Login</Button>
-              </Link>
+              <>
+                <a href={CV_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}>
+                  <Button variant="warm" size="sm" className="w-full"><FileText className="w-4 h-4 mr-1" /> CV</Button>
+                </a>
+                <Link to="/login" onClick={() => setMobileOpen(false)}>
+                  <Button variant="warm" size="sm" className="w-full">Login</Button>
+                </Link>
+              </>
             )}
           </div>
         </nav>
