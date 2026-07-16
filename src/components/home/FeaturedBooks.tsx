@@ -53,12 +53,11 @@ const FeaturedBooks = () => {
           {books.map((book, i) => (
             <motion.div key={book.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i + 1}
               className="bg-background rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow group flex flex-col">
-              <div className="aspect-[4/3] bg-muted/40 p-4 flex items-center justify-center overflow-hidden border-b relative">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/[0.02] to-transparent pointer-events-none" />
+              <div className="aspect-[3/4] overflow-hidden relative border-b">
                 <img 
                   src={book.image_url || bookImg} 
                   alt={book.title} 
-                  className="h-full w-auto object-contain shadow-md rounded-sm group-hover:scale-105 group-hover:shadow-lg transition-all duration-500" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                 />
               </div>
               <div className="p-6 flex flex-col flex-1">
