@@ -52,12 +52,12 @@ const Books = () => {
   }, []);
 
   const handleAdd = (book: Book) => {
-    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book" });
+    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book", book_format: book.book_format });
     toast({ title: `"${book.title}" added to cart!` });
   };
 
   const handleOrderNow = (book: Book) => {
-    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book" });
+    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book", book_format: book.book_format });
     setCheckoutOpen(true);
   };
 

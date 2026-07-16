@@ -7,6 +7,7 @@ export interface CartItem {
   image_url: string | null;
   quantity: number;
   item_type: "book" | "course";
+  book_format?: string | null;
 }
 
 interface CartContextType {

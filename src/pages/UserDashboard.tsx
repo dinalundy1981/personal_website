@@ -127,12 +127,22 @@ const UserDashboard = () => {
                     ) : (
                       <div className="space-y-3">
                         {bookOrders.map(order => (
-                          <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border gap-3">
-                            <div>
-                              <p className="font-medium text-foreground">{order.books?.title || "Book"}</p>
-                              <p className="text-sm text-muted-foreground">Qty: {order.quantity} · ${order.total_price}</p>
+                          <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg bg-muted/50 border gap-3">
+                            <div className="flex-1 min-w-0">
+                              <p className="font-semibold text-foreground leading-snug">{order.books?.title || "Book"}</p>
+                              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground mt-1">
+                                <span>Qty: {order.quantity}</span>
+                                <span>Total: ${order.total_price}</span>
+                                {order.customer_name && <span>Name: {order.customer_name}</span>}
+                                {order.phone && <span>Phone: {order.phone}</span>}
+                              </div>
+                              {order.delivery_address && (
+                                <p className="text-xs text-foreground mt-1.5 bg-background/50 p-2 rounded border border-dashed border-border/65">
+                                  <strong>Delivery:</strong> {order.delivery_address}
+                                </p>
+                              )}
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-shrink-0">
                               {order.status === "approved" && order.books?.file_url && (
                                 <Button size="sm" variant="outline" onClick={() => handleOpenBookFile(order.books.file_url)}>
                                   {order.books.book_format === "audio" ? (
@@ -163,10 +173,19 @@ const UserDashboard = () => {
                     ) : (
                       <div className="space-y-3">
                         {courseOrders.map(order => (
-                          <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border">
-                            <div>
-                              <p className="font-medium text-foreground">{order.courses?.title || "Course"}</p>
-                              <p className="text-sm text-muted-foreground">${order.total_price}</p>
+                          <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg bg-muted/50 border gap-3">
+                            <div className="flex-1 min-w-0">
+                              <p className="font-semibold text-foreground leading-snug">{order.courses?.title || "Course"}</p>
+                              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground mt-1">
+                                <span>Total: ${order.total_price}</span>
+                                {order.customer_name && <span>Name: {order.customer_name}</span>}
+                                {order.phone && <span>Phone: {order.phone}</span>}
+                              </div>
+                              {order.delivery_address && (
+                                <p className="text-xs text-foreground mt-1.5 bg-background/50 p-2 rounded border border-dashed border-border/65">
+                                  <strong>Delivery:</strong> {order.delivery_address}
+                                </p>
+                              )}
                             </div>
                             <span className={`text-xs px-2 py-1 rounded-full ${order.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
                               {order.status}

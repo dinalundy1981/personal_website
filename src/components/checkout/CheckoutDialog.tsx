@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -29,13 +30,21 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
   const { user } = useAuth();
   const { toast } = useToast();
   const [step, setStep] = useState<"cart" | "info" | "payment">("cart");
+  const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [selectedMethod, setSelectedMethod] = useState("");
   const [paymentEmail, setPaymentEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
+
+  // Check if cart contains any physical books (physical, paperback, or hardcover formats)
+  const hasPhysicalBook = items.some((item) => 
+    item.item_type === "book" && 
+    (item.book_format === "physical" || item.book_format === "paperback" || item.book_format === "hardcover")
+  );
 
   useEffect(() => {
     if (open && step === "payment") {
@@ -45,11 +54,25 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
     }
   }, [open, step]);
 
+  // Prefill name and phone from user profile
+  useEffect(() => {
+    if (open && user) {
+      supabase.from("profiles").select("full_name, phone").eq("user_id", user.id).maybeSingle().then(({ data }) => {
+        if (data) {
+          setCustomerName((name) => name || data.full_name || "");
+          setPhone((p) => p || data.phone || "");
+        }
+      });
+    }
+  }, [open, user]);
+
   useEffect(() => {
     if (!open) {
       setStep("cart");
+      setCustomerName("");
       setPhone("");
       setCountry("");
+      setDeliveryAddress("");
       setSelectedMethod("");
       setPaymentEmail("");
     }
@@ -85,8 +108,10 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
             quantity: item.quantity,
             total_price: item.price * item.quantity,
             status: "pending",
+            customer_name: customerName,
             phone,
-            country,
+            delivery_address: hasPhysicalBook ? deliveryAddress : null,
+            country: hasPhysicalBook ? country : null,
             payment_method: selectedMethod,
             payment_email: paymentEmail,
           } as any)
@@ -95,11 +120,12 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
           supabase.from("course_orders").insert({
             course_id: item.id,
             user_id: user.id,
-            quantity: item.quantity,
             total_price: item.price * item.quantity,
             status: "pending",
+            customer_name: customerName,
             phone,
-            country,
+            delivery_address: hasPhysicalBook ? deliveryAddress : null,
+            country: hasPhysicalBook ? country : null,
             payment_method: selectedMethod,
             payment_email: paymentEmail,
           } as any)
@@ -109,7 +135,7 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
       clearCart();
       onOpenChange(false);
       toast({ title: "Order submitted!", description: "Your order is pending admin verification. You'll be notified once approved." });
-    } catch {
+    } catch (e) {
       toast({ title: "Error submitting order", variant: "destructive" });
     }
     setSubmitting(false);
@@ -154,7 +180,9 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
                           <p className="font-semibold text-sm text-primary break-words line-clamp-2 pr-4 sm:pr-0 leading-snug">{item.title}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <p className="text-secondary font-heading text-sm">${item.price.toFixed(2)}</p>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground capitalize font-medium">{item.item_type}</span>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground capitalize font-medium">
+                              {item.item_type === "book" && item.book_format ? `${item.book_format} Book` : item.item_type}
+                            </span>
                           </div>
                         </div>
                         
@@ -209,25 +237,56 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
             </DialogHeader>
             <div className="space-y-4 mt-4 w-full">
               <div>
-                <Label>Phone Number</Label>
-                <Input placeholder="+1 (555) 123-4567" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <Label htmlFor="customer-name">Full Name</Label>
+                <Input 
+                  id="customer-name"
+                  placeholder="Enter your full name" 
+                  value={customerName} 
+                  onChange={(e) => setCustomerName(e.target.value)} 
+                />
               </div>
               <div>
-                <Label>Country</Label>
-                <select
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                >
-                  <option value="">Select your country</option>
-                  {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
-                </select>
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input 
+                  id="phone"
+                  placeholder="e.g. +1 (555) 123-4567" 
+                  value={phone} 
+                  onChange={(e) => setPhone(e.target.value)} 
+                />
               </div>
+              
+              {hasPhysicalBook && (
+                <>
+                  <div>
+                    <Label htmlFor="country">Country</Label>
+                    <select
+                      id="country"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                    >
+                      <option value="">Select your country</option>
+                      {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <Label htmlFor="address">Delivery Address</Label>
+                    <Textarea 
+                      id="address"
+                      placeholder="Enter street address, city, state, and ZIP code" 
+                      value={deliveryAddress} 
+                      onChange={(e) => setDeliveryAddress(e.target.value)} 
+                      rows={3}
+                    />
+                  </div>
+                </>
+              )}
+
               <div className="flex gap-2">
                 <Button variant="outline" className="flex-1" onClick={() => setStep("cart")}>Back</Button>
                 <Button
                   className="flex-1"
-                  disabled={!phone.trim() || !country}
+                  disabled={!customerName.trim() || !phone.trim() || (hasPhysicalBook && (!country || !deliveryAddress.trim()))}
                   onClick={() => setStep("payment")}
                 >
                   Next <ArrowRight className="w-4 h-4 ml-1" />
@@ -271,8 +330,14 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
               )}
 
               <div>
-                <Label>Email used for payment</Label>
-                <Input type="email" placeholder="your-payment@email.com" value={paymentEmail} onChange={(e) => setPaymentEmail(e.target.value)} />
+                <Label htmlFor="payment-email">Email used for payment</Label>
+                <Input 
+                  id="payment-email"
+                  type="email" 
+                  placeholder="your-payment@email.com" 
+                  value={paymentEmail} 
+                  onChange={(e) => setPaymentEmail(e.target.value)} 
+                />
               </div>
 
               <div className="flex gap-2">
@@ -282,7 +347,7 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
                   disabled={!selectedMethod || !paymentEmail.trim() || submitting}
                   onClick={handleSubmitOrder}
                 >
-                  <CheckCircle className="w-4 h-4 ml-1" /> {submitting ? "Submitting..." : "Submit Order"}
+                  <CheckCircle className="w-4 h-4 mr-1" /> {submitting ? "Submitting..." : "Submit Order"}
                 </Button>
               </div>
             </div>

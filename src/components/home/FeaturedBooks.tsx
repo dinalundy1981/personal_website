@@ -18,6 +18,7 @@ interface Book {
   price: number;
   image_url: string | null;
   category?: string | null;
+  book_format?: string | null;
 }
 
 const FeaturedBooks = () => {
@@ -31,7 +32,7 @@ const FeaturedBooks = () => {
     const fetch = async () => {
       const { data } = await supabase
         .from("books")
-        .select("id, title, description, price, image_url, category")
+        .select("id, title, description, price, image_url, category, book_format")
         .eq("is_published", true)
         .order("created_at", { ascending: false })
         .limit(3);
@@ -45,12 +46,12 @@ const FeaturedBooks = () => {
   const activeBook = books[activeIndex] || books[0];
 
   const handleAdd = (book: Book) => {
-    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book" });
+    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book", book_format: book.book_format });
     toast({ title: `"${book.title}" added to cart!` });
   };
 
   const handleOrderNow = (book: Book) => {
-    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book" });
+    addToCart({ id: book.id, title: book.title, price: book.price, image_url: book.image_url, item_type: "book", book_format: book.book_format });
     setCheckoutOpen(true);
   };
 

@@ -1,0 +1,12 @@
+ALTER TABLE public.book_orders 
+ADD COLUMN IF NOT EXISTS customer_name TEXT,
+ADD COLUMN IF NOT EXISTS delivery_address TEXT;
+
+ALTER TABLE public.course_orders 
+ADD COLUMN IF NOT EXISTS customer_name TEXT,
+ADD COLUMN IF NOT EXISTS delivery_address TEXT,
+ADD COLUMN IF NOT EXISTS phone TEXT,
+ADD COLUMN IF NOT EXISTS country TEXT,
+ADD COLUMN IF NOT EXISTS payment_method TEXT,
+ADD COLUMN IF NOT EXISTS payment_email TEXT,
+ADD COLUMN IF NOT EXISTS admin_notes TEXT;

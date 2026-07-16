@@ -394,13 +394,21 @@ const DashboardView = () => {
             {pendingBookOrders.map((order) => (
               <div key={order.id} className="bg-card rounded-xl border p-4 flex flex-col sm:flex-row sm:items-center gap-3">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  {order.books?.image_url && <img src={order.books.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />}
-                  <div className="min-w-0">
+                  {order.books?.image_url && <img src={order.books.image_url} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />}
+                  <div className="min-w-0 flex-1">
                     <p className="font-medium text-sm truncate">{order.books?.title || "Book"}</p>
                     <p className="text-xs text-muted-foreground">Book · Qty: {order.quantity} · ${Number(order.total_price).toFixed(2)} · {order.payment_email || "N/A"}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Name: {order.customer_name || "N/A"} · Phone: {order.phone || "N/A"}
+                    </p>
+                    {order.delivery_address && (
+                      <p className="text-xs text-foreground mt-1 bg-muted/40 px-2 py-1 rounded border border-dashed border-border/70 max-w-md">
+                        Delivery: {order.delivery_address}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="flex gap-1.5">
+                <div className="flex gap-1.5 flex-shrink-0">
                   <Button size="sm" onClick={() => handleOrderAction(order.id, "approved", "book")}>
                     <Check className="w-3 h-3 mr-1" /> Approve
                   </Button>
@@ -413,13 +421,21 @@ const DashboardView = () => {
             {pendingCourseOrders.map((order) => (
               <div key={order.id} className="bg-card rounded-xl border p-4 flex flex-col sm:flex-row sm:items-center gap-3">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  {order.courses?.image_url && <img src={order.courses.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />}
-                  <div className="min-w-0">
+                  {order.courses?.image_url && <img src={order.courses.image_url} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />}
+                  <div className="min-w-0 flex-1">
                     <p className="font-medium text-sm truncate">{order.courses?.title || "Course"}</p>
                     <p className="text-xs text-muted-foreground">Course · ${Number(order.total_price).toFixed(2)} · {order.payment_email || "N/A"}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Name: {order.customer_name || "N/A"} · Phone: {order.phone || "N/A"}
+                    </p>
+                    {order.delivery_address && (
+                      <p className="text-xs text-foreground mt-1 bg-muted/40 px-2 py-1 rounded border border-dashed border-border/70 max-w-md">
+                        Delivery: {order.delivery_address}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="flex gap-1.5">
+                <div className="flex gap-1.5 flex-shrink-0">
                   <Button size="sm" onClick={() => handleOrderAction(order.id, "approved", "course")}>
                     <Check className="w-3 h-3 mr-1" /> Approve
                   </Button>
@@ -868,13 +884,20 @@ const AdminDashboard = () => {
               {orders.map((order) => (
                 <div key={order.id} className="bg-card rounded-xl border p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                    {order.books?.image_url && <img src={order.books.image_url} alt="" className="w-12 h-12 rounded-lg object-cover" />}
+                    {order.books?.image_url && <img src={order.books.image_url} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />}
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-sm text-foreground">{order.books?.title || "Unknown Book"}</h3>
                       <p className="text-xs text-muted-foreground">Qty: {order.quantity} · ${Number(order.total_price).toFixed(2)} · {order.payment_method || "N/A"} · {order.payment_email || "N/A"}</p>
-                      <p className="text-xs text-muted-foreground">{order.phone || ""} · {order.country || ""} · {new Date(order.created_at).toLocaleDateString()}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Name: {order.customer_name || "N/A"} · Phone: {order.phone || "N/A"} · Date: {new Date(order.created_at).toLocaleDateString()}
+                      </p>
+                      {order.delivery_address && (
+                        <p className="text-xs text-foreground bg-muted/40 p-1.5 rounded border border-dashed mt-1 max-w-xl">
+                          <strong>Delivery Address:</strong> {order.delivery_address}
+                        </p>
+                      )}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-shrink-0">
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${order.status === "approved" ? "bg-green-100 text-green-700" : order.status === "rejected" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>{order.status}</span>
                       {order.status === "pending" && (
                         <div className="flex gap-1">
@@ -897,13 +920,20 @@ const AdminDashboard = () => {
               {courseOrders.map((order: any) => (
                 <div key={order.id} className="bg-card rounded-xl border p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                    {order.courses?.image_url && <img src={order.courses.image_url} alt="" className="w-12 h-12 rounded-lg object-cover" />}
+                    {order.courses?.image_url && <img src={order.courses.image_url} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />}
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-sm text-foreground">{order.courses?.title || "Unknown Course"}</h3>
                       <p className="text-xs text-muted-foreground">Qty: {order.quantity} · ${Number(order.total_price).toFixed(2)} · {order.payment_method || "N/A"} · {order.payment_email || "N/A"}</p>
-                      <p className="text-xs text-muted-foreground">{order.phone || ""} · {order.country || ""} · {new Date(order.created_at).toLocaleDateString()}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Name: {order.customer_name || "N/A"} · Phone: {order.phone || "N/A"} · Date: {new Date(order.created_at).toLocaleDateString()}
+                      </p>
+                      {order.delivery_address && (
+                        <p className="text-xs text-foreground bg-muted/40 p-1.5 rounded border border-dashed mt-1 max-w-xl">
+                          <strong>Delivery Address:</strong> {order.delivery_address}
+                        </p>
+                      )}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-shrink-0">
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${order.status === "approved" ? "bg-green-100 text-green-700" : order.status === "rejected" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>{order.status}</span>
                       {order.status === "pending" && (
                         <div className="flex gap-1">
