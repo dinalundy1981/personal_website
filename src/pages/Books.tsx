@@ -70,14 +70,19 @@ const Books = () => {
                 return (
                   <motion.div key={book.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
                     className="bg-card rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group border flex flex-col">
-                    <div className="aspect-[16/10] overflow-hidden relative">
-                      <img src={book.image_url || bookPlaceholder} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      <div className="absolute top-3 right-3 flex gap-1.5">
+                    <div className="aspect-[4/3] bg-muted/40 p-4 flex items-center justify-center overflow-hidden border-b relative">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/[0.02] to-transparent pointer-events-none" />
+                      <img 
+                        src={book.image_url || bookPlaceholder} 
+                        alt={book.title} 
+                        className="h-full w-auto object-contain shadow-md rounded-sm group-hover:scale-105 group-hover:shadow-lg transition-all duration-500" 
+                      />
+                      <div className="absolute top-3 right-3 flex flex-wrap gap-1.5 z-10">
                         {book.category && (
-                          <span className="bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1 rounded-full shadow">{book.category}</span>
+                          <span className="bg-secondary text-secondary-foreground text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">{book.category}</span>
                         )}
                         {badge && (
-                          <span className={`${badge.color} text-xs font-semibold px-3 py-1 rounded-full shadow flex items-center gap-1`}>
+                          <span className={`${badge.color} text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1`}>
                             <badge.icon className="w-3 h-3" /> {badge.label}
                           </span>
                         )}
