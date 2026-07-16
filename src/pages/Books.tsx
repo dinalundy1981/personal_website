@@ -64,36 +64,39 @@ const Books = () => {
           ) : books.length === 0 ? (
             <p className="text-center text-muted-foreground py-12">No books available yet. Check back soon!</p>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {books.map((book, i) => {
                 const badge = formatBadge(book.book_format);
                 return (
                   <motion.div key={book.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
-                    className="bg-card rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group border flex flex-col">
-                    <div className="aspect-[3/4] overflow-hidden relative border-b">
+                    className="bg-card rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 group border flex flex-row h-40 sm:h-44 w-full">
+                    <div className="w-28 sm:w-32 h-full flex-shrink-0 overflow-hidden relative border-r">
                       <img 
                         src={book.image_url || bookPlaceholder} 
                         alt={book.title} 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                       />
-                      <div className="absolute top-3 right-3 flex flex-wrap gap-1.5 z-10">
-                        {book.category && (
-                          <span className="bg-secondary text-secondary-foreground text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">{book.category}</span>
-                        )}
-                        {badge && (
-                          <span className={`${badge.color} text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1`}>
-                            <badge.icon className="w-3 h-3" /> {badge.label}
-                          </span>
-                        )}
-                      </div>
                     </div>
-                    <div className="p-5 flex flex-col flex-1">
-                      <h3 className="font-heading text-lg text-primary mb-2">{book.title}</h3>
-                      <p className="text-muted-foreground text-sm mb-4 flex-1 line-clamp-3">{book.description}</p>
-                      <div className="flex items-center justify-between pt-3 border-t border-border gap-2">
-                        <span className="font-heading text-xl text-secondary">${book.price.toFixed(2)}</span>
-                        <Button variant="secondary" size="sm" onClick={() => handleAdd(book)}>
-                          <ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart
+                    <div className="flex-1 p-3 sm:p-4 flex flex-col justify-between min-w-0 h-full">
+                      <div>
+                        <div className="flex flex-wrap gap-1 mb-1.5">
+                          {book.category && (
+                            <span className="bg-secondary/15 text-secondary text-[9px] font-bold px-2 py-0.5 rounded-full">{book.category}</span>
+                          )}
+                          {badge && (
+                            <span className={`${badge.color} text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5`}>
+                              <badge.icon className="w-2.5 h-2.5" /> {badge.label}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="font-heading text-base sm:text-lg text-primary mb-1 line-clamp-2 leading-snug">{book.title}</h3>
+                        <p className="text-muted-foreground text-xs line-clamp-2 leading-relaxed">{book.description}</p>
+                      </div>
+                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-dashed border-border">
+                        <span className="font-heading text-lg sm:text-xl text-secondary">${book.price.toFixed(2)}</span>
+                        <Button variant="secondary" size="sm" className="h-8 px-2 sm:px-3 text-xs" onClick={() => handleAdd(book)}>
+                          <ShoppingCart className="w-3.5 h-3.5" /> 
+                          <span className="hidden xs:inline ml-1">Add to Cart</span>
                         </Button>
                       </div>
                     </div>
