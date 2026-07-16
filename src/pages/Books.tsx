@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, FileText, Headphones } from "lucide-react";
+import { ShoppingCart, FileText, Headphones, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
@@ -24,6 +24,9 @@ interface Book {
 const formatBadge = (format: string | null) => {
   if (format === "pdf") return { label: "PDF", icon: FileText, color: "bg-red-100 text-red-700" };
   if (format === "audio") return { label: "Audiobook", icon: Headphones, color: "bg-blue-100 text-blue-700" };
+  if (format === "physical" || format === "paperback" || format === "hardcover") {
+    return { label: "Physical Book", icon: BookOpen, color: "bg-amber-100 text-amber-800" };
+  }
   return null;
 };
 
@@ -60,9 +63,15 @@ const Books = () => {
 
   const filteredBooks = books.filter((book) => {
     if (selectedFormat === "all") return true;
+    if (selectedFormat === "physical") {
+      return book.book_format === "physical" || book.book_format === "paperback" || book.book_format === "hardcover";
+    }
     if (selectedFormat === "pdf") return book.book_format === "pdf";
     if (selectedFormat === "audio") return book.book_format === "audio";
-    if (selectedFormat === "others") return book.book_format !== "pdf" && book.book_format !== "audio";
+    if (selectedFormat === "others") {
+      const f = book.book_format;
+      return f !== "pdf" && f !== "audio" && f !== "physical" && f !== "paperback" && f !== "hardcover";
+    }
     return true;
   });
 
@@ -87,6 +96,7 @@ const Books = () => {
           >
             {[
               { id: "all", label: "All Books" },
+              { id: "physical", label: "Physical Books" },
               { id: "pdf", label: "PDF Books" },
               { id: "audio", label: "Audiobooks" },
               { id: "others", label: "Others" }
