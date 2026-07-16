@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ShoppingCart, FileText, Headphones, Download } from "lucide-react";
+import { ShoppingCart, FileText, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
@@ -17,7 +17,6 @@ interface Book {
   image_url: string | null;
   category: string | null;
   book_format: string | null;
-  file_url: string | null;
 }
 
 const formatBadge = (format: string | null) => {
@@ -36,7 +35,7 @@ const Books = () => {
     const fetchBooks = async () => {
       const { data } = await supabase
         .from("books")
-        .select("id, title, description, price, image_url, category, book_format, file_url")
+        .select("id, title, description, price, image_url, category, book_format")
         .eq("is_published", true)
         .order("created_at", { ascending: false });
       if (data) setBooks(data as Book[]);
@@ -89,18 +88,9 @@ const Books = () => {
                       <p className="text-muted-foreground text-sm mb-4 flex-1 line-clamp-3">{book.description}</p>
                       <div className="flex items-center justify-between pt-3 border-t border-border gap-2">
                         <span className="font-heading text-xl text-secondary">${book.price.toFixed(2)}</span>
-                        <div className="flex gap-2">
-                          {book.file_url && (book.book_format === "pdf" || book.book_format === "audio") && (
-                            <a href={book.file_url} target="_blank" rel="noopener noreferrer">
-                              <Button variant="outline" size="sm">
-                                <Download className="w-4 h-4 mr-1" /> {book.book_format === "pdf" ? "PDF" : "Listen"}
-                              </Button>
-                            </a>
-                          )}
-                          <Button variant="secondary" size="sm" onClick={() => handleAdd(book)}>
-                            <ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart
-                          </Button>
-                        </div>
+                        <Button variant="secondary" size="sm" onClick={() => handleAdd(book)}>
+                          <ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart
+                        </Button>
                       </div>
                     </div>
                   </motion.div>

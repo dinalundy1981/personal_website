@@ -24,24 +24,14 @@ const card3D = {
   }),
 };
 
-const getYouTubeEmbedUrl = (url: string) => {
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
-  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
-};
-
 const WorkWithMe = () => {
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [coachingImage, setCoachingImage] = useState<string>(coachingImg);
 
   useEffect(() => {
-    // Fetch TEDx video and coaching image in parallel
-    Promise.all([
-      supabase.from("site_images").select("image_url").eq("section", "tedx_video").single(),
-      supabase.from("site_images").select("image_url").eq("section", "work_with_me_image").single(),
-    ]).then(([videoRes, imageRes]) => {
-      if (videoRes.data) setVideoUrl(videoRes.data.image_url);
-      if (imageRes.data) setCoachingImage(imageRes.data.image_url);
-    });
+    supabase.from("site_images").select("image_url").eq("section", "work_with_me_image").single()
+      .then(({ data }) => {
+        if (data) setCoachingImage(data.image_url);
+      });
   }, []);
 
   return (
@@ -87,46 +77,6 @@ const WorkWithMe = () => {
               </p>
             </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* TEDx Video Section */}
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="text-center mb-8">
-            <h2 className="font-heading text-3xl text-primary mb-2">Hope from the Edge</h2>
-            <p className="text-muted-foreground">TEDxURI Talk by Dr. Dina Lundy</p>
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={card3D}
-            custom={1}
-            style={{ perspective: 1200 }}
-            className="bg-background rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.08)] border"
-          >
-            <div className="aspect-video">
-              {videoUrl ? (
-                <iframe
-                  src={getYouTubeEmbedUrl(videoUrl)}
-                  title="Hope from the Edge - TEDxURI"
-                  className="w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground">
-                  Video coming soon
-                </div>
-              )}
-            </div>
-            <div className="p-6 text-center">
-              <p className="text-foreground/80 text-sm leading-relaxed">
-                Listen to how I put myself back together after navigating the grief of losing both parents to Alzheimer's.
-              </p>
-            </div>
-          </motion.div>
         </div>
       </section>
 

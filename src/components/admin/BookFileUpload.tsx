@@ -1,8 +1,9 @@
 import { useState, useRef } from "react";
-import { Upload, FileText, Headphones, Loader2, X } from "lucide-react";
+import { Upload, FileText, Headphones, Loader2, X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { openBookFile } from "@/lib/bookFile";
 
 interface BookFileUploadProps {
   value: string;
@@ -41,8 +42,7 @@ const BookFileUpload = ({ value, onChange, accept, label }: BookFileUploadProps)
       return;
     }
 
-    const { data: urlData } = supabase.storage.from("book-files").getPublicUrl(filePath);
-    onChange(urlData.publicUrl);
+    onChange(filePath);
     toast({ title: "File uploaded successfully!" });
     setUploading(false);
   };
@@ -50,6 +50,10 @@ const BookFileUpload = ({ value, onChange, accept, label }: BookFileUploadProps)
   const handleRemove = () => {
     onChange("");
     if (inputRef.current) inputRef.current.value = "";
+  };
+
+  const handlePreview = () => {
+    openBookFile(value, (message) => toast({ title: "Unable to open file", description: message, variant: "destructive" }));
   };
 
   const isPdf = value && (value.endsWith(".pdf") || value.includes(".pdf"));
@@ -68,9 +72,9 @@ const BookFileUpload = ({ value, onChange, accept, label }: BookFileUploadProps)
       {value ? (
         <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border">
           {isPdf ? <FileText className="w-5 h-5 text-red-500" /> : <Headphones className="w-5 h-5 text-blue-500" />}
-          <a href={value} target="_blank" rel="noopener noreferrer" className="text-sm text-secondary underline truncate flex-1">
-            {value.split("/").pop()}
-          </a>
+          <button type="button" onClick={handlePreview} className="text-sm text-secondary underline truncate flex-1 text-left flex items-center gap-1">
+            {value.split("/").pop()} <ExternalLink className="w-3 h-3 flex-shrink-0" />
+          </button>
           <Button variant="ghost" size="sm" onClick={handleRemove}><X className="w-4 h-4" /></Button>
         </div>
       ) : (
