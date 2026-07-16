@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart, FileText, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
@@ -7,6 +7,7 @@ import { fadeUp } from "@/lib/animations";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import CheckoutDialog from "@/components/checkout/CheckoutDialog";
 import bookPlaceholder from "@/assets/book-placeholder.jpg";
 
@@ -29,6 +30,7 @@ const formatBadge = (format: string | null) => {
 const Books = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedFormat, setSelectedFormat] = useState<string>("all");
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const { addToCart } = useCart();
   const { toast } = useToast();
@@ -56,6 +58,14 @@ const Books = () => {
     setCheckoutOpen(true);
   };
 
+  const filteredBooks = books.filter((book) => {
+    if (selectedFormat === "all") return true;
+    if (selectedFormat === "pdf") return book.book_format === "pdf";
+    if (selectedFormat === "audio") return book.book_format === "audio";
+    if (selectedFormat === "others") return book.book_format !== "pdf" && book.book_format !== "audio";
+    return true;
+  });
+
   return (
     <Layout>
       <section className="py-16 bg-warm/30">
@@ -66,74 +76,115 @@ const Books = () => {
       </section>
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
+          
+          {/* Category/Format Filter Tabs above Book Cards */}
+          <motion.div 
+            initial="hidden" 
+            animate="visible" 
+            variants={fadeUp} 
+            custom={1}
+            className="flex flex-wrap items-center justify-center gap-3 mb-12"
+          >
+            {[
+              { id: "all", label: "All Books" },
+              { id: "pdf", label: "PDF Books" },
+              { id: "audio", label: "Audiobooks" },
+              { id: "others", label: "Others" }
+            ].map((tab) => {
+              const active = selectedFormat === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setSelectedFormat(tab.id)}
+                  className={cn(
+                    "px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 shadow-sm border",
+                    active
+                      ? "bg-primary text-primary-foreground border-primary shadow-md -translate-y-0.5"
+                      : "bg-card border-border/80 text-muted-foreground hover:text-primary hover:bg-muted"
+                  )}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </motion.div>
+
           {loading ? (
             <p className="text-center text-muted-foreground">Loading books...</p>
-          ) : books.length === 0 ? (
-            <p className="text-center text-muted-foreground py-12">No books available yet. Check back soon!</p>
+          ) : filteredBooks.length === 0 ? (
+            <p className="text-center text-muted-foreground py-12">No books found in this category.</p>
           ) : (
             /* 4 column grid on large screens to keep cards compact and elegant */
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {books.map((book, i) => {
-                const badge = formatBadge(book.book_format);
-                return (
-                  <motion.div key={book.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
-                    className="bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border flex flex-col h-full">
-                    
-                    {/* aspect-[2/3] matches standard book cover aspect ratio perfectly */}
-                    <div className="aspect-[2/3] w-full overflow-hidden relative border-b bg-muted/5">
-                      <img 
-                        src={book.image_url || bookPlaceholder} 
-                        alt={book.title} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                      />
-                      <div className="absolute top-3 right-3 flex flex-wrap gap-1.5 z-10">
-                        {book.category && (
-                          <span className="bg-secondary text-secondary-foreground text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-sm">{book.category}</span>
-                        )}
-                        {badge && (
-                          <span className={`${badge.color} text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1`}>
-                            <badge.icon className="w-3 h-3" /> {badge.label}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div className="p-5 flex flex-col flex-1 justify-between">
-                      <div>
-                        <h3 className="font-heading text-base sm:text-lg text-primary mb-1.5 line-clamp-2 leading-snug group-hover:text-secondary transition-colors">{book.title}</h3>
-                        <p className="text-muted-foreground text-xs line-clamp-3 leading-relaxed">{book.description}</p>
+            <motion.div layout className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <AnimatePresence mode="popLayout">
+                {filteredBooks.map((book, i) => {
+                  const badge = formatBadge(book.book_format);
+                  return (
+                    <motion.div
+                      layout
+                      key={book.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.3 }}
+                      className="bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border flex flex-col h-full"
+                    >
+                      {/* aspect-[2/3] matches standard book cover aspect ratio perfectly */}
+                      <div className="aspect-[2/3] w-full overflow-hidden relative border-b bg-muted/5">
+                        <img 
+                          src={book.image_url || bookPlaceholder} 
+                          alt={book.title} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                        />
+                        <div className="absolute top-3 right-3 flex flex-wrap gap-1.5 z-10">
+                          {book.category && (
+                            <span className="bg-secondary text-secondary-foreground text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-sm">{book.category}</span>
+                          )}
+                          {badge && (
+                            <span className={`${badge.color} text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1`}>
+                              <badge.icon className="w-3 h-3" /> {badge.label}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       
-                      <div className="mt-4">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground font-medium">Price</span>
-                          <span className="font-heading text-lg sm:text-xl text-secondary">${book.price.toFixed(2)}</span>
+                      <div className="p-5 flex flex-col flex-1 justify-between">
+                        <div>
+                          <h3 className="font-heading text-base sm:text-lg text-primary mb-1.5 line-clamp-2 leading-snug group-hover:text-secondary transition-colors">{book.title}</h3>
+                          <p className="text-muted-foreground text-xs line-clamp-3 leading-relaxed">{book.description}</p>
                         </div>
                         
-                        <div className="flex gap-2 mt-3 pt-2 border-t border-dashed border-border">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="flex-1 text-xs px-1" 
-                            onClick={() => handleAdd(book)}
-                          >
-                            <ShoppingCart className="w-3.5 h-3.5 mr-1" /> Add
-                          </Button>
-                          <Button 
-                            variant="default" 
-                            size="sm" 
-                            className="flex-1 text-xs px-1 font-semibold" 
-                            onClick={() => handleOrderNow(book)}
-                          >
-                            Order Now
-                          </Button>
+                        <div className="mt-4">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-muted-foreground font-medium">Price</span>
+                            <span className="font-heading text-lg sm:text-xl text-secondary">${book.price.toFixed(2)}</span>
+                          </div>
+                          
+                          <div className="flex gap-2 mt-3 pt-2 border-t border-dashed border-border">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="flex-1 text-xs px-1" 
+                              onClick={() => handleAdd(book)}
+                            >
+                              <ShoppingCart className="w-3.5 h-3.5 mr-1" /> Add
+                            </Button>
+                            <Button 
+                              variant="default" 
+                              size="sm" 
+                              className="flex-1 text-xs px-1 font-semibold" 
+                              onClick={() => handleOrderNow(book)}
+                            >
+                              Order Now
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </motion.div>
           )}
         </div>
       </section>
