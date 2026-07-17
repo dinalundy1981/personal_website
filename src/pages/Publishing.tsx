@@ -90,7 +90,7 @@ const Publishing = () => {
                         <img
                           src={pub.image_url}
                           alt={pub.title}
-                          className="h-full w-auto max-w-full object-contain relative z-10 py-3 px-2 shadow-lg transition-transform duration-500 group-hover:scale-105"
+                          className="h-[95%] w-auto max-w-full object-contain relative z-10 py-1.5 shadow-lg transition-transform duration-500 group-hover:scale-[1.03]"
                         />
                       </>
                     ) : (
@@ -185,7 +185,7 @@ const Publishing = () => {
                   className="bg-card rounded-xl border border-border shadow-sm overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all duration-300"
                 >
                   {wip.image_url ? (
-                    <div className="sm:w-36 flex-shrink-0 aspect-[4/3] sm:aspect-auto relative overflow-hidden flex items-center justify-center p-2 border-r border-b sm:border-b-0 bg-muted/10 group">
+                    <div className="sm:w-36 flex-shrink-0 aspect-[4/3] sm:aspect-auto relative overflow-hidden flex items-center justify-center p-1.5 border-r border-b sm:border-b-0 bg-muted/10 group">
                       {/* Blurred matching background */}
                       <div 
                         className="absolute inset-0 bg-cover bg-center blur-md scale-110 opacity-30" 
@@ -195,7 +195,7 @@ const Publishing = () => {
                       <img 
                         src={wip.image_url} 
                         alt={wip.title} 
-                        className="max-h-24 sm:max-h-32 max-w-full object-contain relative z-10 shadow-md rounded transition-transform duration-500 group-hover:scale-105" 
+                        className="h-[95%] w-auto max-w-full object-contain relative z-10 shadow-md rounded transition-transform duration-500 group-hover:scale-[1.03]" 
                       />
                     </div>
                   ) : (
