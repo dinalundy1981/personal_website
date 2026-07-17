@@ -65,7 +65,7 @@ const Publishing = () => {
               <p className="text-muted-foreground text-lg">No publications yet. Check back soon!</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" style={{ perspective: "1200px" }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" style={{ perspective: "1200px" }}>
               {publications.map((pub, i) => (
                 <motion.div
                   key={pub.id}
@@ -73,68 +73,66 @@ const Publishing = () => {
                   whileInView="visible"
                   viewport={{ once: true, margin: "-50px" }}
                   variants={card3D}
-                  custom={i % 3}
-                  whileHover={{ y: -6, boxShadow: "0 20px 40px -12px rgba(0,0,0,0.1)" }}
-                  className="bg-card rounded-2xl border shadow-[0_4px_20px_-4px_rgba(255,255,255,0.6),0_2px_12px_-2px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_-4px_rgba(255,255,255,0.8),0_4px_20px_-4px_rgba(0,0,0,0.1)] transition-shadow duration-300 overflow-hidden flex flex-col"
+                  custom={i % 4}
+                  whileHover={{ y: -5, boxShadow: "0 12px 24px -10px rgba(0,0,0,0.08)" }}
+                  className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
                 >
-                  {/* Image — fixed aspect ratio */}
-                  {pub.image_url ? (
-                    <div className="aspect-[16/10] overflow-hidden">
+                  {/* Image Container with Full-view Clear Rendering */}
+                  <div className="aspect-[4/3] bg-warm/5 dark:bg-muted/10 border-b flex items-center justify-center p-3 relative overflow-hidden group">
+                    {pub.image_url ? (
                       <img
                         src={pub.image_url}
                         alt={pub.title}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        className="h-full max-w-full object-contain rounded shadow-md transition-transform duration-500 group-hover:scale-[1.02]"
                       />
-                    </div>
-                  ) : (
-                    <div className="aspect-[16/10] bg-muted flex items-center justify-center">
-                      <FileText className="w-12 h-12 text-muted-foreground/40" />
-                    </div>
-                  )}
-
-                  {/* Content */}
-                  <div className="p-5 sm:p-6 flex flex-col flex-1">
-                    {pub.publication_type && (
-                      <div className="flex items-center gap-1.5 mb-3">
-                        <Tag className="w-3.5 h-3.5 text-secondary" />
-                        <span className="text-xs font-medium text-secondary uppercase tracking-wide">
-                          {pub.publication_type}
-                        </span>
+                    ) : (
+                      <div className="w-12 h-12 rounded bg-muted flex items-center justify-center shadow-inner">
+                        <FileText className="w-6 h-6 text-muted-foreground/30" />
                       </div>
                     )}
+                  </div>
 
-                    <h3 className="font-heading text-lg sm:text-xl text-primary mb-2 line-clamp-2">
+                  {/* Content */}
+                  <div className="p-4 sm:p-5 flex flex-col flex-1">
+                    <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
+                      {pub.publication_type && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-secondary/10 text-secondary uppercase tracking-wider">
+                          {pub.publication_type}
+                        </span>
+                      )}
+                      {pub.published_date && (
+                        <span className="text-[11px] text-muted-foreground font-medium flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {new Date(pub.published_date).toLocaleDateString("en-US", { year: "numeric", month: "short" })}
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="font-heading text-base text-primary mb-2 line-clamp-2 hover:text-accent transition-colors font-semibold leading-snug">
                       {pub.title}
                     </h3>
 
                     {pub.author && (
-                      <div className="flex items-center gap-1.5 text-muted-foreground text-sm mb-2">
-                        <User className="w-3.5 h-3.5" />
-                        <span>{pub.author}</span>
-                      </div>
-                    )}
-
-                    {pub.published_date && (
-                      <div className="flex items-center gap-1.5 text-muted-foreground text-sm mb-3">
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>{new Date(pub.published_date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
-                      </div>
+                      <p className="text-muted-foreground text-[12px] mb-3 flex items-center gap-1 font-medium">
+                        <User className="w-3 h-3" />
+                        <span className="truncate">{pub.author}</span>
+                      </p>
                     )}
 
                     {(pub.abstract || pub.description) && (
-                      <p className="text-foreground/70 text-sm leading-relaxed mb-4 line-clamp-4 flex-1">
+                      <p className="text-foreground/70 text-[12px] leading-relaxed mb-4 line-clamp-3 flex-1">
                         {pub.abstract || pub.description}
                       </p>
                     )}
 
                     {pub.url ? (
-                      <a href={pub.url} target="_blank" rel="noopener noreferrer" className="mt-auto">
-                        <Button variant="secondary" className="w-full">
-                          <ExternalLink className="w-4 h-4 mr-2" /> Read More
+                      <a href={pub.url} target="_blank" rel="noopener noreferrer" className="mt-auto pt-2">
+                        <Button variant="outline" size="sm" className="w-full text-xs font-semibold h-9 gap-1.5 hover:bg-secondary hover:text-secondary-foreground transition-all duration-300">
+                          <ExternalLink className="w-3.5 h-3.5" /> Read Article
                         </Button>
                       </a>
                     ) : (
-                      <Button variant="outline" className="w-full mt-auto" disabled>
+                      <Button variant="ghost" size="sm" className="w-full mt-auto text-xs h-9" disabled>
                         Coming Soon
                       </Button>
                     )}
@@ -166,7 +164,7 @@ const Publishing = () => {
               <p className="text-muted-foreground text-lg">No works in progress at the moment.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8" style={{ perspective: "1200px" }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ perspective: "1200px" }}>
               {wips.map((wip, i) => (
                 <motion.div
                   key={wip.id}
@@ -175,36 +173,40 @@ const Publishing = () => {
                   viewport={{ once: true, margin: "-50px" }}
                   variants={card3D}
                   custom={i % 2}
-                  whileHover={{ y: -4, boxShadow: "0 16px 32px -8px rgba(0,0,0,0.08)" }}
-                  className="bg-card rounded-2xl border shadow-[0_4px_20px_-4px_rgba(255,255,255,0.6),0_2px_12px_-2px_rgba(0,0,0,0.06)] overflow-hidden flex flex-col sm:flex-row"
+                  whileHover={{ y: -4, boxShadow: "0 12px 24px -10px rgba(0,0,0,0.08)" }}
+                  className="bg-card rounded-xl border border-border shadow-sm overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all duration-300"
                 >
                   {wip.image_url ? (
-                    <div className="sm:w-48 flex-shrink-0 aspect-[16/10] sm:aspect-auto overflow-hidden">
-                      <img src={wip.image_url} alt={wip.title} className="w-full h-full object-cover" />
+                    <div className="sm:w-40 flex-shrink-0 aspect-[4/3] sm:aspect-auto bg-warm/5 dark:bg-muted/10 border-r border-b sm:border-b-0 flex items-center justify-center p-3">
+                      <img src={wip.image_url} alt={wip.title} className="max-h-32 sm:max-h-full max-w-full object-contain rounded shadow-sm" />
                     </div>
                   ) : (
-                    <div className="sm:w-48 flex-shrink-0 aspect-[16/10] sm:aspect-auto bg-muted flex items-center justify-center">
-                      <Clock className="w-10 h-10 text-muted-foreground/40" />
+                    <div className="sm:w-40 flex-shrink-0 aspect-[4/3] sm:aspect-auto bg-muted flex items-center justify-center">
+                      <Clock className="w-8 h-8 text-muted-foreground/30" />
                     </div>
                   )}
 
-                  <div className="p-5 flex flex-col flex-1">
-                    <h3 className="font-heading text-lg text-primary mb-2">{wip.title}</h3>
-                    {wip.author && (
-                      <p className="text-muted-foreground text-sm mb-1">
-                        <User className="w-3.5 h-3.5 inline mr-1" />{wip.author}
-                      </p>
-                    )}
-                    {wip.expected_date && (
-                      <p className="text-muted-foreground text-xs mb-2">Expected: {wip.expected_date}</p>
-                    )}
+                  <div className="p-4 sm:p-5 flex flex-col flex-1">
+                    <h3 className="font-heading text-base font-semibold text-primary mb-1.5 line-clamp-2 leading-snug">{wip.title}</h3>
+                    <div className="flex items-center gap-3 text-muted-foreground text-[12px] mb-2 flex-wrap">
+                      {wip.author && (
+                        <span className="flex items-center gap-1 font-medium">
+                          <User className="w-3 h-3" /> {wip.author}
+                        </span>
+                      )}
+                      {wip.expected_date && (
+                        <span className="flex items-center gap-1 font-medium bg-accent/10 text-accent px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider">
+                          Expected: {wip.expected_date}
+                        </span>
+                      )}
+                    </div>
                     {wip.description && (
-                      <p className="text-foreground/70 text-sm leading-relaxed mb-4 line-clamp-3 flex-1">{wip.description}</p>
+                      <p className="text-foreground/70 text-[12px] leading-relaxed mb-3 line-clamp-2 flex-1">{wip.description}</p>
                     )}
                     {wip.url && (
                       <a href={wip.url} target="_blank" rel="noopener noreferrer" className="mt-auto">
-                        <Button variant="outline" size="sm">
-                          <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Learn More
+                        <Button variant="outline" size="sm" className="h-8 text-xs font-semibold">
+                          <ExternalLink className="w-3 h-3 mr-1" /> View Project
                         </Button>
                       </a>
                     )}
