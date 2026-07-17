@@ -77,14 +77,22 @@ const Publishing = () => {
                   whileHover={{ y: -5, boxShadow: "0 12px 24px -10px rgba(0,0,0,0.08)" }}
                   className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
                 >
-                  {/* Image Container with Full-bleed Clear Rendering */}
-                  <div className="aspect-[3/4] overflow-hidden border-b relative group bg-muted/10">
+                  {/* Image Container with Premium Blurred Backdrop & Clear Centered Cover */}
+                  <div className="aspect-[16/10] overflow-hidden border-b relative group bg-muted/20 flex items-center justify-center">
                     {pub.image_url ? (
-                      <img
-                        src={pub.image_url}
-                        alt={pub.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
+                      <>
+                        {/* Blurred matching background */}
+                        <div 
+                          className="absolute inset-0 bg-cover bg-center blur-md scale-110 opacity-30" 
+                          style={{ backgroundImage: `url(${pub.image_url})` }}
+                        />
+                        {/* Clear centered full cover */}
+                        <img
+                          src={pub.image_url}
+                          alt={pub.title}
+                          className="h-full w-auto max-w-full object-contain relative z-10 py-3 px-2 shadow-lg transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <FileText className="w-10 h-10 text-muted-foreground/30" />
@@ -177,11 +185,21 @@ const Publishing = () => {
                   className="bg-card rounded-xl border border-border shadow-sm overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all duration-300"
                 >
                   {wip.image_url ? (
-                    <div className="sm:w-36 flex-shrink-0 aspect-[3/4] sm:aspect-auto overflow-hidden border-r border-b sm:border-b-0">
-                      <img src={wip.image_url} alt={wip.title} className="w-full h-full object-cover" />
+                    <div className="sm:w-36 flex-shrink-0 aspect-[4/3] sm:aspect-auto relative overflow-hidden flex items-center justify-center p-2 border-r border-b sm:border-b-0 bg-muted/10 group">
+                      {/* Blurred matching background */}
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center blur-md scale-110 opacity-30" 
+                        style={{ backgroundImage: `url(${wip.image_url})` }}
+                      />
+                      {/* Clear centered full cover */}
+                      <img 
+                        src={wip.image_url} 
+                        alt={wip.title} 
+                        className="max-h-24 sm:max-h-32 max-w-full object-contain relative z-10 shadow-md rounded transition-transform duration-500 group-hover:scale-105" 
+                      />
                     </div>
                   ) : (
-                    <div className="sm:w-36 flex-shrink-0 aspect-[3/4] sm:aspect-auto bg-muted flex items-center justify-center">
+                    <div className="sm:w-36 flex-shrink-0 aspect-[4/3] sm:aspect-auto bg-muted flex items-center justify-center border-r border-b sm:border-b-0">
                       <Clock className="w-8 h-8 text-muted-foreground/30" />
                     </div>
                   )}
