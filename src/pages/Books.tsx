@@ -84,7 +84,7 @@ const Books = () => {
         </div>
       </section>
       <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-w-5xl">
           
           {/* Category/Format Filter Tabs above Book Cards */}
           <motion.div 
@@ -125,7 +125,7 @@ const Books = () => {
             <p className="text-center text-muted-foreground py-12">No books found in this category.</p>
           ) : (
             /* 4 column grid on large screens to keep cards compact and elegant */
-            <motion.div layout className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               <AnimatePresence mode="popLayout">
                 {filteredBooks.map((book, i) => {
                   const badge = formatBadge(book.book_format);
@@ -137,52 +137,52 @@ const Books = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border flex flex-col h-full"
+                      className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group border border-border/60 flex flex-col h-full"
                     >
                       {/* aspect-[2/3] matches standard book cover aspect ratio perfectly */}
                       <div className="aspect-[2/3] w-full overflow-hidden relative border-b bg-muted/5">
                         <img 
                           src={book.image_url || bookPlaceholder} 
                           alt={book.title} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                          className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" 
                         />
-                        <div className="absolute top-3 right-3 flex flex-wrap gap-1.5 z-10">
+                        <div className="absolute top-2 right-2 flex flex-wrap gap-1 z-10">
                           {book.category && (
-                            <span className="bg-secondary text-secondary-foreground text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-sm">{book.category}</span>
+                            <span className="bg-secondary/95 text-secondary-foreground text-[9px] font-bold px-2 py-0.5 rounded shadow-sm">{book.category}</span>
                           )}
                           {badge && (
-                            <span className={`${badge.color} text-[10px] font-semibold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1`}>
-                              <badge.icon className="w-3 h-3" /> {badge.label}
+                            <span className={`${badge.color} text-[9px] font-bold px-2 py-0.5 rounded shadow-sm flex items-center gap-0.5`}>
+                              <badge.icon className="w-2.5 h-2.5" /> {badge.label}
                             </span>
                           )}
                         </div>
                       </div>
                       
-                      <div className="p-5 flex flex-col flex-1 justify-between">
+                      <div className="p-4 flex flex-col flex-1 justify-between">
                         <div>
-                          <h3 className="font-heading text-base sm:text-lg text-primary mb-1.5 line-clamp-2 leading-snug group-hover:text-secondary transition-colors">{book.title}</h3>
-                          <p className="text-muted-foreground text-xs line-clamp-3 leading-relaxed">{book.description}</p>
+                          <h3 className="font-heading text-sm sm:text-base font-semibold text-primary mb-1 line-clamp-2 leading-snug group-hover:text-secondary transition-colors">{book.title}</h3>
+                          <p className="text-muted-foreground text-[11px] sm:text-xs line-clamp-2 leading-relaxed">{book.description}</p>
                         </div>
                         
-                        <div className="mt-4">
+                        <div className="mt-3">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-muted-foreground font-medium">Price</span>
-                            <span className="font-heading text-lg sm:text-xl text-secondary">${book.price.toFixed(2)}</span>
+                            <span className="text-[11px] text-muted-foreground font-medium">Price</span>
+                            <span className="font-heading text-sm sm:text-base text-secondary font-bold">${book.price.toFixed(2)}</span>
                           </div>
                           
-                          <div className="flex gap-2 mt-3 pt-2 border-t border-dashed border-border">
+                          <div className="flex gap-1.5 mt-2.5 pt-2 border-t border-dashed border-border/60">
                             <Button 
                               variant="outline" 
                               size="sm" 
-                              className="flex-1 text-xs px-1" 
+                              className="flex-1 text-[11px] h-8 px-1" 
                               onClick={() => handleAdd(book)}
                             >
-                              <ShoppingCart className="w-3.5 h-3.5 mr-1" /> Add
+                              <ShoppingCart className="w-3 h-3 mr-1" /> Add
                             </Button>
                             <Button 
                               variant="default" 
                               size="sm" 
-                              className="flex-1 text-xs px-1 font-semibold" 
+                              className="flex-1 text-[11px] h-8 px-1 font-semibold" 
                               onClick={() => handleOrderNow(book)}
                             >
                               Order Now
