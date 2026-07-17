@@ -77,17 +77,17 @@ const Publishing = () => {
                   whileHover={{ y: -5, boxShadow: "0 12px 24px -10px rgba(0,0,0,0.08)" }}
                   className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
                 >
-                  {/* Image Container with Full-view Clear Rendering */}
-                  <div className="aspect-[4/3] bg-warm/5 dark:bg-muted/10 border-b flex items-center justify-center p-3 relative overflow-hidden group">
+                  {/* Image Container with Full-bleed Clear Rendering */}
+                  <div className="aspect-[3/4] overflow-hidden border-b relative group bg-muted/10">
                     {pub.image_url ? (
                       <img
                         src={pub.image_url}
                         alt={pub.title}
-                        className="h-full max-w-full object-contain rounded shadow-md transition-transform duration-500 group-hover:scale-[1.02]"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded bg-muted flex items-center justify-center shadow-inner">
-                        <FileText className="w-6 h-6 text-muted-foreground/30" />
+                      <div className="w-full h-full flex items-center justify-center">
+                        <FileText className="w-10 h-10 text-muted-foreground/30" />
                       </div>
                     )}
                   </div>
@@ -177,11 +177,11 @@ const Publishing = () => {
                   className="bg-card rounded-xl border border-border shadow-sm overflow-hidden flex flex-col sm:flex-row hover:shadow-md transition-all duration-300"
                 >
                   {wip.image_url ? (
-                    <div className="sm:w-40 flex-shrink-0 aspect-[4/3] sm:aspect-auto bg-warm/5 dark:bg-muted/10 border-r border-b sm:border-b-0 flex items-center justify-center p-3">
-                      <img src={wip.image_url} alt={wip.title} className="max-h-32 sm:max-h-full max-w-full object-contain rounded shadow-sm" />
+                    <div className="sm:w-36 flex-shrink-0 aspect-[3/4] sm:aspect-auto overflow-hidden border-r border-b sm:border-b-0">
+                      <img src={wip.image_url} alt={wip.title} className="w-full h-full object-cover" />
                     </div>
                   ) : (
-                    <div className="sm:w-40 flex-shrink-0 aspect-[4/3] sm:aspect-auto bg-muted flex items-center justify-center">
+                    <div className="sm:w-36 flex-shrink-0 aspect-[3/4] sm:aspect-auto bg-muted flex items-center justify-center">
                       <Clock className="w-8 h-8 text-muted-foreground/30" />
                     </div>
                   )}
