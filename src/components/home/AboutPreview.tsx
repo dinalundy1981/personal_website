@@ -53,7 +53,7 @@ const AboutPreview = ({ images }: AboutPreviewProps) => {
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
             >
               <div className="bg-primary text-primary-foreground rounded-full w-20 h-20 sm:w-24 sm:h-24 flex flex-col items-center justify-center shadow-2xl text-center ring-4 ring-background">
-                <span className="text-xl sm:text-2xl font-bold leading-none">{s?.badge_number ?? "30+"}</span>
+                <span className="text-xl sm:text-2xl font-bold leading-none">{s?.badge_number ?? "15+"}</span>
                 <span className="text-[8px] sm:text-[10px] leading-tight mt-0.5 px-1">{s?.badge_label ?? "Years of Expertise"}</span>
               </div>
             </motion.div>

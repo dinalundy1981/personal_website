@@ -85,6 +85,8 @@ CREATE TABLE IF NOT EXISTS public.books (
   is_published BOOLEAN DEFAULT true,
   book_format TEXT DEFAULT 'physical',
   file_url TEXT,
+  rating DECIMAL(2,1) DEFAULT 5.0,
+  details TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -405,6 +407,17 @@ CREATE TABLE IF NOT EXISTS public.philanthropy_cards (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Book Reviews & Comments
+CREATE TABLE IF NOT EXISTS public.book_reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  book_id UUID REFERENCES public.books(id) ON DELETE CASCADE NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  comment TEXT NOT NULL,
+  rating INTEGER DEFAULT 5 CHECK (rating >= 1 AND rating <= 5),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
 -- 5. INITIAL VALUES INSERTIONS
 INSERT INTO public.homepage_hero_settings (badge_text) 
 SELECT 'Family Advocate · Author · Keynote Speaker' 
@@ -441,6 +454,7 @@ ALTER TABLE public.homepage_hero_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.homepage_about_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tedx_talks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.philanthropy_cards ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.book_reviews ENABLE ROW LEVEL SECURITY;
 
 -- 7. SECURITY RLS POLICIES
 
@@ -650,6 +664,16 @@ CREATE POLICY "Philanthropy cards readable by all" ON public.philanthropy_cards 
 DROP POLICY IF EXISTS "Admins manage philanthropy cards" ON public.philanthropy_cards;
 CREATE POLICY "Admins manage philanthropy cards" ON public.philanthropy_cards FOR ALL TO public USING (has_role(auth.uid(), 'admin'));
 
+-- Book Reviews
+DROP POLICY IF EXISTS "Reviews are readable by everyone" ON public.book_reviews;
+CREATE POLICY "Reviews are readable by everyone" ON public.book_reviews FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Authenticated users can post reviews" ON public.book_reviews;
+CREATE POLICY "Authenticated users can post reviews" ON public.book_reviews FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can delete their own reviews" ON public.book_reviews;
+CREATE POLICY "Users can delete their own reviews" ON public.book_reviews FOR DELETE TO authenticated USING (auth.uid() = user_id OR public.has_role(auth.uid(), 'admin'::app_role));
+
 -- 8. AUTO-UPDATE UPDATED_AT COLUMN TRIGGERS
 CREATE OR REPLACE PROCEDURE public.create_timestamp_trigger(table_name TEXT)
 LANGUAGE plpgsql AS $$
@@ -678,6 +702,7 @@ CALL public.create_timestamp_trigger('homepage_hero_settings');
 CALL public.create_timestamp_trigger('homepage_about_settings');
 CALL public.create_timestamp_trigger('tedx_talks');
 CALL public.create_timestamp_trigger('philanthropy_cards');
+CALL public.create_timestamp_trigger('book_reviews');
 
 DROP PROCEDURE public.create_timestamp_trigger(TEXT);
 

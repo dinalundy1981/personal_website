@@ -19,7 +19,7 @@ const primaryLinks = [
   { label: "Contact", path: "/contact" },
 ];
 
-const CV_URL = "https://docs.google.com/document/d/1VULjLVU1uTAbmofsCVeWIwMZquFB0HJj/mobilebasic";
+const CV_URL = "https://docs.google.com/document/d/1jb_Wn_M8xVBIO34LTtuspECo7sm2vOrg/edit?usp=sharing&ouid=118314648783378577970&rtpof=true&sd=true";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);

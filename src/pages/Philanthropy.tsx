@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { fadeUp } from "@/lib/animations";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 interface PhilanthropyCard {
   id: string;
@@ -29,6 +30,11 @@ const Philanthropy = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Philanthropy & Foster Care Advocacy" 
+        description="Learn about Dr. Dina Lundy's social impact projects, foster care advocacy, inclusive education syllabus design, and pedagogy for underrepresented groups."
+        keywords="Dr Dina Lundy philanthropy, foster care advocacy, diversity lens syllabus, inclusive education"
+      />
       {/* Hero */}
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">

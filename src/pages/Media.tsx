@@ -5,6 +5,7 @@ import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import SEO from "@/components/SEO";
 
 interface MediaCategory {
   id: string;
@@ -64,6 +65,11 @@ const Media = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Media & Gallery" 
+        description="View photos, videos, and featured talks from Dr. Dina Lundy's academic appearances, community philanthropy events, and media features."
+        keywords="Dr Dina Lundy media, gallery, featured talks, video presentations"
+      />
       {/* Hero */}
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">

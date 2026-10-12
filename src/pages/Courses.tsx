@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import bookPlaceholder from "@/assets/book-placeholder.jpg";
+import SEO from "@/components/SEO";
 
 interface Course {
   id: string;
@@ -63,6 +64,11 @@ const Courses = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Transformative Courses & Workshops" 
+        description="Enroll in developmental psychology, multicultural studies, and education equity training courses curated by Dr. Dina Lundy."
+        keywords="Dr Dina Lundy courses, psychology workshops, education equity, online training"
+      />
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">
           <motion.h1

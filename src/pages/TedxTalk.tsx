@@ -4,6 +4,7 @@ import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { supabase } from "@/integrations/supabase/client";
 import { Play, User } from "lucide-react";
+import SEO from "@/components/SEO";
 
 interface TedxTalk {
   id: string;
@@ -55,6 +56,11 @@ const TedxTalkPage = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="TEDx Talks & Presentations" 
+        description="Watch Dr. Dina Lundy's TEDx talks and keynote presentations exploring history, systemic inequity, foster care, and psychology."
+        keywords="Dr Dina Lundy TEDx, TEDx talk, keynote speech, public presentations"
+      />
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">
           <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">

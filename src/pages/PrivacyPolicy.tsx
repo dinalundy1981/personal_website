@@ -1,9 +1,15 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
+import SEO from "@/components/SEO";
 
 const PrivacyPolicy = () => (
   <Layout>
+    <SEO 
+      title="Privacy Policy" 
+      description="Read the Privacy Policy for Dr. Dina Lundy's website, detailing how personal information and cookies are processed."
+      keywords="privacy policy, data usage, terms"
+    />
     <section className="py-16 md:py-20 bg-warm/30">
       <div className="container mx-auto px-4 text-center">
         <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Privacy Policy</motion.h1>

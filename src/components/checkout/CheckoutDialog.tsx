@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import AuthDialog from "@/components/auth/AuthDialog";
-import { ShoppingCart, ArrowRight, CheckCircle, X, Minus, Plus } from "lucide-react";
+import { ShoppingCart, ArrowRight, CheckCircle, X, Minus, Plus, CreditCard, Wallet, Smartphone, Landmark, Copy, Check } from "lucide-react";
 
 interface PaymentMethod {
   id: string;
@@ -18,6 +18,33 @@ interface PaymentMethod {
   label: string;
   details: string | null;
 }
+
+const DEFAULT_PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    id: "default-paypal",
+    method_type: "paypal",
+    label: "PayPal",
+    details: "Send payment to: frugalharvardgrad@gmail.com\nPlease include your full name or book title in the payment note.",
+  },
+  {
+    id: "default-card",
+    method_type: "credit_card",
+    label: "Credit / Debit Card (Visa, Mastercard, Amex)",
+    details: "Enter your billing email address below to submit your order. An electronic invoice / payment link will be confirmed.",
+  },
+  {
+    id: "default-zelle",
+    method_type: "zelle",
+    label: "Zelle Instant Transfer",
+    details: "Send payment via Zelle to: contact@drdinalundy.com\nEnter your Zelle phone number or email below to verify.",
+  },
+  {
+    id: "default-mobile",
+    method_type: "mobile_apps",
+    label: "Venmo / Cash App",
+    details: "Send payment via Venmo or Cash App. Enter your handle or payment email below to verify your purchase.",
+  },
+];
 
 const COUNTRIES = [
   "United States", "United Kingdom", "Canada", "Australia", "Germany", "France",
@@ -34,11 +61,12 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(DEFAULT_PAYMENT_METHODS);
   const [selectedMethod, setSelectedMethod] = useState("");
   const [paymentEmail, setPaymentEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Check if cart contains any physical books (physical, paperback, or hardcover formats)
   const hasPhysicalBook = items.some((item) => 
@@ -49,7 +77,17 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
   useEffect(() => {
     if (open && step === "payment") {
       supabase.from("payment_methods").select("*").eq("is_active", true).then(({ data }) => {
-        if (data) setPaymentMethods(data);
+        if (data && data.length > 0) {
+          // Merge database methods with default methods for full coverage
+          const existingTypes = new Set(data.map((d: any) => d.method_type));
+          const complementary = DEFAULT_PAYMENT_METHODS.filter((d) => !existingTypes.has(d.method_type));
+          const merged = [...data, ...complementary];
+          setPaymentMethods(merged);
+          if (!selectedMethod && merged.length > 0) setSelectedMethod(merged[0].label);
+        } else {
+          setPaymentMethods(DEFAULT_PAYMENT_METHODS);
+          if (!selectedMethod) setSelectedMethod(DEFAULT_PAYMENT_METHODS[0].label);
+        }
       });
     }
   }, [open, step]);
@@ -131,12 +169,26 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
           } as any)
         ),
       ];
-      await Promise.all(orderPromises);
+      const results = await Promise.all(orderPromises);
+      const firstError = results.find((r) => r.error)?.error;
+
+      if (firstError) {
+        console.error("Order submission failed:", firstError);
+        toast({
+          title: "Order submission failed",
+          description: firstError.message || "Database insert error",
+          variant: "destructive",
+        });
+        setSubmitting(false);
+        return;
+      }
+
       clearCart();
       onOpenChange(false);
       toast({ title: "Order submitted!", description: "Your order is pending admin verification. You'll be notified once approved." });
-    } catch (e) {
-      toast({ title: "Error submitting order", variant: "destructive" });
+    } catch (e: any) {
+      console.error("Catch block error submitting order:", e);
+      toast({ title: "Error submitting order", description: e.message || "Network error", variant: "destructive" });
     }
     setSubmitting(false);
   };
@@ -314,16 +366,60 @@ const CheckoutDialog = ({ open, onOpenChange }: { open: boolean; onOpenChange: (
 
               {paymentMethods.length > 0 ? (
                 <RadioGroup value={selectedMethod} onValueChange={setSelectedMethod} className="grid gap-3">
-                  {paymentMethods.map((pm) => (
-                    <div key={pm.id} className="flex items-start gap-3 border rounded-lg p-3 w-full min-w-0 bg-card/30">
-                      <RadioGroupItem value={pm.label} id={pm.id} className="mt-1 flex-shrink-0" />
-                      <label htmlFor={pm.id} className="flex-1 cursor-pointer min-w-0 break-words">
-                        <p className="font-semibold text-sm text-primary break-words">{pm.label}</p>
-                        <p className="text-[10px] text-muted-foreground capitalize mt-0.5">{pm.method_type.replace(/_/g, " ")}</p>
-                        {pm.details && <p className="text-xs text-muted-foreground mt-2 whitespace-pre-wrap break-words border-t pt-2 border-dashed">{pm.details}</p>}
-                      </label>
-                    </div>
-                  ))}
+                  {paymentMethods.map((pm) => {
+                    const IconComponent =
+                      pm.method_type === "credit_card" ? CreditCard :
+                      pm.method_type === "paypal" ? Wallet :
+                      pm.method_type === "zelle" || pm.method_type === "mobile_apps" ? Smartphone :
+                      pm.method_type === "bank_transfer" ? Landmark : CreditCard;
+
+                    const isSelected = selectedMethod === pm.label;
+
+                    return (
+                      <div
+                        key={pm.id}
+                        onClick={() => setSelectedMethod(pm.label)}
+                        className={cn(
+                          "flex items-start gap-3 border rounded-xl p-3.5 w-full min-w-0 transition-all cursor-pointer",
+                          isSelected
+                            ? "bg-secondary/10 border-secondary ring-1 ring-secondary/30 shadow-sm"
+                            : "bg-card/50 border-border/80 hover:bg-card"
+                        )}
+                      >
+                        <RadioGroupItem value={pm.label} id={pm.id} className="mt-1 flex-shrink-0" />
+                        <label htmlFor={pm.id} className="flex-1 cursor-pointer min-w-0">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                              <IconComponent className="w-3.5 h-3.5" />
+                            </div>
+                            <p className="font-semibold text-sm text-primary break-words leading-tight">{pm.label}</p>
+                          </div>
+                          <p className="text-[10px] text-muted-foreground capitalize mt-1 ml-8">
+                            {pm.method_type.replace(/_/g, " ")}
+                          </p>
+                          {pm.details && (
+                            <div className="mt-2.5 ml-8 text-xs text-foreground/85 bg-background/80 p-2.5 rounded-lg border border-border/60 relative group">
+                              <p className="whitespace-pre-wrap break-words leading-relaxed pr-6">{pm.details}</p>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigator.clipboard.writeText(pm.details || "");
+                                  setCopiedId(pm.id);
+                                  toast({ title: "Payment details copied to clipboard!" });
+                                  setTimeout(() => setCopiedId(null), 2500);
+                                }}
+                                className="absolute top-2 right-2 text-muted-foreground hover:text-primary transition-colors"
+                                title="Copy details"
+                              >
+                                {copiedId === pm.id ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
+                              </button>
+                            </div>
+                          )}
+                        </label>
+                      </div>
+                    );
+                  })}
                 </RadioGroup>
               ) : (
                 <p className="text-muted-foreground text-sm">No payment methods configured yet. Please contact the admin.</p>

@@ -9,12 +9,14 @@ import EmailSubscription from "@/components/home/EmailSubscription";
 import PodcastPreview from "@/components/home/PodcastPreview";
 import NewsletterCTA from "@/components/home/NewsletterCTA";
 import { useSiteImages } from "@/hooks/useSiteImages";
+import SEO from "@/components/SEO";
 
 const Index = () => {
   const { images } = useSiteImages();
 
   return (
     <Layout>
+      <SEO />
       <HeroSection heroImage={images["hero"]} />
       <AboutPreview images={images} />
       <FeaturedBooks />

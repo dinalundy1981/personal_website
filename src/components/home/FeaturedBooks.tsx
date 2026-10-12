@@ -9,7 +9,12 @@ import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import CheckoutDialog from "@/components/checkout/CheckoutDialog";
-import bookImg from "@/assets/book-placeholder.jpg";
+import bookPlaceholder from "@/assets/book-placeholder.jpg";
+import bookDeveloping from "@/assets/book-developing.jpg";
+import bookHumanDev from "@/assets/book-human-dev.jpg";
+import bookLatinx from "@/assets/book-latinx.png";
+import bookMulticultural from "@/assets/book-multicultural.jpg";
+import bookPsychological from "@/assets/book-psychological.jpg";
 
 interface Book {
   id: string;
@@ -20,6 +25,17 @@ interface Book {
   category?: string | null;
   book_format?: string | null;
 }
+
+const getBookCover = (book: Book) => {
+  if (book.image_url && !book.image_url.includes("placeholder")) return book.image_url;
+  const t = (book.title || "").toLowerCase();
+  if (t.includes("latinx") || t.includes("chicano")) return bookLatinx;
+  if (t.includes("multicultural")) return bookMulticultural;
+  if (t.includes("human development") || t.includes("lifespan")) return bookHumanDev;
+  if (t.includes("developmental")) return bookDeveloping;
+  if (t.includes("psychological concepts")) return bookPsychological;
+  return bookPlaceholder;
+};
 
 const FeaturedBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -85,7 +101,7 @@ const FeaturedBooks = () => {
                 {/* Book Cover (Full Cover, aspect-[2/3], shadow, no side margins) */}
                 <div className="w-40 sm:w-48 aspect-[2/3] overflow-hidden rounded-xl shadow-2xl flex-shrink-0 relative bg-muted/5 group border">
                   <img 
-                    src={activeBook.image_url || bookImg} 
+                    src={getBookCover(activeBook)} 
                     alt={activeBook.title} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                   />
@@ -173,7 +189,7 @@ const FeaturedBooks = () => {
                   {/* Thumbnail Cover (aspect-[2/3], full-bleed cover) */}
                   <div className="w-12 sm:w-14 aspect-[2/3] overflow-hidden rounded shadow-md flex-shrink-0 relative border bg-muted/5">
                     <img 
-                      src={book.image_url || bookImg} 
+                      src={getBookCover(book)} 
                       alt={book.title} 
                       className="w-full h-full object-cover" 
                     />

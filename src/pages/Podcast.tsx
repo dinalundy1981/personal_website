@@ -4,6 +4,7 @@ import { Mic, PlayCircle, Music, Video, Calendar, Clock, Tag } from "lucide-reac
 import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 const getYouTubeEmbedUrl = (url: string) => {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
@@ -24,6 +25,11 @@ const Podcast = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Podcast" 
+        description="Listen to and watch Dr. Dina Lundy's conversations on education, psychology, leadership, and social advocacy."
+        keywords="Dr Dina Lundy podcast, psychology podcast, social advocacy audio, pretty psych professor video"
+      />
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">
           <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">

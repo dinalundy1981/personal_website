@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Mail, MapPin, Phone, Facebook, Instagram, Linkedin, Youtube, Twitter } from "lucide-react";
+import { Send, Mail, MapPin, Phone, Instagram, Linkedin, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,13 +8,12 @@ import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 const socialLinks = [
-  { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
   { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-  { icon: Twitter, href: "https://twitter.com", label: "X (Twitter)" },
-  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
+  { icon: Linkedin, href: "https://linkedin.com/in/drlundy", label: "LinkedIn" },
+  { icon: Youtube, href: "https://www.youtube.com/channel/UCUONXU0zh8n2T-gZO1mpisg", label: "YouTube" },
 ];
 
 const Contact = () => {
@@ -42,6 +41,11 @@ const Contact = () => {
 
   return (
     <Layout>
+      <SEO
+        title="Contact & Booking"
+        description="Get in touch with Dr. Dina Lundy for academic collaborations, speaking engagements, or life coaching inquiries."
+        keywords="Dr Dina Lundy contact, book Dina Lundy, consultation, collaboration request"
+      />
       <section className="py-16 md:py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">
           <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Get In Touch</motion.h1>

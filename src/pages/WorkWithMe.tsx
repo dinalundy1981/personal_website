@@ -6,6 +6,7 @@ import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { supabase } from "@/integrations/supabase/client";
 import coachingImg from "@/assets/coaching-img.jpg";
+import SEO from "@/components/SEO";
 
 const CALENDLY_LINK = "https://calendly.com/dinalundy1981/30min";
 
@@ -36,6 +37,11 @@ const WorkWithMe = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Work With Me & Life Coaching" 
+        description="Transform your life with purpose-driven coaching grounded in psychological frameworks. Book a free discovery call with Dr. Dina Lundy."
+        keywords="Dr Dina Lundy coaching, life coach, psychological coaching, purpose-driven coaching"
+      />
       {/* Hero */}
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">

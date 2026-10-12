@@ -7,6 +7,7 @@ import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import SEO from "@/components/SEO";
 
 const Login = () => {
   const { toast } = useToast();
@@ -50,6 +51,11 @@ const Login = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Login & Register" 
+        description="Access your dashboard to view purchased courses, books, and register for events on Dr. Dina Lundy's portal."
+        keywords="login, register, user portal, account"
+      />
       <section className="py-20 bg-warm/30 min-h-[80vh] flex items-center">
         <div className="container mx-auto px-4">
           <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0} className="max-w-md mx-auto bg-background p-8 rounded-xl border shadow-lg">

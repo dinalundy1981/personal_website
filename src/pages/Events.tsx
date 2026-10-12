@@ -9,6 +9,7 @@ import { fadeUp } from "@/lib/animations";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import SEO from "@/components/SEO";
 
 interface EventImage {
   id: string;
@@ -107,6 +108,11 @@ const Events = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Speaking Engagements & Events" 
+        description="Join Dr. Dina Lundy at upcoming conferences, workshops, panels, and academic talks. Book her for speaking engagements."
+        keywords="Dr Dina Lundy speaking, public speaking, academic events, keynotes"
+      />
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">
           <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">

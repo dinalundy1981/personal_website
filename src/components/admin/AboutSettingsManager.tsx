@@ -129,7 +129,7 @@ const AboutSettingsManager = () => {
           <p className="text-sm font-semibold text-foreground mb-3">Floating Badge (over photo collage)</p>
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
-              <Label>Badge Number (e.g. "30+")</Label>
+              <Label>Badge Number (e.g. "15+")</Label>
               <Input value={settings.badge_number} onChange={(e) => update("badge_number", e.target.value)} />
             </div>
             <div>

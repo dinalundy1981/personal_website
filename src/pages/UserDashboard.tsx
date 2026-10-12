@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { fadeUp } from "@/lib/animations";
 import { openBookFile } from "@/lib/bookFile";
-import { User, BookOpen, GraduationCap, CalendarDays, Mail, Phone, Edit2, Save, FileText, Headphones } from "lucide-react";
+import { User, BookOpen, GraduationCap, CalendarDays, Mail, Phone, Edit2, Save, FileText, Headphones, Library } from "lucide-react";
 
 const UserDashboard = () => {
   const { user, loading } = useAuth();
@@ -48,6 +48,13 @@ const UserDashboard = () => {
     fetchData();
   }, [user]);
 
+  const approvedDigitalBooks = bookOrders.filter(
+    (order) =>
+      order.status === "approved" &&
+      order.books &&
+      order.books.book_format !== "physical"
+  );
+
   const handleSaveProfile = async () => {
     if (!user) return;
     const { error } = await supabase.from("profiles").update({ full_name: form.full_name, phone: form.phone }).eq("user_id", user.id);
@@ -73,13 +80,81 @@ const UserDashboard = () => {
           <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
             <h1 className="font-heading text-3xl text-primary mb-8">My Dashboard</h1>
 
-            <Tabs defaultValue="profile" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4 max-w-lg">
+            <Tabs defaultValue="library" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-5 max-w-2xl">
+                <TabsTrigger value="library"><Library className="w-4 h-4 mr-1" /> My Library</TabsTrigger>
                 <TabsTrigger value="profile"><User className="w-4 h-4 mr-1" /> Profile</TabsTrigger>
                 <TabsTrigger value="books"><BookOpen className="w-4 h-4 mr-1" /> Books</TabsTrigger>
                 <TabsTrigger value="courses"><GraduationCap className="w-4 h-4 mr-1" /> Courses</TabsTrigger>
                 <TabsTrigger value="events"><CalendarDays className="w-4 h-4 mr-1" /> Events</TabsTrigger>
               </TabsList>
+
+              <TabsContent value="library">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-primary">My Digital Library</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {approvedDigitalBooks.length === 0 ? (
+                      <div className="text-center py-12 space-y-4">
+                        <Library className="w-16 h-16 text-muted-foreground/30 mx-auto" />
+                        <h3 className="font-heading text-xl text-primary">Your Library is Empty</h3>
+                        <p className="text-muted-foreground text-sm max-w-md mx-auto leading-relaxed">
+                          Welcome to your digital bookshelf, {profile?.full_name || "Reader"}! Purchased digital books (PDFs, Audiobooks) will appear here once approved by the administrator.
+                        </p>
+                        <Button onClick={() => navigate("/books")} variant="default" size="sm" className="mt-2 font-semibold">
+                          Explore Books
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {approvedDigitalBooks.map((order) => {
+                          const book = order.books;
+                          if (!book) return null;
+                          return (
+                            <div key={order.id} className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border flex flex-col h-full group">
+                              <div className="aspect-[2/3] w-full overflow-hidden relative border-b bg-muted/5">
+                                <img
+                                  src={book.image_url || "/placeholder.svg"}
+                                  alt={book.title}
+                                  className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                                />
+                                <div className="absolute top-2 right-2">
+                                  <span className="bg-secondary/95 text-secondary-foreground text-[10px] font-bold px-2.5 py-0.5 rounded shadow-sm capitalize">
+                                    {book.book_format === "audio" ? "Audiobook" : book.book_format.toUpperCase()}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="p-4 flex flex-col flex-1 justify-between gap-3">
+                                <h3 className="font-heading text-sm font-semibold text-primary line-clamp-2 leading-snug group-hover:text-secondary transition-colors">
+                                  {book.title}
+                                </h3>
+                                {book.file_url ? (
+                                  <Button
+                                    size="sm"
+                                    className="w-full font-semibold"
+                                    onClick={() => handleOpenBookFile(book.file_url)}
+                                  >
+                                    {book.book_format === "audio" ? (
+                                      <><Headphones className="w-4 h-4 mr-1.5" /> Listen Now</>
+                                    ) : (
+                                      <><FileText className="w-4 h-4 mr-1.5" /> Read PDF</>
+                                    )}
+                                  </Button>
+                                ) : (
+                                  <Button size="sm" className="w-full" disabled>
+                                    File Not Available
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
 
               <TabsContent value="profile">
                 <Card>

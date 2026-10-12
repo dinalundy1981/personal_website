@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { fadeUp } from "@/lib/animations";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
+
+import dinaImg from "@/assets/dina-portrait.jpg";
 
 const card3D = {
   hidden: { opacity: 0, y: 40, rotateX: 8 },
@@ -36,15 +39,30 @@ const Publishing = () => {
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="py-16 md:py-20 bg-warm/30">
-        <div className="container mx-auto px-4 text-center">
-          <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-3xl sm:text-4xl md:text-5xl text-primary mb-4">
-            Publishing
-          </motion.h1>
-          <motion.p initial="hidden" animate="visible" variants={fadeUp} custom={1} className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base">
-            Academic publications, research articles, op-eds, and works in progress by Dr. Lundy.
-          </motion.p>
+      <SEO
+        title="Publishing & Research"
+        description="Explore academic publications, research articles, op-eds, and works in progress on psychology, chattel slavery, and Black family structures by Dr. Dina Lundy."
+        keywords="Dr Dina Lundy publishing, research papers, academic articles, Black family studies, slavery research"
+      />
+      {/* Hero with Author Profile Spotlight */}
+      <section className="py-12 md:py-16 bg-warm/30 border-b border-border/50">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 text-center sm:text-left">
+            <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-border shadow-xl flex-shrink-0 bg-card">
+              <img src={dinaImg} alt="Dr. Dina Lundy" className="w-full h-full object-cover object-top" />
+            </div>
+            <div className="flex-1">
+              <span className="inline-block text-[10px] font-bold text-secondary uppercase tracking-widest mb-1 bg-secondary/10 px-2.5 py-0.5 rounded-full">
+                Scholarly Research & Publications
+              </span>
+              <h1 className="font-heading text-3xl sm:text-4xl text-primary font-bold leading-tight">
+                Academic Publishing & Scholarship
+              </h1>
+              <p className="text-muted-foreground text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
+                Authored by <strong>Dr. Adina Lundy, EdD</strong>. Researching systemic inequity, cyberpsychology, generational poverty, and educational access for marginalized populations and system-involved youth.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -82,15 +100,15 @@ const Publishing = () => {
                     {pub.image_url ? (
                       <>
                         {/* Blurred matching background */}
-                        <div 
-                          className="absolute inset-0 bg-cover bg-center blur-md scale-110 opacity-30" 
+                        <div
+                          className="absolute inset-0 bg-cover bg-center blur-md scale-110 opacity-30"
                           style={{ backgroundImage: `url(${pub.image_url})` }}
                         />
                         {/* Clear centered full cover */}
                         <img
                           src={pub.image_url}
                           alt={pub.title}
-                          className="h-[95%] w-auto max-w-full object-contain relative z-10 py-1.5 shadow-lg transition-transform duration-500 group-hover:scale-[1.03]"
+                          className="h-full w-auto max-w-full object-contain relative z-10 p-0 shadow-md transition-transform duration-500 group-hover:scale-[1.02]"
                         />
                       </>
                     ) : (
@@ -187,15 +205,15 @@ const Publishing = () => {
                   {wip.image_url ? (
                     <div className="sm:w-36 flex-shrink-0 aspect-[4/3] sm:aspect-auto relative overflow-hidden flex items-center justify-center p-1.5 border-r border-b sm:border-b-0 bg-muted/10 group">
                       {/* Blurred matching background */}
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center blur-md scale-110 opacity-30" 
+                      <div
+                        className="absolute inset-0 bg-cover bg-center blur-md scale-110 opacity-30"
                         style={{ backgroundImage: `url(${wip.image_url})` }}
                       />
                       {/* Clear centered full cover */}
-                      <img 
-                        src={wip.image_url} 
-                        alt={wip.title} 
-                        className="h-[95%] w-auto max-w-full object-contain relative z-10 shadow-md rounded transition-transform duration-500 group-hover:scale-[1.03]" 
+                      <img
+                        src={wip.image_url}
+                        alt={wip.title}
+                        className="h-[95%] w-auto max-w-full object-contain relative z-10 shadow-md rounded transition-transform duration-500 group-hover:scale-[1.03]"
                       />
                     </div>
                   ) : (

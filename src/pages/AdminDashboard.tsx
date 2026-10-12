@@ -56,6 +56,8 @@ const tabConfig: { key: TableName; label: string; icon: any; fields: { name: str
       { name: "category", type: "text" },
       { name: "book_format", type: "select", required: true, options: [{ value: "physical", label: "Physical Book" }, { value: "pdf", label: "PDF Book" }, { value: "audio", label: "Audiobook" }] },
       { name: "file_url", type: "book_file" },
+      { name: "rating", type: "number", required: false },
+      { name: "details", type: "textarea", required: false },
     ],
   },
   {
@@ -265,6 +267,14 @@ const DashboardView = () => {
         supabase.from("book_orders").select("*, books(title, image_url)").eq("status", "pending").order("created_at", { ascending: false }).limit(10),
         supabase.from("course_orders").select("*, courses(title, image_url)").eq("status", "pending").order("created_at", { ascending: false }).limit(10),
       ]);
+      if (pendingBooks.error || pendingCourses.error) {
+        console.error("Error fetching pending orders:", pendingBooks.error || pendingCourses.error);
+        toast({
+          title: "Error fetching pending orders",
+          description: pendingBooks.error?.message || pendingCourses.error?.message || "Database fetch error",
+          variant: "destructive"
+        });
+      }
       setStats({
         books: books.count || 0,
         courses: courses.count || 0,
@@ -620,8 +630,18 @@ const AdminDashboard = () => {
       supabase.from("book_orders").select("*, books(title, image_url)").order("created_at", { ascending: false }),
       supabase.from("course_orders").select("*, courses(title, image_url)").order("created_at", { ascending: false }),
     ]);
-    if (bookRes.data) setOrders(bookRes.data);
-    if (courseRes.data) setCourseOrders(courseRes.data);
+    if (bookRes.error) {
+      console.error("Error fetching book orders:", bookRes.error);
+      toast({ title: "Error fetching book orders", description: bookRes.error.message, variant: "destructive" });
+    } else {
+      setOrders(bookRes.data || []);
+    }
+    if (courseRes.error) {
+      console.error("Error fetching course orders:", courseRes.error);
+      toast({ title: "Error fetching course orders", description: courseRes.error.message, variant: "destructive" });
+    } else {
+      setCourseOrders(courseRes.data || []);
+    }
     setLoadingData(false);
   };
 
@@ -974,8 +994,10 @@ const AdminDashboard = () => {
                     <label className="block text-sm font-medium text-foreground mb-1">Type</label>
                     <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={pmForm.method_type || "paypal"} onChange={(e) => setPmForm({ ...pmForm, method_type: e.target.value })}>
                       <option value="paypal">PayPal</option>
-                      <option value="bank_transfer">Bank Transfer</option>
-                      <option value="mobile_apps">Mobile Apps</option>
+                      <option value="credit_card">Credit / Debit Card</option>
+                      <option value="zelle">Zelle Instant Transfer</option>
+                      <option value="mobile_apps">Venmo / Cash App</option>
+                      <option value="bank_transfer">Bank Wire / ACH</option>
                     </select>
                   </div>
                   <div>

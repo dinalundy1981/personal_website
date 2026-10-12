@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import bookPlaceholder from "@/assets/book-placeholder.jpg";
+import SEO from "@/components/SEO";
 
 interface Blog {
   id: string;
@@ -47,6 +48,11 @@ const BlogList = () => {
 
   return (
     <Layout>
+      <SEO 
+        title="Newsletter & Insights"
+        description="Insights, reflections, and thought leadership from Dr. Dina Lundy."
+        keywords="Dr Dina Lundy newsletter, psychology blog, educational leadership reflections"
+      />
       <section className="py-20 bg-warm/30">
         <div className="container mx-auto px-4 text-center">
           <motion.h1 initial="hidden" animate="visible" variants={fadeUp} custom={0} className="font-heading text-4xl md:text-5xl text-primary mb-4">Newsletter</motion.h1>
@@ -129,6 +135,13 @@ const BlogPost = () => {
 
   return (
     <Layout>
+      <SEO 
+        title={blog.title}
+        description={blog.excerpt || undefined}
+        ogImage={blog.image_url || undefined}
+        ogUrl={`https://dinalundy.com/newsletter/${blog.id}`}
+        twitterImage={blog.image_url || undefined}
+      />
       <article className="py-12 bg-background">
         <div className="container mx-auto px-4 max-w-3xl">
           <Button variant="ghost" size="sm" onClick={() => navigate("/newsletter")} className="mb-6">
