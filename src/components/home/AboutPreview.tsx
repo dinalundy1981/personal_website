@@ -2,7 +2,10 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
-import profileImg from "@/assets/profile-placeholder.jpg";
+import dinaPortrait from "@/assets/dina-portrait.jpg";
+import conferenceImg from "@/assets/conference-img.jpg";
+import coachingImg from "@/assets/coaching-img.jpg";
+import tedxImg from "@/assets/tedx-img.png";
 import { useAboutSettings } from "@/hooks/useAboutSettings";
 
 interface AboutPreviewProps {
@@ -11,10 +14,10 @@ interface AboutPreviewProps {
 
 const AboutPreview = ({ images }: AboutPreviewProps) => {
   const { settings } = useAboutSettings();
-  const img1 = images["about_1"] || profileImg;
-  const img2 = images["about_2"] || profileImg;
-  const img3 = images["about_3"] || profileImg;
-  const img4 = images["about_4"] || profileImg;
+  const img1 = images["about_1"] || conferenceImg;
+  const img2 = images["about_2"] || dinaPortrait;
+  const img3 = images["about_3"] || coachingImg;
+  const img4 = images["about_4"] || tedxImg;
 
   const s = settings;
 

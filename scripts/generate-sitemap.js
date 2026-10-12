@@ -103,6 +103,13 @@ ${xmlEntries}
   const outputPath = path.resolve(__dirname, '../public/sitemap.xml');
   fs.writeFileSync(outputPath, sitemapXml, 'utf8');
   console.log(`Sitemap generated successfully at ${outputPath}`);
+
+  const distDir = path.resolve(__dirname, '../dist');
+  if (fs.existsSync(distDir)) {
+    const distPath = path.resolve(distDir, 'sitemap.xml');
+    fs.writeFileSync(distPath, sitemapXml, 'utf8');
+    console.log(`Sitemap copied to production build at ${distPath}`);
+  }
 }
 
 generate();
