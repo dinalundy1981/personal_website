@@ -61,7 +61,7 @@ const About = () => {
                   {/* Overlay Badge */}
                   <div className="absolute bottom-4 left-4 right-4 bg-card/95 backdrop-blur-md border border-border/80 rounded-xl p-3 shadow-lg">
                     <p className="font-heading font-bold text-base text-primary">Dr. Adina Lundy, EdD</p>
-                    <p className="text-xs text-muted-foreground font-medium">Academic Director & Psychology Scholar</p>
+                    <p className="text-xs text-muted-foreground font-medium">Leading Authority on the Family, Forensic Analyst, and Author</p>
                   </div>
                 </div>
 
